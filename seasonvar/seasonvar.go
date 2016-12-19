@@ -24,7 +24,7 @@ func New() *Seasonvar {
 
 func (s *Seasonvar) ValidateLink(link string) error {
 	if linkRegexp.FindString(link) == "" {
-		return errors.New("incorrect url format")
+		return errors.New("incorrect link format")
 	}
 	return nil
 }
@@ -33,8 +33,16 @@ func (s *Seasonvar) AbsoluteLink(link string) string {
 	return fmt.Sprintf(seriesLinkFormat, link)
 }
 
-func (s *Seasonvar) GetSeasonLink(url string) (string, error) {
-	body, err := httpGet(url)
+func (s *Seasonvar) GetSeasonLink(link string) (string, error) {
+	seasonID, err := s.GetSeasonID(link)
+	if err != nil {
+		return "", err
+	}
+	return fmt.Sprintf(playlistLinkFormat, seasonID), nil
+}
+
+func (s *Seasonvar) GetSeasonID(link string) (string, error) {
+	body, err := httpGet(link)
 	if err != nil {
 		return "", err
 	}
@@ -42,5 +50,5 @@ func (s *Seasonvar) GetSeasonLink(url string) (string, error) {
 	if len(season) < 1 {
 		return "", errors.New("season id not found")
 	}
-	return fmt.Sprintf(playlistLinkFormat, season[1]), nil
+	return season[1], nil
 }
