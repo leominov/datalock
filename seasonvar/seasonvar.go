@@ -155,3 +155,7 @@ func (s *Seasonvar) GetSeasonIDFromLink(link string) (int, error) {
 	}
 	return i, nil
 }
+
+func (s *Seasonvar) GetMainLink() string {
+	return fmt.Sprintf(seriesLinkFormat, "/")
+}

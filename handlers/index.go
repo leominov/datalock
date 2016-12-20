@@ -60,7 +60,7 @@ func (i *indexHandle) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		masterTmpl.Execute(w, seasonMeta)
 		return
 	}
-	http.Error(w, "Not found", http.StatusNotFound)
+	http.Redirect(w, r, i.s.GetMainLink(), http.StatusFound)
 }
 
 func IndexHandle(seasonvar *seasonvar.Seasonvar) http.Handler {
