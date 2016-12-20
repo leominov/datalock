@@ -3,6 +3,7 @@ package seasonvar
 import (
 	"errors"
 	"fmt"
+	"os"
 	"regexp"
 	"strconv"
 )
@@ -14,6 +15,7 @@ const (
 
 var (
 	linkRegexp              = regexp.MustCompile(`http\:\/\/seasonvar\.ru\/(.*)\.html`)
+	seasonIDLinkRegexp      = regexp.MustCompile(`serial\-([0-9]+)\-`)
 	seasonIDRegexp          = regexp.MustCompile(`data\-season\=\"([0-9]+)\"`)
 	seasonTitleRegexp       = regexp.MustCompile(`\<title\>([^<]+)\<\/title\>`)
 	seasonKeywordsRegexp    = regexp.MustCompile(`\<meta\ name\=\"keywords\"\ content\=\"([^"]+)\"`)
@@ -21,20 +23,24 @@ var (
 )
 
 type Seasonvar struct {
-	Seasons map[string]*SeasonMeta
+	NodeName string
+	Seasons  map[int]*SeasonMeta
 }
 
 type SeasonMeta struct {
-	Title       string
-	ID          int
-	Link        string
-	Keywords    string
-	Description string
+	Title           string
+	ID              int
+	Link            string
+	Keywords        string
+	Description     string
+	CacheHitCounter int
 }
 
 func New() *Seasonvar {
+	hostname, _ := os.Hostname()
 	return &Seasonvar{
-		Seasons: make(map[string]*SeasonMeta),
+		NodeName: hostname,
+		Seasons:  make(map[int]*SeasonMeta),
 	}
 }
 
@@ -49,20 +55,28 @@ func (s *Seasonvar) AbsoluteLink(link string) string {
 	return fmt.Sprintf(seriesLinkFormat, link)
 }
 
-func (s *Seasonvar) GetSeasonMeta(link string) (*SeasonMeta, bool, error) {
-	if meta, ok := s.Seasons[link]; ok {
-		return meta, true, nil
+func (s *Seasonvar) GetSeasonMeta(link string) (*SeasonMeta, error) {
+	var seasonMeta *SeasonMeta
+	var err error
+	var ok bool
+	seasonID, err := s.GetSeasonIDFromLink(link)
+	if err == nil {
+		if seasonMeta, ok = s.Seasons[seasonID]; ok {
+			seasonMeta.CacheHitCounter++
+		}
 	}
-	seasonMeta, err := s.collectSeasonMeta(link)
-	if err != nil {
-		return nil, false, err
+	if seasonMeta == nil {
+		seasonMeta, err = s.collectSeasonMeta(link)
+		if err != nil {
+			return nil, err
+		}
 	}
-	s.Seasons[link] = seasonMeta
-	return seasonMeta, false, nil
+	s.Seasons[seasonMeta.ID] = seasonMeta
+	return seasonMeta, nil
 }
 
 func (s *Seasonvar) collectSeasonMeta(link string) (*SeasonMeta, error) {
-	var sm *SeasonMeta
+	var seasonMeta *SeasonMeta
 	body, err := httpGet(link)
 	if err != nil {
 		return nil, err
@@ -83,14 +97,15 @@ func (s *Seasonvar) collectSeasonMeta(link string) (*SeasonMeta, error) {
 	if err != nil {
 		return nil, err
 	}
-	sm = &SeasonMeta{
+	seasonLink := fmt.Sprintf(playlistLinkFormat, seasonID)
+	seasonMeta = &SeasonMeta{
 		ID:          seasonID,
-		Link:        fmt.Sprintf(playlistLinkFormat, seasonID),
+		Link:        seasonLink,
 		Title:       seasonTitle,
 		Keywords:    seasonKeywords,
 		Description: seasonDescription,
 	}
-	return sm, nil
+	return seasonMeta, nil
 }
 
 func (s *Seasonvar) GetSeasonTitle(body string) (string, error) {
@@ -119,6 +134,18 @@ func (s *Seasonvar) GetSeasonDescription(body string) (string, error) {
 
 func (s *Seasonvar) GetSeasonID(body string) (int, error) {
 	season := seasonIDRegexp.FindStringSubmatch(body)
+	if len(season) < 1 {
+		return 0, errors.New("season id not found")
+	}
+	i, err := strconv.Atoi(season[1])
+	if err != nil {
+		return 0, err
+	}
+	return i, nil
+}
+
+func (s *Seasonvar) GetSeasonIDFromLink(link string) (int, error) {
+	season := seasonIDLinkRegexp.FindStringSubmatch(link)
 	if len(season) < 1 {
 		return 0, errors.New("season id not found")
 	}
