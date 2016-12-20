@@ -31,7 +31,6 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.Handle("/", handlers.IndexHandle(seasonvar))
-	mux.Handle("/player", handlers.PlayerHandle(seasonvar))
 
 	httpServer := manners.NewServer()
 	httpServer.Addr = httpAddr

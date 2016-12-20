@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"html/template"
 	"net/http"
 	"strings"
 
@@ -8,16 +9,30 @@ import (
 )
 
 const (
-	IndexPage = `
+	PlayerPageTemplate = `
+    <!DOCTYPE html>
     <html>
         <head>
-            <title>datalock</title>
+            <title>{{.Title}}</title>
+            <meta name="keywords" content="{{.Keywords}}">
+            <meta name="description" content="{{.Description}}">
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+            <style>
+                body {
+                    margin: 0;
+                    background-color: #000;
+                }
+                iframe {
+                    display: block;
+                    background: #000;
+                    border: none;
+                    height: 100vh;
+                    width: 100vw;
+                }
+            </style>
         </head>
         <body>
-            <form method="GET" action="/player">
-                <input name="link" type="text" value="" autocomplete="off">&nbsp;<input type="submit" value="Get link">
-            </form>
+            <iframe src="{{.Link}}"></iframe>
         </body>
     </html>
     `
@@ -30,15 +45,20 @@ type indexHandle struct {
 func (i *indexHandle) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if strings.Index(r.URL.RequestURI(), ".html") > 0 {
 		seriesLink := i.s.AbsoluteLink(r.URL.RequestURI())
-		seasonLink, err := i.s.GetSeasonLink(seriesLink)
+		seasonMeta, err := i.s.GetSeasonMeta(seriesLink)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		http.Redirect(w, r, seasonLink, http.StatusFound)
+		masterTmpl, err := template.New("master").Parse(PlayerPageTemplate)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		masterTmpl.Execute(w, seasonMeta)
 		return
 	}
-	w.Write([]byte(IndexPage))
+	http.Error(w, "Not found", http.StatusNotFound)
 }
 
 func IndexHandle(seasonvar *seasonvar.Seasonvar) http.Handler {
