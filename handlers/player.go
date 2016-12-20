@@ -2,13 +2,8 @@ package handlers
 
 import (
 	"net/http"
-	"regexp"
 
 	"github.com/leominov/datalock/seasonvar"
-)
-
-var (
-	LinkRegexp = regexp.MustCompile(`http\:\/\/seasonvar\.ru\/(.*)\.html`)
 )
 
 type playerHandle struct {
