@@ -44,23 +44,26 @@ type indexHandle struct {
 }
 
 func (i *indexHandle) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if strings.Index(r.URL.RequestURI(), ".html") > 0 {
-		seriesLink := i.s.AbsoluteLink(r.URL.RequestURI())
-		seasonMeta, err := i.s.GetSeasonMeta(seriesLink)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		masterTmpl, err := template.New("master").Parse(PlayerPageTemplate)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		w.Header().Add("X-Cache", fmt.Sprintf("%d.%s", seasonMeta.CacheHitCounter, i.s.NodeName))
-		masterTmpl.Execute(w, seasonMeta)
+	if strings.Index(r.URL.RequestURI(), ".html") == -1 {
+		http.Redirect(w, r, i.s.GetMainLink(), http.StatusFound)
 		return
 	}
-	http.Redirect(w, r, i.s.GetMainLink(), http.StatusFound)
+	seriesLink := i.s.AbsoluteLink(r.URL.RequestURI())
+	seasonMeta, err := i.s.GetSeasonMeta(seriesLink)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	masterTmpl, err := template.New("master").Parse(PlayerPageTemplate)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Add("X-Cache", fmt.Sprintf("%d.%s", seasonMeta.CacheHitCounter, i.s.NodeName))
+	err = masterTmpl.Execute(w, seasonMeta)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
 
 func IndexHandle(seasonvar *seasonvar.Seasonvar) http.Handler {
