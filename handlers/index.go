@@ -33,7 +33,7 @@ const (
             </style>
         </head>
         <body>
-            <iframe src="http://datalock.ru/player/{{.ID}}"></iframe>
+            <iframe src="http://datalock.ru/player/{{.ID}}" allowfullscreen></iframe>
             <!-- Yandex.Metrika counter -->
             <script type="text/javascript">
                 (function (d, w, c) {
