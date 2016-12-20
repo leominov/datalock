@@ -53,6 +53,7 @@ func main() {
 			}
 		case s := <-signalChan:
 			log.Println(fmt.Sprintf("Captured %v. Exiting...", s))
+			httpServer.BlockingClose()
 			os.Exit(0)
 		}
 	}
