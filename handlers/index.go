@@ -36,6 +36,7 @@ func (i *indexHandle) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		http.Redirect(w, r, seasonLink, http.StatusFound)
+		return
 	}
 	w.Write([]byte(IndexPage))
 }
