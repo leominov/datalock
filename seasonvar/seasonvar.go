@@ -4,10 +4,11 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
+	"strconv"
 )
 
 const (
-	playlistLinkFormat = "http://datalock.ru/player/%s"
+	playlistLinkFormat = "http://datalock.ru/player/%d"
 	seriesLinkFormat   = "http://seasonvar.ru%s"
 )
 
@@ -19,18 +20,22 @@ var (
 	seasonDescriptionRegexp = regexp.MustCompile(`\<meta\ name\=\"description\"\ content\=\"([^"]+)\"`)
 )
 
-type Seasonvar struct{}
+type Seasonvar struct {
+	Seasons map[string]*SeasonMeta
+}
 
 type SeasonMeta struct {
 	Title       string
-	ID          string
+	ID          int
 	Link        string
 	Keywords    string
 	Description string
 }
 
 func New() *Seasonvar {
-	return &Seasonvar{}
+	return &Seasonvar{
+		Seasons: make(map[string]*SeasonMeta),
+	}
 }
 
 func (s *Seasonvar) ValidateLink(link string) error {
@@ -44,7 +49,19 @@ func (s *Seasonvar) AbsoluteLink(link string) string {
 	return fmt.Sprintf(seriesLinkFormat, link)
 }
 
-func (s *Seasonvar) GetSeasonMeta(link string) (*SeasonMeta, error) {
+func (s *Seasonvar) GetSeasonMeta(link string) (*SeasonMeta, bool, error) {
+	if meta, ok := s.Seasons[link]; ok {
+		return meta, true, nil
+	}
+	seasonMeta, err := s.collectSeasonMeta(link)
+	if err != nil {
+		return nil, false, err
+	}
+	s.Seasons[link] = seasonMeta
+	return seasonMeta, false, nil
+}
+
+func (s *Seasonvar) collectSeasonMeta(link string) (*SeasonMeta, error) {
 	var sm *SeasonMeta
 	body, err := httpGet(link)
 	if err != nil {
@@ -100,10 +117,14 @@ func (s *Seasonvar) GetSeasonDescription(body string) (string, error) {
 	return description[1], nil
 }
 
-func (s *Seasonvar) GetSeasonID(body string) (string, error) {
+func (s *Seasonvar) GetSeasonID(body string) (int, error) {
 	season := seasonIDRegexp.FindStringSubmatch(body)
 	if len(season) < 1 {
-		return "", errors.New("season id not found")
+		return 0, errors.New("season id not found")
 	}
-	return season[1], nil
+	i, err := strconv.Atoi(season[1])
+	if err != nil {
+		return 0, err
+	}
+	return i, nil
 }

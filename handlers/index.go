@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
 	"strings"
@@ -45,7 +46,7 @@ type indexHandle struct {
 func (i *indexHandle) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if strings.Index(r.URL.RequestURI(), ".html") > 0 {
 		seriesLink := i.s.AbsoluteLink(r.URL.RequestURI())
-		seasonMeta, err := i.s.GetSeasonMeta(seriesLink)
+		seasonMeta, isCache, err := i.s.GetSeasonMeta(seriesLink)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -55,6 +56,7 @@ func (i *indexHandle) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		w.Header().Add("X-Cache-Hit", fmt.Sprintf("%v", isCache))
 		masterTmpl.Execute(w, seasonMeta)
 		return
 	}
