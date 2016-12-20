@@ -9,8 +9,7 @@ import (
 )
 
 const (
-	playlistLinkFormat = "http://datalock.ru/player/%d"
-	seriesLinkFormat   = "http://seasonvar.ru%s"
+	seriesLinkFormat = "http://seasonvar.ru%s"
 )
 
 var (
@@ -30,7 +29,6 @@ type Seasonvar struct {
 type SeasonMeta struct {
 	Title           string
 	ID              int
-	Link            string
 	Keywords        string
 	Description     string
 	CacheHitCounter int
@@ -97,10 +95,8 @@ func (s *Seasonvar) collectSeasonMeta(link string) (*SeasonMeta, error) {
 	if err != nil {
 		return nil, err
 	}
-	seasonLink := fmt.Sprintf(playlistLinkFormat, seasonID)
 	seasonMeta = &SeasonMeta{
 		ID:          seasonID,
-		Link:        seasonLink,
 		Title:       seasonTitle,
 		Keywords:    seasonKeywords,
 		Description: seasonDescription,

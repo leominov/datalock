@@ -33,7 +33,7 @@ const (
             </style>
         </head>
         <body>
-            <iframe src="{{.Link}}"></iframe>
+            <iframe src="http://datalock.ru/player/{{.ID}}"></iframe>
         </body>
     </html>
     `
