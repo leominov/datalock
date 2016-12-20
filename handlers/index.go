@@ -44,11 +44,12 @@ type indexHandle struct {
 }
 
 func (i *indexHandle) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if strings.Index(r.URL.RequestURI(), ".html") == -1 {
-		http.Redirect(w, r, i.s.GetMainLink(), http.StatusFound)
+	requestURI := r.URL.RequestURI()
+	seriesLink := i.s.AbsoluteLink(requestURI)
+	if strings.Index(requestURI, ".html") == -1 {
+		http.Redirect(w, r, seriesLink, http.StatusFound)
 		return
 	}
-	seriesLink := i.s.AbsoluteLink(r.URL.RequestURI())
 	seasonMeta, err := i.s.GetSeasonMeta(seriesLink)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
