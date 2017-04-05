@@ -11,10 +11,6 @@ DIR="$( cd -P "$( dirname "$SOURCE" )/.." && pwd )"
 # Change into that directory
 cd $DIR
 
-if [ "$(go env GOOS)" = "freebsd" ]; then
-  export CC="clang"
-fi
-
 # Build
 echo "--> Building..."
 go build \
