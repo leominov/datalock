@@ -31,6 +31,7 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.Handle("/", handlers.IndexHandle(seasonvar))
+	mux.Handle("/healthz", handlers.HealthzHandle())
 
 	httpServer := manners.NewServer()
 	httpServer.Addr = httpAddr

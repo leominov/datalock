@@ -71,36 +71,28 @@ const (
     `
 )
 
-type indexHandle struct {
-	s *seasonvar.Seasonvar
-}
-
-func (i *indexHandle) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	requestURI := r.URL.RequestURI()
-	seriesLink := i.s.AbsoluteLink(requestURI)
-	if strings.Index(requestURI, ".html") == -1 {
-		http.Redirect(w, r, seriesLink, http.StatusFound)
-		return
-	}
-	seasonMeta, err := i.s.GetSeasonMeta(seriesLink)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	masterTmpl, err := template.New("master").Parse(PlayerPageTemplate)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	w.Header().Add("X-Cache", fmt.Sprintf("%d.%s", seasonMeta.CacheHitCounter, i.s.NodeName))
-	err = masterTmpl.Execute(w, seasonMeta)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-}
-
-func IndexHandle(seasonvar *seasonvar.Seasonvar) http.Handler {
-	return &indexHandle{
-		s: seasonvar,
-	}
+func IndexHandle(s *seasonvar.Seasonvar) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestURI := r.URL.RequestURI()
+		seriesLink := s.AbsoluteLink(requestURI)
+		if strings.Index(requestURI, ".html") == -1 {
+			http.Redirect(w, r, seriesLink, http.StatusFound)
+			return
+		}
+		seasonMeta, err := s.GetSeasonMeta(seriesLink)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		masterTmpl, err := template.New("master").Parse(PlayerPageTemplate)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.Header().Add("X-Cache", fmt.Sprintf("%d.%s", seasonMeta.CacheHitCounter, s.NodeName))
+		err = masterTmpl.Execute(w, seasonMeta)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+	})
 }
