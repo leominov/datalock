@@ -15,7 +15,7 @@ const (
 var (
 	linkRegexp              = regexp.MustCompile(`http\:\/\/seasonvar\.ru\/(.*)\.html`)
 	seasonIDLinkRegexp      = regexp.MustCompile(`serial\-([0-9]+)\-`)
-	seasonIDRegexp          = regexp.MustCompile(`data\-season\=\"([0-9]+)\"`)
+	seasonIDRegexp          = regexp.MustCompile(`data\-id\-season\=\"([0-9]+)\"`)
 	seasonTitleRegexp       = regexp.MustCompile(`\<title\>([^<]+)\<\/title\>`)
 	seasonKeywordsRegexp    = regexp.MustCompile(`\<meta\ name\=\"keywords\"\ content\=\"([^"]+)\"`)
 	seasonDescriptionRegexp = regexp.MustCompile(`\<meta\ name\=\"description\"\ content\=\"([^"]+)\"`)
