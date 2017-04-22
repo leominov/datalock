@@ -6,6 +6,8 @@ import (
 	"os"
 	"regexp"
 	"strconv"
+
+	"github.com/leominov/datalock/metrics"
 )
 
 const (
@@ -58,10 +60,11 @@ func (s *Seasonvar) GetSeasonMeta(link string) (*SeasonMeta, error) {
 	var err error
 	var ok bool
 	seasonID, err := s.GetSeasonIDFromLink(link)
-	if err == nil {
-		if seasonMeta, ok = s.Seasons[seasonID]; ok {
-			seasonMeta.CacheHitCounter++
-		}
+	if err != nil {
+		return nil, err
+	}
+	if seasonMeta, ok = s.Seasons[seasonID]; ok {
+		seasonMeta.CacheHitCounter++
 	}
 	if seasonMeta == nil {
 		seasonMeta, err = s.collectSeasonMeta(link)
@@ -75,8 +78,10 @@ func (s *Seasonvar) GetSeasonMeta(link string) (*SeasonMeta, error) {
 
 func (s *Seasonvar) collectSeasonMeta(link string) (*SeasonMeta, error) {
 	var seasonMeta *SeasonMeta
+	metrics.HttpRequestsTotalCount.Inc()
 	body, err := httpGet(link)
 	if err != nil {
+		metrics.HttpRequestsErrorCount.Inc()
 		return nil, err
 	}
 	seasonID, err := s.GetSeasonID(body)
@@ -85,15 +90,15 @@ func (s *Seasonvar) collectSeasonMeta(link string) (*SeasonMeta, error) {
 	}
 	seasonTitle, err := s.GetSeasonTitle(body)
 	if err != nil {
-		return nil, err
+		seasonTitle = ""
 	}
 	seasonKeywords, err := s.GetSeasonKeywords(body)
 	if err != nil {
-		return nil, err
+		seasonKeywords = ""
 	}
 	seasonDescription, err := s.GetSeasonDescription(body)
 	if err != nil {
-		return nil, err
+		seasonDescription = ""
 	}
 	seasonMeta = &SeasonMeta{
 		ID:          seasonID,
@@ -107,6 +112,7 @@ func (s *Seasonvar) collectSeasonMeta(link string) (*SeasonMeta, error) {
 func (s *Seasonvar) GetSeasonTitle(body string) (string, error) {
 	title := seasonTitleRegexp.FindStringSubmatch(body)
 	if len(title) < 1 {
+		metrics.SeasonTitleErrorCount.Inc()
 		return "", errors.New("season title not found")
 	}
 	return title[1], nil
@@ -115,6 +121,7 @@ func (s *Seasonvar) GetSeasonTitle(body string) (string, error) {
 func (s *Seasonvar) GetSeasonKeywords(body string) (string, error) {
 	keywords := seasonKeywordsRegexp.FindStringSubmatch(body)
 	if len(keywords) < 1 {
+		metrics.SeasonKeywordsErrorCount.Inc()
 		return "", errors.New("season keywords not found")
 	}
 	return keywords[1], nil
@@ -123,6 +130,7 @@ func (s *Seasonvar) GetSeasonKeywords(body string) (string, error) {
 func (s *Seasonvar) GetSeasonDescription(body string) (string, error) {
 	description := seasonDescriptionRegexp.FindStringSubmatch(body)
 	if len(description) < 1 {
+		metrics.SeasonDescriptionErrorCount.Inc()
 		return "", errors.New("season description not found")
 	}
 	return description[1], nil
@@ -131,6 +139,7 @@ func (s *Seasonvar) GetSeasonDescription(body string) (string, error) {
 func (s *Seasonvar) GetSeasonID(body string) (int, error) {
 	season := seasonIDRegexp.FindStringSubmatch(body)
 	if len(season) < 1 {
+		metrics.SeasonIDErrorCount.Inc()
 		return 0, errors.New("season id not found")
 	}
 	i, err := strconv.Atoi(season[1])

@@ -10,15 +10,25 @@ import (
 
 	"github.com/braintree/manners"
 	"github.com/leominov/datalock/handlers"
+	"github.com/leominov/datalock/metrics"
 	"github.com/leominov/datalock/seasonvar"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 const (
 	DefaultHTTPAddr = "127.0.0.1:7000"
 )
 
+func init() {
+	metrics.InitMetrics()
+}
+
 func main() {
 	log.Println("Starting datalock...")
+
+	if err := handlers.ParseTemplates(); err != nil {
+		log.Fatal(err)
+	}
 
 	httpAddr := os.Getenv("DATALOCK_LISTEN_ADDR")
 	if httpAddr == "" {
@@ -32,6 +42,7 @@ func main() {
 	mux := http.NewServeMux()
 	mux.Handle("/", handlers.IndexHandle(seasonvar))
 	mux.Handle("/healthz", handlers.HealthzHandle())
+	mux.Handle("/metrics", promhttp.Handler())
 
 	httpServer := manners.NewServer()
 	httpServer.Addr = httpAddr
