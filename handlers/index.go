@@ -9,7 +9,7 @@ import (
 	"github.com/leominov/datalock/seasonvar"
 )
 
-func IndexHandle(s *seasonvar.Seasonvar) http.Handler {
+func IndexHandler(s *seasonvar.Seasonvar) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		requestURI := r.URL.RequestURI()
 		seriesLink := s.AbsoluteLink(requestURI)

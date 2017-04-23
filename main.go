@@ -40,8 +40,8 @@ func main() {
 	seasonvar := seasonvar.New()
 
 	mux := http.NewServeMux()
-	mux.Handle("/", handlers.IndexHandle(seasonvar))
-	mux.Handle("/healthz", handlers.HealthzHandle())
+	mux.Handle("/", handlers.IndexHandler(seasonvar))
+	mux.Handle("/healthz", handlers.HealthzHandler())
 	mux.Handle("/metrics", promhttp.Handler())
 
 	httpServer := manners.NewServer()
