@@ -29,11 +29,7 @@ type Season struct {
 
 func AllSeasonsHandler(s *seasonvar.Seasonvar) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		as := AllSeasons{
-			Seasons: []Season{},
-		}
-		q := r.URL.Query()
-		url := q.Get("url")
+		url := r.URL.Query().Get("url")
 		if len(url) == 0 {
 			http.Error(w, "Incorrect request", http.StatusBadRequest)
 			return
@@ -48,6 +44,7 @@ func AllSeasonsHandler(s *seasonvar.Seasonvar) http.Handler {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		as := AllSeasons{[]Season{}}
 		iter := xpathSeasons.Iter(root)
 		for iter.Next() {
 			node := iter.Node()
