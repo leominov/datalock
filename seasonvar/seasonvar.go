@@ -206,6 +206,7 @@ func (s *Seasonvar) GetSeasonIDFromLink(link string) (int, error) {
 }
 
 func (s *Seasonvar) SetUser(u *User) error {
+	u.SecureMark = utils.CleanText(u.SecureMark)
 	return s.DB.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket(BucketUsers)
 		encoded, err := json.Marshal(u)

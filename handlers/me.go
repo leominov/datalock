@@ -23,7 +23,6 @@ func MeHandler(s *seasonvar.Seasonvar) http.Handler {
 			}
 			u.UserAgent = r.UserAgent()
 			u.IP = ip
-			u.SecureMark = utils.CleanText(u.SecureMark)
 			if err := s.SetUser(u); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return

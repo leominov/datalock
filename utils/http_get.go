@@ -7,10 +7,6 @@ import (
 	"strings"
 )
 
-const (
-	DefaultUserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.1 Safari/603.1.30"
-)
-
 var (
 	client http.Client
 )
@@ -21,7 +17,7 @@ func HttpGetRaw(url string) ([]byte, error) {
 	if err != nil {
 		return body, err
 	}
-	req.Header.Set("User-Agent", DefaultUserAgent)
+	req.Header.Set("User-Agent", RandomUserAgent())
 	resp, err := client.Do(req)
 	if err != nil {
 		return body, err
