@@ -8,6 +8,7 @@ const (
 	DefaultMetricsPath = "/metrics"
 	DefaultHealthzPath = "/healthz"
 	DefaultDatabaseDir = "./database"
+	DefaultHdHostname  = "data-hd.datalock.ru"
 )
 
 type Config struct {
@@ -16,6 +17,7 @@ type Config struct {
 	HealthzPath string
 	PublicDir   string
 	DatabaseDir string
+	HdHostname  string
 }
 
 func NewConfig() *Config {
@@ -49,6 +51,10 @@ func (c *Config) LoadFromEnv() error {
 	c.DatabaseDir = os.Getenv("DATALOCK_DATABASE_DIR")
 	if c.DatabaseDir == "" {
 		c.DatabaseDir = DefaultDatabaseDir
+	}
+	c.HdHostname = os.Getenv("DATALOCK_HD_HOSTNAME")
+	if c.HdHostname == "" {
+		c.HdHostname = DefaultHdHostname
 	}
 	return nil
 }

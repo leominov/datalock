@@ -47,7 +47,7 @@ func main() {
 	mux.Handle(s.Config.MetricsPath, promhttp.Handler())
 	mux.Handle("/js/", handlers.ProxyHandler(s))
 	mux.Handle("/tpl/asset/js/", handlers.JavaScriptHandler(s))
-	mux.Handle("/styleP.php", handlers.ProxyHandler(s))
+	mux.Handle("/styleP.php", handlers.StyleHandler(s))
 	mux.Handle("/player.php", handlers.ProxyHandler(s))
 	mux.Handle("/playls2/", handlers.PlaylistHandler(s))
 

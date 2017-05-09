@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net"
+	"net/http"
 	"os"
 	"path"
 	"regexp"
@@ -247,4 +248,11 @@ func (s *Seasonvar) GetUser(ip string) (*User, error) {
 		}
 		return nil
 	})
+}
+
+func (s *Seasonvar) CanShowHD(r *http.Request) bool {
+	if coo, err := r.Cookie("hdq"); err == nil && coo.Value != "" {
+		return true
+	}
+	return false
 }
