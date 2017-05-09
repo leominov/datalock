@@ -7,6 +7,7 @@ import (
 
 	"github.com/leominov/datalock/metrics"
 	"github.com/leominov/datalock/seasonvar"
+	"github.com/leominov/datalock/utils"
 )
 
 type TemplateVars struct {
@@ -15,12 +16,8 @@ type TemplateVars struct {
 }
 
 func IndexHandler(s *seasonvar.Seasonvar) http.Handler {
-	var ip string
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		ip = r.Header.Get("X-REAL-IP")
-		if ip == "" {
-			ip = r.RemoteAddr
-		}
+		ip := utils.RealIP(r)
 		requestURI := r.URL.RequestURI()
 		seriesLink := s.AbsoluteLink(requestURI)
 		if requestURI == "/" {

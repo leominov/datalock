@@ -9,8 +9,7 @@ import (
 )
 
 func ProxyHandler(s *seasonvar.Seasonvar) http.Handler {
-	var u *url.URL
-	u, _ = url.Parse(s.AbsoluteLink("/"))
+	u, _ := url.Parse(s.AbsoluteLink("/"))
 	reverseProxy := httputil.NewSingleHostReverseProxy(u)
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		r.Host = u.Hostname()

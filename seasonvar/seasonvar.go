@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"net"
 	"net/http"
 	"os"
 	"path"
@@ -207,9 +206,6 @@ func (s *Seasonvar) GetSeasonIDFromLink(link string) (int, error) {
 }
 
 func (s *Seasonvar) SetUser(u *User) error {
-	if h, _, err := net.SplitHostPort(u.IP); err == nil {
-		u.IP = h
-	}
 	return s.DB.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket(BucketUsers)
 		encoded, err := json.Marshal(u)
@@ -222,9 +218,6 @@ func (s *Seasonvar) SetUser(u *User) error {
 
 func (s *Seasonvar) GetUser(ip string) (*User, error) {
 	var u *User
-	if h, _, err := net.SplitHostPort(ip); err == nil {
-		ip = h
-	}
 	return u, s.DB.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket(BucketUsers)
 		v := b.Get([]byte(ip))

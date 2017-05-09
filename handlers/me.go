@@ -4,23 +4,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"regexp"
 
 	"github.com/leominov/datalock/seasonvar"
 	"github.com/leominov/datalock/utils"
 )
 
-var (
-	cleanRegexp = regexp.MustCompile(`[^a-z0-9]`)
-)
-
 func MeHandler(s *seasonvar.Seasonvar) http.Handler {
-	var ip string
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		ip = r.Header.Get("X-REAL-IP")
-		if ip == "" {
-			ip = r.RemoteAddr
-		}
+		ip := utils.RealIP(r)
 		switch r.Method {
 		case "POST":
 			decoder := json.NewDecoder(r.Body)
