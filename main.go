@@ -15,10 +15,6 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-const (
-	DefaultHTTPAddr = "127.0.0.1:7000"
-)
-
 func init() {
 	metrics.InitMetrics()
 }
@@ -30,22 +26,28 @@ func main() {
 		log.Fatal(err)
 	}
 
-	httpAddr := os.Getenv("DATALOCK_LISTEN_ADDR")
-	if httpAddr == "" {
-		httpAddr = DefaultHTTPAddr
+	config := seasonvar.NewConfig()
+	if err := config.Load(); err != nil {
+		log.Fatal(err)
 	}
 
-	log.Printf("HTTP service listening on %s", httpAddr)
+	log.Printf("HTTP service listening on %s", config.ListenAddr)
 
-	seasonvar := seasonvar.New()
+	s := seasonvar.New(config)
 
 	mux := http.NewServeMux()
-	mux.Handle("/", handlers.IndexHandler(seasonvar))
-	mux.Handle("/healthz", handlers.HealthzHandler())
-	mux.Handle("/metrics", promhttp.Handler())
+	mux.Handle("/", handlers.IndexHandler(s))
+	mux.Handle("/me", handlers.MeHandler(s))
+	mux.Handle(s.Config.HealthzPath, handlers.HealthzHandler())
+	mux.Handle(s.Config.MetricsPath, promhttp.Handler())
+	mux.Handle("/js/", handlers.ProxyHandler(s))
+	mux.Handle("/tpl/asset/js/", handlers.JavaScriptHandler(s))
+	mux.Handle("/styleP.php", handlers.ProxyHandler(s))
+	mux.Handle("/player.php", handlers.ProxyHandler(s))
+	mux.Handle("/playls2/", handlers.PlaylistHandler(s))
 
 	httpServer := manners.NewServer()
-	httpServer.Addr = httpAddr
+	httpServer.Addr = config.ListenAddr
 	httpServer.Handler = handlers.LoggingHandler(mux)
 
 	errChan := make(chan error, 10)

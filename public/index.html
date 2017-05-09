@@ -1,0 +1,129 @@
+<html>
+<head>
+    <title>Сизонвар</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <style type="text/css">.pkt_added {text-decoration:none !important;}</style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header"><h1>Привет</h1></div>
+        <p class="lead">
+            Чтобы смотреть сериалы на <a href="http://seasonvar.ru">Seasonvar</a> без рекламы, блокировок и с любым переводом, выполните следующие простые шаги:
+        </p>
+        <ol class="lead">
+            <li>
+                Откройте любую страницу с незаблокированным сериалом, например, "<a href="http://seasonvar.ru/serial-148-Mislit__kak_prestupnik-1-season.html">Мыслить как преступник</a>";
+            </li>
+            <li>
+                Перейдите во вкладку Console инструментов разработчика, обычно, это клавиша <kbd>F12</kbd>;
+            </li>
+            <li>
+                Вставьте код <code>i=document.body.textContent.match(/\'secureMark\'\:\ \'(.+)\'/i),i&amp;&amp;i[1]</code> и нажмите <kbd>Enter</kbd>;
+            </li>
+            <li>
+                Скопируйте полученную строку (без ковычек) и вставьте в поле ниже, а затем нажмите "Сохранить":<br>
+                <form class="form-inline">
+                    <input type="text" id="secure_mark" class="form-control" style="width: 30%;">
+                    <button type="button" id="submit_secure_mark" class="btn btn-success">Сохранить</button>
+                    <span class="state-saved" style="display: none;">👍</span>
+                    <span class="state-filed" style="display: none">👎</span>
+                </form>
+            </li>
+            <li>
+                Открывайте <a href="/serial-148-Mislit__kak_prestupnik-1-season.html">любимый сериал</a> и продолжайте просмотр.
+            </li>
+        </ol>
+    </div>
+    <script type="text/javascript" async="" src="https://mc.yandex.ru/metrika/watch.js"></script><script>
+        window.onload = function() {
+            var xhr = new XMLHttpRequest(),
+                sm = document.getElementById('secure_mark'),
+                ssm = document.getElementById('submit_secure_mark');
+
+            function GetMe() {
+                xhr.open('GET', '/me', true);
+                xhr.onload = function() {
+                    if (xhr.status != 200) {
+                        return
+                    }
+                    var data = JSON.parse(xhr.responseText);
+                    sm.value = data['secure_mark'];
+                }
+                xhr.send();
+            }
+
+            function SetMe() {
+                Hide('.state-failed');
+                Hide('.state-saved');
+                xhr.open('POST', '/me', true);
+                xhr.onload = function() {
+                    if (xhr.status != 200) {
+                        Show('.state-failed');
+                        return
+                    }
+                    Show('.state-saved');
+                }
+                xhr.onerror = function() {
+                    Show('.state-failed');
+                }
+                var json = JSON.stringify({
+                    secure_mark: sm.value,
+                });
+                xhr.send(json);
+            }
+
+            function Hide(selector) {
+                e = document.querySelectorAll(selector);
+                for (var i = 0; i < e.length; i++) {
+                    e[i].style.display = 'none';
+                }
+            }
+
+            function Show(selector) {
+                e = document.querySelectorAll(selector);
+                for (var i = 0; i < e.length; i++) {
+                    e[i].style.display = 'inline';
+                }
+            }
+
+            submit_secure_mark.onclick = function() {
+                SetMe();
+            };
+
+            GetMe();
+        };
+    </script>
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+        (function (d, w, c) {
+            (w[c] = w[c] || []).push(function() {
+                try {
+                    w.yaCounter41725489 = new Ya.Metrika({
+                        id:41725489,
+                        clickmap:true,
+                        trackLinks:true,
+                        accurateTrackBounce:true
+                    });
+                } catch(e) { }
+            });
+
+            var n = d.getElementsByTagName("script")[0],
+                s = d.createElement("script"),
+                f = function () { n.parentNode.insertBefore(s, n); };
+            s.type = "text/javascript";
+            s.async = true;
+            s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+            if (w.opera == "[object Opera]") {
+                d.addEventListener("DOMContentLoaded", f, false);
+            } else { f(); }
+        })(document, window, "yandex_metrika_callbacks");
+    </script>
+    <noscript>
+        <div>
+            <img src="https://mc.yandex.ru/watch/41725489" style="position:absolute; left:-9999px;" alt="" />
+        </div>
+    </noscript>
+    <!-- /Yandex.Metrika counter -->
+</body>
+</html>

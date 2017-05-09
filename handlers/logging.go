@@ -10,8 +10,13 @@ const (
 )
 
 func LoggingHandler(h http.Handler) http.Handler {
+	var ip string
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Printf(LogginFormat, r.RemoteAddr, r.Method, r.URL.Path, r.Proto, r.UserAgent())
+		ip = r.Header.Get("X-REAL-IP")
+		if ip == "" {
+			ip = r.RemoteAddr
+		}
+		log.Printf(LogginFormat, ip, r.Method, r.URL.Path, r.Proto, r.UserAgent())
 		h.ServeHTTP(w, r)
 	})
 }

@@ -34,6 +34,11 @@ var (
 		Help: "How many errors while getting season id.",
 	})
 
+	SerialIDErrorCount = prometheus.NewCounter(prometheus.CounterOpts{
+		Name: prometheus.BuildFQName(namespace, "", "serial_id_error_count"),
+		Help: "How many errors while getting serial id.",
+	})
+
 	SeasonTitleErrorCount = prometheus.NewCounter(prometheus.CounterOpts{
 		Name: prometheus.BuildFQName(namespace, "", "season_title_error_count"),
 		Help: "How many errors while getting season title.",
@@ -58,6 +63,7 @@ func InitMetrics() {
 		prometheus.MustRegister(HttpRequestsTotalCount)
 		prometheus.MustRegister(TemplateExecuteErrorCount)
 		prometheus.MustRegister(SeasonIDErrorCount)
+		prometheus.MustRegister(SerialIDErrorCount)
 		prometheus.MustRegister(SeasonTitleErrorCount)
 		prometheus.MustRegister(SeasonKeywordsErrorCount)
 		prometheus.MustRegister(SeasonDescriptionErrorCount)

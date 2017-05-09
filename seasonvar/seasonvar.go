@@ -3,21 +3,25 @@ package seasonvar
 import (
 	"errors"
 	"fmt"
+	"net"
 	"os"
 	"regexp"
 	"strconv"
 
 	"github.com/leominov/datalock/metrics"
+	"github.com/leominov/datalock/utils"
 )
 
 const (
-	seriesLinkFormat = "http://seasonvar.ru%s"
+	Hostname         = "seasonvar.ru"
+	seriesLinkFormat = "http://%s%s"
 )
 
 var (
 	linkRegexp              = regexp.MustCompile(`http\:\/\/seasonvar\.ru\/(.*)\.html`)
 	seasonIDLinkRegexp      = regexp.MustCompile(`serial\-([0-9]+)\-`)
 	seasonIDRegexp          = regexp.MustCompile(`data\-id\-season\=\"([0-9]+)\"`)
+	serialIDRegexp          = regexp.MustCompile(`data\-id\-serial\=\"([0-9]+)\"`)
 	seasonTitleRegexp       = regexp.MustCompile(`\<title\>([^<]+)\<\/title\>`)
 	seasonKeywordsRegexp    = regexp.MustCompile(`\<meta\ name\=\"keywords\"\ content\=\"([^"]+)\"`)
 	seasonDescriptionRegexp = regexp.MustCompile(`\<meta\ name\=\"description\"\ content\=\"([^"]+)\"`)
@@ -26,21 +30,32 @@ var (
 type Seasonvar struct {
 	NodeName string
 	Seasons  map[int]*SeasonMeta
+	Users    map[string]*User
+	Config   *Config
 }
 
 type SeasonMeta struct {
 	Title           string
 	ID              int
+	Serial          int
 	Keywords        string
 	Description     string
 	CacheHitCounter int
 }
 
-func New() *Seasonvar {
+type User struct {
+	IP         string `json:"ip"`
+	UserAgent  string `json:"-"`
+	SecureMark string `json:"secure_mark"`
+}
+
+func New(config *Config) *Seasonvar {
 	hostname, _ := os.Hostname()
 	return &Seasonvar{
 		NodeName: hostname,
 		Seasons:  make(map[int]*SeasonMeta),
+		Users:    make(map[string]*User),
+		Config:   config,
 	}
 }
 
@@ -52,7 +67,7 @@ func (s *Seasonvar) ValidateLink(link string) error {
 }
 
 func (s *Seasonvar) AbsoluteLink(link string) string {
-	return fmt.Sprintf(seriesLinkFormat, link)
+	return fmt.Sprintf(seriesLinkFormat, Hostname, link)
 }
 
 func (s *Seasonvar) GetSeasonMeta(link string) (*SeasonMeta, error) {
@@ -79,12 +94,16 @@ func (s *Seasonvar) GetSeasonMeta(link string) (*SeasonMeta, error) {
 func (s *Seasonvar) collectSeasonMeta(link string) (*SeasonMeta, error) {
 	var seasonMeta *SeasonMeta
 	metrics.HttpRequestsTotalCount.Inc()
-	body, err := httpGet(link)
+	body, err := utils.HttpGet(link)
 	if err != nil {
 		metrics.HttpRequestsErrorCount.Inc()
 		return nil, err
 	}
 	seasonID, err := s.GetSeasonID(body)
+	if err != nil {
+		return nil, err
+	}
+	serialID, err := s.GetSerialID(body)
 	if err != nil {
 		return nil, err
 	}
@@ -102,6 +121,7 @@ func (s *Seasonvar) collectSeasonMeta(link string) (*SeasonMeta, error) {
 	}
 	seasonMeta = &SeasonMeta{
 		ID:          seasonID,
+		Serial:      serialID,
 		Title:       seasonTitle,
 		Keywords:    seasonKeywords,
 		Description: seasonDescription,
@@ -149,6 +169,19 @@ func (s *Seasonvar) GetSeasonID(body string) (int, error) {
 	return i, nil
 }
 
+func (s *Seasonvar) GetSerialID(body string) (int, error) {
+	serial := serialIDRegexp.FindStringSubmatch(body)
+	if len(serial) < 1 {
+		metrics.SerialIDErrorCount.Inc()
+		return 0, errors.New("serial id not found")
+	}
+	i, err := strconv.Atoi(serial[1])
+	if err != nil {
+		return 0, err
+	}
+	return i, nil
+}
+
 func (s *Seasonvar) GetSeasonIDFromLink(link string) (int, error) {
 	season := seasonIDLinkRegexp.FindStringSubmatch(link)
 	if len(season) < 1 {
@@ -159,4 +192,23 @@ func (s *Seasonvar) GetSeasonIDFromLink(link string) (int, error) {
 		return 0, err
 	}
 	return i, nil
+}
+
+func (s *Seasonvar) SetUser(u *User) {
+	h, _, err := net.SplitHostPort(u.IP)
+	if err == nil {
+		u.IP = h
+	}
+	s.Users[u.IP] = u
+}
+
+func (s *Seasonvar) GetUser(ip string) *User {
+	h, _, err := net.SplitHostPort(ip)
+	if err == nil {
+		ip = h
+	}
+	if u, ok := s.Users[ip]; ok {
+		return u
+	}
+	return nil
 }
