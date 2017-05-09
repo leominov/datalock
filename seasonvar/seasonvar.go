@@ -22,7 +22,6 @@ const (
 )
 
 var (
-	linkRegexp              = regexp.MustCompile(`http\:\/\/seasonvar\.ru\/(.*)\.html`)
 	seasonIDLinkRegexp      = regexp.MustCompile(`serial\-([0-9]+)\-`)
 	seasonIDRegexp          = regexp.MustCompile(`data\-id\-season\=\"([0-9]+)\"`)
 	serialIDRegexp          = regexp.MustCompile(`data\-id\-serial\=\"([0-9]+)\"`)
@@ -79,13 +78,6 @@ func (s *Seasonvar) Start() error {
 
 func (s *Seasonvar) Stop() error {
 	return s.DB.Close()
-}
-
-func (s *Seasonvar) ValidateLink(link string) error {
-	if linkRegexp.FindString(link) == "" {
-		return errors.New("incorrect link format")
-	}
-	return nil
 }
 
 func (s *Seasonvar) AbsoluteLink(link string) string {
