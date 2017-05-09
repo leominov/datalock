@@ -20,3 +20,4 @@ _cgo_gotypes.go
 _cgo_export.*
 
 bin/
+database/

@@ -58,7 +58,6 @@ var (
 func InitMetrics() {
 	once.Do(func() {
 		prometheus.MustRegister(version.NewCollector(namespace))
-
 		prometheus.MustRegister(HttpRequestsErrorCount)
 		prometheus.MustRegister(HttpRequestsTotalCount)
 		prometheus.MustRegister(TemplateExecuteErrorCount)

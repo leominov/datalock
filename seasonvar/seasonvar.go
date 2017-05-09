@@ -1,20 +1,23 @@
 package seasonvar
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net"
 	"os"
+	"path"
 	"regexp"
 	"strconv"
 
+	"github.com/boltdb/bolt"
 	"github.com/leominov/datalock/metrics"
 	"github.com/leominov/datalock/utils"
 )
 
 const (
 	Hostname         = "seasonvar.ru"
-	seriesLinkFormat = "http://%s%s"
+	SeriesLinkFormat = "http://%s%s"
 )
 
 var (
@@ -25,27 +28,29 @@ var (
 	seasonTitleRegexp       = regexp.MustCompile(`\<title\>([^<]+)\<\/title\>`)
 	seasonKeywordsRegexp    = regexp.MustCompile(`\<meta\ name\=\"keywords\"\ content\=\"([^"]+)\"`)
 	seasonDescriptionRegexp = regexp.MustCompile(`\<meta\ name\=\"description\"\ content\=\"([^"]+)\"`)
+
+	BucketUsers = []byte("users")
+	BucketMeta  = []byte("meta")
 )
 
 type Seasonvar struct {
 	NodeName string
 	Seasons  map[int]*SeasonMeta
-	Users    map[string]*User
 	Config   *Config
+	DB       *bolt.DB
 }
 
 type SeasonMeta struct {
-	Title           string
-	ID              int
-	Serial          int
-	Keywords        string
-	Description     string
-	CacheHitCounter int
+	Title       string
+	ID          int
+	Serial      int
+	Keywords    string
+	Description string
 }
 
 type User struct {
 	IP         string `json:"ip"`
-	UserAgent  string `json:"-"`
+	UserAgent  string `json:"user_agent"`
 	SecureMark string `json:"secure_mark"`
 }
 
@@ -54,9 +59,29 @@ func New(config *Config) *Seasonvar {
 	return &Seasonvar{
 		NodeName: hostname,
 		Seasons:  make(map[int]*SeasonMeta),
-		Users:    make(map[string]*User),
 		Config:   config,
 	}
+}
+
+func (s *Seasonvar) Start() error {
+	var err error
+	s.DB, err = bolt.Open(path.Join(s.Config.DatabaseDir, "datalock.db"), 0600, nil)
+	if err != nil {
+		return err
+	}
+	return s.DB.Update(func(tx *bolt.Tx) error {
+		if _, err := tx.CreateBucketIfNotExists(BucketUsers); err != nil {
+			return err
+		}
+		if _, err := tx.CreateBucketIfNotExists(BucketMeta); err != nil {
+			return err
+		}
+		return nil
+	})
+}
+
+func (s *Seasonvar) Stop() error {
+	return s.DB.Close()
 }
 
 func (s *Seasonvar) ValidateLink(link string) error {
@@ -67,7 +92,7 @@ func (s *Seasonvar) ValidateLink(link string) error {
 }
 
 func (s *Seasonvar) AbsoluteLink(link string) string {
-	return fmt.Sprintf(seriesLinkFormat, Hostname, link)
+	return fmt.Sprintf(SeriesLinkFormat, Hostname, link)
 }
 
 func (s *Seasonvar) GetSeasonMeta(link string) (*SeasonMeta, error) {
@@ -78,10 +103,8 @@ func (s *Seasonvar) GetSeasonMeta(link string) (*SeasonMeta, error) {
 	if err != nil {
 		return nil, err
 	}
-	if seasonMeta, ok = s.Seasons[seasonID]; ok {
-		seasonMeta.CacheHitCounter++
-	}
-	if seasonMeta == nil {
+	seasonMeta, ok = s.Seasons[seasonID]
+	if !ok {
 		seasonMeta, err = s.collectSeasonMeta(link)
 		if err != nil {
 			return nil, err
@@ -194,21 +217,34 @@ func (s *Seasonvar) GetSeasonIDFromLink(link string) (int, error) {
 	return i, nil
 }
 
-func (s *Seasonvar) SetUser(u *User) {
-	h, _, err := net.SplitHostPort(u.IP)
-	if err == nil {
+func (s *Seasonvar) SetUser(u *User) error {
+	if h, _, err := net.SplitHostPort(u.IP); err == nil {
 		u.IP = h
 	}
-	s.Users[u.IP] = u
+	return s.DB.Update(func(tx *bolt.Tx) error {
+		b := tx.Bucket(BucketUsers)
+		encoded, err := json.Marshal(u)
+		if err != nil {
+			return err
+		}
+		return b.Put([]byte(u.IP), encoded)
+	})
 }
 
-func (s *Seasonvar) GetUser(ip string) *User {
-	h, _, err := net.SplitHostPort(ip)
-	if err == nil {
+func (s *Seasonvar) GetUser(ip string) (*User, error) {
+	var u *User
+	if h, _, err := net.SplitHostPort(ip); err == nil {
 		ip = h
 	}
-	if u, ok := s.Users[ip]; ok {
-		return u
-	}
-	return nil
+	return u, s.DB.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket(BucketUsers)
+		v := b.Get([]byte(ip))
+		if len(v) == 0 {
+			return errors.New("User not found")
+		}
+		if err := json.Unmarshal(v, &u); err != nil {
+			return err
+		}
+		return nil
+	})
 }

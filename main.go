@@ -35,6 +35,10 @@ func main() {
 
 	s := seasonvar.New(config)
 
+	if err := s.Start(); err != nil {
+		log.Fatal(err)
+	}
+
 	mux := http.NewServeMux()
 	mux.Handle("/", handlers.IndexHandler(s))
 	mux.Handle("/me", handlers.MeHandler(s))
@@ -65,9 +69,14 @@ func main() {
 			if err != nil {
 				log.Fatal(err)
 			}
-		case s := <-signalChan:
-			log.Println(fmt.Sprintf("Captured %v. Exiting...", s))
+		case signal := <-signalChan:
+			log.Println(fmt.Sprintf("Captured %v. Exiting...", signal))
 			httpServer.BlockingClose()
+			log.Println("Closing database connection...")
+			if err := s.Stop(); err != nil {
+				log.Fatal(err)
+			}
+			log.Println("Bye")
 			os.Exit(0)
 		}
 	}

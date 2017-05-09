@@ -26,15 +26,18 @@ func MeHandler(s *seasonvar.Seasonvar) http.Handler {
 			}
 			u.UserAgent = r.UserAgent()
 			u.IP = ip
-			s.SetUser(u)
+			if err := s.SetUser(u); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
 			encoder := json.NewEncoder(w)
 			if err := encoder.Encode(u); err != nil {
 				http.Error(w, fmt.Sprintf("Cannot encode response data: %v", err), http.StatusInternalServerError)
 				return
 			}
 		default:
-			u := s.GetUser(ip)
-			if u == nil {
+			u, err := s.GetUser(ip)
+			if err != nil {
 				http.Error(w, "User not found", http.StatusNotFound)
 				return
 			}

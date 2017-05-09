@@ -7,6 +7,7 @@ const (
 	DefaultPublicDir   = "./public"
 	DefaultMetricsPath = "/metrics"
 	DefaultHealthzPath = "/healthz"
+	DefaultDatabaseDir = "./database"
 )
 
 type Config struct {
@@ -14,6 +15,7 @@ type Config struct {
 	MetricsPath string
 	HealthzPath string
 	PublicDir   string
+	DatabaseDir string
 }
 
 func NewConfig() *Config {
@@ -43,6 +45,10 @@ func (c *Config) LoadFromEnv() error {
 	c.HealthzPath = os.Getenv("DATALOCK_HEALTHZ_PATH")
 	if c.HealthzPath == "" {
 		c.HealthzPath = DefaultHealthzPath
+	}
+	c.DatabaseDir = os.Getenv("DATALOCK_DATABASE_DIR")
+	if c.DatabaseDir == "" {
+		c.DatabaseDir = DefaultDatabaseDir
 	}
 	return nil
 }

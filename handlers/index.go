@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"path"
 	"strings"
@@ -31,13 +30,12 @@ func IndexHandler(s *seasonvar.Seasonvar) http.Handler {
 			http.Redirect(w, r, seriesLink, http.StatusFound)
 			return
 		}
-		u := s.GetUser(ip)
+		u, _ := s.GetUser(ip)
 		seasonMeta, err := s.GetSeasonMeta(seriesLink)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		w.Header().Add("X-CACHE", fmt.Sprintf("%d.%s", seasonMeta.CacheHitCounter, s.NodeName))
 		vars := TemplateVars{
 			User: u,
 			Meta: seasonMeta,
