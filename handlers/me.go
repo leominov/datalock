@@ -4,8 +4,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"regexp"
 
 	"github.com/leominov/datalock/seasonvar"
+	"github.com/leominov/datalock/utils"
+)
+
+var (
+	cleanRegexp = regexp.MustCompile(`[^a-z0-9]`)
 )
 
 func MeHandler(s *seasonvar.Seasonvar) http.Handler {
@@ -26,6 +32,7 @@ func MeHandler(s *seasonvar.Seasonvar) http.Handler {
 			}
 			u.UserAgent = r.UserAgent()
 			u.IP = ip
+			u.SecureMark = utils.CleanText(u.SecureMark)
 			if err := s.SetUser(u); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
