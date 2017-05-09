@@ -73,7 +73,6 @@ func main() {
 		case signal := <-signalChan:
 			log.Println(fmt.Sprintf("Captured %v. Exiting...", signal))
 			httpServer.BlockingClose()
-			log.Println("Closing database connection...")
 			if err := s.Stop(); err != nil {
 				log.Fatal(err)
 			}
