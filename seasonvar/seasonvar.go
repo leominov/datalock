@@ -39,11 +39,11 @@ type Seasonvar struct {
 }
 
 type SeasonMeta struct {
-	Title       string
-	ID          int
-	Serial      int
-	Keywords    string
-	Description string
+	Title       string `json:"title"`
+	ID          int    `json:"id"`
+	Serial      int    `json:"serial"`
+	Keywords    string `json:"keywords"`
+	Description string `json:"description"`
 }
 
 type User struct {
