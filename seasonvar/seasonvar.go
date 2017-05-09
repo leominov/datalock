@@ -29,11 +29,11 @@ var (
 	seasonDescriptionRegexp = regexp.MustCompile(`\<meta\ name\=\"description\"\ content\=\"([^"]+)\"`)
 
 	BucketUsers = []byte("users")
+	BucketMeta  = []byte("meta")
 )
 
 type Seasonvar struct {
 	NodeName string
-	Seasons  map[int]*SeasonMeta
 	Config   *Config
 	DB       *bolt.DB
 }
@@ -56,7 +56,6 @@ func New(config *Config) *Seasonvar {
 	hostname, _ := os.Hostname()
 	return &Seasonvar{
 		NodeName: hostname,
-		Seasons:  make(map[int]*SeasonMeta),
 		Config:   config,
 	}
 }
@@ -71,6 +70,9 @@ func (s *Seasonvar) Start() error {
 		if _, err := tx.CreateBucketIfNotExists(BucketUsers); err != nil {
 			return err
 		}
+		if _, err := tx.CreateBucketIfNotExists(BucketMeta); err != nil {
+			return err
+		}
 		return nil
 	})
 }
@@ -83,22 +85,23 @@ func (s *Seasonvar) AbsoluteLink(link string) string {
 	return fmt.Sprintf(SeriesLinkFormat, Hostname, link)
 }
 
-func (s *Seasonvar) GetSeasonMeta(link string) (*SeasonMeta, error) {
+func (s *Seasonvar) GetCachedSeasonMeta(link string) (*SeasonMeta, error) {
 	var seasonMeta *SeasonMeta
 	var err error
-	var ok bool
 	seasonID, err := s.GetSeasonIDFromLink(link)
 	if err != nil {
 		return nil, err
 	}
-	seasonMeta, ok = s.Seasons[seasonID]
-	if !ok {
+	seasonMeta, err = s.GetSeasonMeta(seasonID)
+	if err != nil {
 		seasonMeta, err = s.collectSeasonMeta(link)
 		if err != nil {
 			return nil, err
 		}
 	}
-	s.Seasons[seasonMeta.ID] = seasonMeta
+	if err := s.SetSeasonMeta(seasonMeta); err != nil {
+		return nil, err
+	}
 	return seasonMeta, nil
 }
 
@@ -226,6 +229,32 @@ func (s *Seasonvar) GetUser(ip string) (*User, error) {
 			return errors.New("User not found")
 		}
 		if err := json.Unmarshal(v, &u); err != nil {
+			return err
+		}
+		return nil
+	})
+}
+
+func (s *Seasonvar) SetSeasonMeta(m *SeasonMeta) error {
+	return s.DB.Update(func(tx *bolt.Tx) error {
+		b := tx.Bucket(BucketMeta)
+		encoded, err := json.Marshal(m)
+		if err != nil {
+			return err
+		}
+		return b.Put([]byte(strconv.Itoa(m.ID)), encoded)
+	})
+}
+
+func (s *Seasonvar) GetSeasonMeta(id int) (*SeasonMeta, error) {
+	var m *SeasonMeta
+	return m, s.DB.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket(BucketMeta)
+		v := b.Get([]byte(strconv.Itoa(id)))
+		if len(v) == 0 {
+			return errors.New("Meta not found")
+		}
+		if err := json.Unmarshal(v, &m); err != nil {
 			return err
 		}
 		return nil

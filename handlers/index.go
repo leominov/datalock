@@ -28,7 +28,7 @@ func IndexHandler(s *seasonvar.Seasonvar) http.Handler {
 			return
 		}
 		u, _ := s.GetUser(ip)
-		seasonMeta, err := s.GetSeasonMeta(seriesLink)
+		seasonMeta, err := s.GetCachedSeasonMeta(seriesLink)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
