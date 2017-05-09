@@ -31,7 +31,6 @@ var (
 	seasonDescriptionRegexp = regexp.MustCompile(`\<meta\ name\=\"description\"\ content\=\"([^"]+)\"`)
 
 	BucketUsers = []byte("users")
-	BucketMeta  = []byte("meta")
 )
 
 type Seasonvar struct {
@@ -72,9 +71,6 @@ func (s *Seasonvar) Start() error {
 	}
 	return s.DB.Update(func(tx *bolt.Tx) error {
 		if _, err := tx.CreateBucketIfNotExists(BucketUsers); err != nil {
-			return err
-		}
-		if _, err := tx.CreateBucketIfNotExists(BucketMeta); err != nil {
 			return err
 		}
 		return nil
