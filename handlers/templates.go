@@ -55,6 +55,10 @@ const (
                         </div>
                         <div id="errorPlayer" class="pgs-player-block error">Ошибка при загрузке плеера, попробуйте перезагрузить страницу</div>
                     </div>
+                    <div class="seasons" style="display: none; color: #fff;">
+                        Список сезонов:
+                        <ul class="seasons_list"></ul>
+                    </div>
                 </div>
             </div>
             <!-- Yandex.Metrika counter -->
@@ -96,6 +100,26 @@ const (
             <script src="/tpl/asset/vendor/swfobject.min.js"></script>
             <script src="/tpl/asset/js/pg.marks.min.js?17.4.4"></script>
             <script src="/tpl/asset/js/pg.player.min.js?17.4.4"></script>
+            <script>
+                $(function() {
+                    String.prototype.format = function () {
+                        var args = [].slice.call(arguments);
+                        return this.replace(/(\{\d+\})/g, function (a){
+                            return args[+(a.substr(1,a.length-2))||0];
+                        });
+                    };
+                    $.getJSON("/all_seasons", {url: window.location.pathname})
+                        .done(function(data) {
+                            if (data["seasons"].length <= 1) {
+                                return;
+                            }
+                            data["seasons"].forEach(function(season) {
+                                $(".seasons_list").append('<li><a href="{0}">{1}</a></li>'.format(season.link, season.title));
+                            });
+                            $(".seasons").show();
+                        });
+                });
+            </script>
         </body>
     </html>
     `

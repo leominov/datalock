@@ -42,6 +42,7 @@ func main() {
 	mux := http.NewServeMux()
 	mux.Handle("/", handlers.IndexHandler(s))
 	mux.Handle("/me", handlers.MeHandler(s))
+	mux.Handle("/all_seasons", handlers.AllSeasonsHandler(s))
 	mux.Handle(s.Config.HealthzPath, handlers.HealthzHandler())
 	mux.Handle(s.Config.MetricsPath, promhttp.Handler())
 	mux.Handle("/js/", handlers.ProxyHandler(s))
