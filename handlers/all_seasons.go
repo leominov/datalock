@@ -53,7 +53,10 @@ func AllSeasonsHandler(s *seasonvar.Seasonvar) http.Handler {
 			if !ok {
 				continue
 			}
-			as.Seasons = append(as.Seasons, Season{title, link})
+			as.Seasons = append(as.Seasons, Season{
+				Title: utils.StandardizeSpaces(title),
+				Link:  strings.TrimSpace(link),
+			})
 		}
 		encoder := json.NewEncoder(w)
 		if err := encoder.Encode(as); err != nil {

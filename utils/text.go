@@ -14,3 +14,7 @@ func CleanText(str string) string {
 	str = cleanRegexp.ReplaceAllString(str, "${1}")
 	return str
 }
+
+func StandardizeSpaces(s string) string {
+	return strings.Join(strings.Fields(strings.TrimSpace(s)), " ")
+}
