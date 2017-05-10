@@ -28,8 +28,8 @@ var (
 	seasonKeywordsRegexp    = regexp.MustCompile(`\<meta\ name\=\"keywords\"\ content\=\"([^"]+)\"`)
 	seasonDescriptionRegexp = regexp.MustCompile(`\<meta\ name\=\"description\"\ content\=\"([^"]+)\"`)
 
-	BucketUsers = []byte("users")
-	BucketMeta  = []byte("meta")
+	UsersBucket = []byte("users")
+	MetaBucket  = []byte("meta")
 )
 
 type Seasonvar struct {
@@ -67,10 +67,12 @@ func (s *Seasonvar) Start() error {
 		return err
 	}
 	return s.DB.Update(func(tx *bolt.Tx) error {
-		if _, err := tx.CreateBucketIfNotExists(BucketUsers); err != nil {
+		// Always create Users bucket.
+		if _, err := tx.CreateBucketIfNotExists(UsersBucket); err != nil {
 			return err
 		}
-		if _, err := tx.CreateBucketIfNotExists(BucketMeta); err != nil {
+		// Always create Meta bucket.
+		if _, err := tx.CreateBucketIfNotExists(MetaBucket); err != nil {
 			return err
 		}
 		return nil
@@ -211,7 +213,7 @@ func (s *Seasonvar) GetSeasonIDFromLink(link string) (int, error) {
 func (s *Seasonvar) SetUser(u *User) error {
 	u.SecureMark = utils.CleanText(u.SecureMark)
 	return s.DB.Update(func(tx *bolt.Tx) error {
-		b := tx.Bucket(BucketUsers)
+		b := tx.Bucket(UsersBucket)
 		encoded, err := json.Marshal(u)
 		if err != nil {
 			return err
@@ -223,7 +225,7 @@ func (s *Seasonvar) SetUser(u *User) error {
 func (s *Seasonvar) GetUser(ip string) (*User, error) {
 	var u *User
 	return u, s.DB.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket(BucketUsers)
+		b := tx.Bucket(UsersBucket)
 		v := b.Get([]byte(ip))
 		if len(v) == 0 {
 			return errors.New("User not found")
@@ -237,7 +239,7 @@ func (s *Seasonvar) GetUser(ip string) (*User, error) {
 
 func (s *Seasonvar) SetSeasonMeta(m *SeasonMeta) error {
 	return s.DB.Update(func(tx *bolt.Tx) error {
-		b := tx.Bucket(BucketMeta)
+		b := tx.Bucket(MetaBucket)
 		encoded, err := json.Marshal(m)
 		if err != nil {
 			return err
@@ -249,7 +251,7 @@ func (s *Seasonvar) SetSeasonMeta(m *SeasonMeta) error {
 func (s *Seasonvar) GetSeasonMeta(id int) (*SeasonMeta, error) {
 	var m *SeasonMeta
 	return m, s.DB.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket(BucketMeta)
+		b := tx.Bucket(MetaBucket)
 		v := b.Get([]byte(strconv.Itoa(id)))
 		if len(v) == 0 {
 			return errors.New("Meta not found")
