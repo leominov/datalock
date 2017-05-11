@@ -37,7 +37,7 @@ func IndexHandler(s *seasonvar.Seasonvar) http.Handler {
 			User: u,
 			Meta: seasonMeta,
 		}
-		if u != nil {
+		if u != nil && len(u.SecureMark) != 0 {
 			err = SecuredPlayerTemplate.Execute(w, vars)
 		} else {
 			err = PlayerPageTemplate.Execute(w, vars)
