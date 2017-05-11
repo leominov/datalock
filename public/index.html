@@ -24,7 +24,7 @@
             <li>
                 Скопируйте полученную строку, вставьте в поле и нажмите "Сохранить":<br>
                 <form class="form-inline" style="margin-bottom: 0em;">
-                    <input type="text" id="secure_mark" class="form-control" style="width: 30%;">
+                    <input type="text" id="secure_mark" class="form-control" style="width: 30%;" autocomplete="off">
                     <button type="button" id="submit_secure_mark" class="btn btn-success">Сохранить</button>
                     <span class="state-saved" style="display: none;">👍</span>
                     <span class="state-filed" style="display: none">👎</span>
@@ -84,6 +84,9 @@
                         return
                     }
                     var data = JSON.parse(xhr.responseText);
+                    if (data['secure_mark'].length == 0) {
+                        return
+                    }
                     sm.value = data['secure_mark'];
                     Show('.state-saved');
                 }
