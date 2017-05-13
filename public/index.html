@@ -1,10 +1,8 @@
 <html>
 <head>
-    <title>Сизонвар</title>
+    <title>Сериалы</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css">
-    <meta name="keywords" content="сериалы онлайн, бесплатно сериалы, смотри онлайн, смотри фильмы онлайн, смотреть онлайн бесплатно, видео онлайн, фильмы онлайн бесплатно, кино онлайн, просмотр онлайн">
-    <meta name="description" content="На сайте собрание лучших сериалов и ВСЕХ их сезонов. Не только зарубежные, но и отечественные сериалы. Просмотр онлайн сериалов стал намного удобнее!">
     <meta content="width=device-width,initial-scale=1" name=viewport>
 </head>
 <body>
@@ -14,70 +12,57 @@
             <p class="lead">Чтобы смотреть сериалы без рекламы, блокировок, в любом качестве и переводе, нажмите на эту большую красную кнопку:</p>
             <p><a class="btn btn-lg btn-danger" id="submit_try_get_secure_mark" role="button">Активировать</a></p>
         </div>
-
         <div class="marketing" style="display: none;">
-            <h4>Что дальше?</h4>
-            <p>
-                <ol>
-                    <li>
-                        Перейдите на страницу с <a href="http://seasonvar.ru/serial-148-Mislit__kak_prestupnik-1-season.html">любимым сериалом</a>;
-                    </li>
-                    <li>
-                        В адресной строке замените <code>seasonvar</code> на <code>1seasonvar</code> и нажмите <kbd>Enter</kbd>.
-                    </li>
-                </ol>
-            </p>
-            <h4>Не работает активация?</h4>
-            <p>
-                Попробуйте провести активацию самостоятельно:
-                <ol>
-                    <li>
-                        Откройте любую страницу с незаблокированным сериалом, например, "<a href="http://seasonvar.ru/serial-148-Mislit__kak_prestupnik-1-season.html">Мыслить как преступник</a>";
-                    </li>
-                    <li>
-                        Перейдите во вкладку Console инструментов разработчика, обычно, это клавиша <kbd>F12</kbd>;
-                    </li>
-                    <li>
-                        Вставьте код <code>i=document.body.textContent.match(/\'secureMark\'\:\ \'(.+)\'/i),i&amp;&amp;i[1]</code> и нажмите <kbd>Enter</kbd>;
-                    </li>
-                    <li>
-                        Скопируйте полученную строку, вставьте в поле и нажмите "Сохранить":<br>
-                        <form class="form-inline" style="margin-bottom: 0em;">
-                            <input type="text" id="secure_mark" class="form-control" style="width: 70%;" autocomplete="off">
-                            <button type="button" id="submit_secure_mark" class="btn btn-success">Сохранить</button>
-                            <span class="state-saved" style="display: none;">👍</span>
-                            <span class="state-filed" style="display: none">👎</span>
-                        </form>
-                    </li>
-                </ol>
-            </p>
+            <div class="dont_work" style="display: none;">
+                <h4>Не работает активация?</h4>
+                <p>
+                    Попробуйте выполнить следующие шаги:
+                    <ol>
+                        <li>
+                            Откройте любую страницу с незаблокированным сериалом";
+                        </li>
+                        <li>
+                            Перейдите во вкладку Console инструментов разработчика, обычно, это клавиша <kbd>F12</kbd>;
+                        </li>
+                        <li>
+                            Вставьте код <code>i=document.body.textContent.match(/\'secureMark\'\:\ \'(.+)\'/i),i&amp;&amp;i[1]</code> и нажмите <kbd>Enter</kbd>;
+                        </li>
+                        <li>
+                            Скопируйте полученную строку, вставьте в поле и нажмите "Сохранить":<br>
+                            <form class="form-inline" style="margin-bottom: 0em;">
+                                <input type="text" id="secure_mark" class="form-control" style="width: 70%;" autocomplete="off">
+                                <button type="button" id="submit_secure_mark" class="btn btn-success">Сохранить</button>
+                                <span class="state-saved" style="display: none;">👍</span>
+                                <span class="state-filed" style="display: none">👎</span>
+                            </form>
+                        </li>
+                    </ol>
+                </p>
+            </div>
             <h4>Что посмотреть?</h4>
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <ul>
                         <li><a href="/serial-584-Kak_ya_vstretil_vashu_mamu-1-season.html">Как я встретил вашу маму</a></li>
                         <li><a href="/serial-415-Teoriya_bol_shogo_vzriva-01-sezon.html">Теория большого взрыва</a></li>
                         <li><a href="/serial-6253-Kartochnyj_domik.html">Карточный домик</a></li>
                         <li><a href="/serial-9277-Kremnievaya_dolina-01-sezon.html">Кремниевая долина</a></li>
                         <li><a href="/serial-2219-Ne_vse_starki_umrut-001-sezon.html">Игра престолов</a></li>
+                        <li><a href="/serial-1399-Sherlock-1-sezon.html">Шерлок</a></li>
+                        <li><a href="/serial-4832-Elementarno-1-sezon.html">Элементарно</a></li>
+                        <li><a href="/serial-3172-Rodina-1-season.html">Родина</a></li>
                     </ul>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <ul>
                         <li><a href="/serial-249-Doktor_Kto-1-season.html">Доктор Кто</a></li>
                         <li><a href="/serial-7276-Oranzhevyj_-001-sezon.html">Оранжевый - это хит сезона</a></li>
                         <li><a href="/serial-1031-Simpsoni-1-sezon.html">Симпсоны</a></li>
                         <li><a href="/serial-9372-Fargo-1-season.html">Фарго</a></li>
                         <li><a href="/serial-9099-Sotnya-1-season.html">Сотня</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-4">
-                    <ul>
-                        <li><a href="/serial-1399-Sherlock-1-sezon.html">Шерлок</a></li>
-                        <li><a href="/serial-4832-Elementarno-1-sezon.html">Элементарно</a></li>
-                        <li><a href="/serial-3172-Rodina-1-season.html">Родина</a></li>
                         <li><a href="/serial-3319-Odnazhdi-00001-sezon.html">Однажды</a></li>
                         <li><a href="/serial-1174-Vsegda_solnechno_v_Filadel_fii-1-sezon.html">Всегда солнечно в Филадельфии</a></li>
+                        <li><a href="/serial-118-Pobeg_iz_tyur_mi-1-season.html">Побег из тюрьмы</a></li>
                     </ul>
                 </div>
             </div>
@@ -210,6 +195,7 @@
 
             submit_try_get_secure_mark.onclick = function() {
                 Show('.marketing');
+                Show('.dont_work');
                 GetSecureMark();
             };
 
