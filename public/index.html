@@ -73,6 +73,12 @@
             var sm = document.getElementById('secure_mark'),
                 mk = document.getElementById('marketing');
 
+            function Init() {
+                // Setup HTML5 on start
+                document.cookie = "playerHtml=true";
+                GetMe();
+            }
+
             function GetMe() {
                 var xhr = new XMLHttpRequest();
                 xhr.open('GET', '/me', true);
@@ -172,7 +178,7 @@
 
             function GetSecureMark() {
                 var xhr = new XMLHttpRequest();
-                xhr.open('GET', 'http://datalock.ru/player/1', false);
+                xhr.open('GET', 'http://datalock.ru/player/1?t=' + Math.random(), false);
                 xhr.onload = function() {
                     if (xhr.status != 200 || xhr.responseText.length == "") {
                         return
@@ -196,7 +202,7 @@
                 GetSecureMark();
             };
 
-            GetMe();
+            Init();
         };
     </script>
     <!-- Yandex.Metrika counter -->
