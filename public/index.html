@@ -11,8 +11,8 @@
     <div class="container">
         <div class="jumbotron">
             <h1>Привет</h1>
-            <p class="lead">Чтобы смотреть сериалы без рекламы, блокировок, в любом качестве и переводе, нажмите на эту большую зеленую кнопку:</p>
-            <p><a class="btn btn-lg btn-success" id="submit_try_get_secure_mark" role="button">Активировать</a></p>
+            <p class="lead">Чтобы смотреть сериалы без рекламы, блокировок, в любом качестве и переводе, нажмите на эту большую красную кнопку:</p>
+            <p><a class="btn btn-lg btn-danger" id="submit_try_get_secure_mark" role="button">Активировать</a></p>
         </div>
 
         <div class="marketing" style="display: none;">
@@ -43,21 +43,14 @@
                     <li>
                         Скопируйте полученную строку, вставьте в поле и нажмите "Сохранить":<br>
                         <form class="form-inline" style="margin-bottom: 0em;">
-                            <input type="text" id="secure_mark" class="form-control" style="width: 30%;" autocomplete="off">
+                            <input type="text" id="secure_mark" class="form-control" style="width: 70%;" autocomplete="off">
                             <button type="button" id="submit_secure_mark" class="btn btn-success">Сохранить</button>
                             <span class="state-saved" style="display: none;">👍</span>
                             <span class="state-filed" style="display: none">👎</span>
                         </form>
                     </li>
-                    <li>
-                        Вернитесь на страницу с <a href="http://seasonvar.ru/serial-148-Mislit__kak_prestupnik-1-season.html">любимым сериалом</a>;
-                    </li>
-                    <li>
-                        В адресной строке замените <code>seasonvar</code> на <code>1seasonvar</code> и нажмите <kbd>Enter</kbd>.
-                    </li>
                 </ol>
             </p>
-            <hr>
             <h4>Что посмотреть?</h4>
             <div class="row">
                 <div class="col-md-4">
@@ -108,6 +101,7 @@
                     }
                     sm.value = data['secure_mark'];
                     Show('.state-saved');
+                    Show('.marketing');
                 }
                 xhr.send();
             }
