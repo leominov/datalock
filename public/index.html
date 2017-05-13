@@ -43,7 +43,7 @@
             <div class="dont_work" style="display: none;">
                 <h4>Не работает активация?</h4>
                 <p>
-                    Попробуйте выполнить следующие шаги:
+                    Попробуйте пройти активацию вручную:
                     <ol>
                         <li>
                             Откройте любую страницу с незаблокированным сериалом";
@@ -159,11 +159,8 @@
             }
 
             function DecodeText(text) {
-                p = text.match( /playlist\/([a-z0-9]+)\//i );
+                p = text.match( /playlist\/([a-z0-9]{32})\//i );
                 if (p != null && p.length == 2) {
-                    if (p[1].length != 32) {
-                        return
-                    }
                     return p[1];
                 }
                 r = text.match( /\(\'([a-z0-9]+)\'\,\'([a-z0-9]+)\'\,\'([a-z0-9]+)\'\,\'([a-z0-9]+)\'/i );
