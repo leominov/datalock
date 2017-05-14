@@ -22,12 +22,12 @@ func init() {
 func main() {
 	log.Println("Starting datalock...")
 
-	if err := handlers.ParseTemplates(); err != nil {
+	config := server.NewConfig()
+	if err := config.Load(); err != nil {
 		log.Fatal(err)
 	}
 
-	config := server.NewConfig()
-	if err := config.Load(); err != nil {
+	if err := handlers.ParseTemplates(config); err != nil {
 		log.Fatal(err)
 	}
 

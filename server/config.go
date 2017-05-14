@@ -7,23 +7,25 @@ import (
 )
 
 const (
-	DefaultHTTPAddr    = "127.0.0.1:7000"
-	DefaultPublicDir   = "./public"
-	DefaultMetricsPath = "/metrics"
-	DefaultHealthzPath = "/healthz"
-	DefaultDatabaseDir = "./database"
-	DefaultHdHostname  = "ZGF0YS1oZC5kYXRhbG9jay5ydQ=="
-	DefaultHostname    = "c2Vhc29udmFyLnJ1"
+	DefaultHTTPAddr     = "127.0.0.1:7000"
+	DefaultPublicDir    = "./public"
+	DefaultMetricsPath  = "/metrics"
+	DefaultHealthzPath  = "/healthz"
+	DefaultDatabaseDir  = "./database"
+	DefaultHdHostname   = "ZGF0YS1oZC5kYXRhbG9jay5ydQ=="
+	DefaultHostname     = "c2Vhc29udmFyLnJ1"
+	DefaultTemplatesDir = "./templates"
 )
 
 type Config struct {
-	ListenAddr  string
-	MetricsPath string
-	HealthzPath string
-	PublicDir   string
-	DatabaseDir string
-	HdHostname  string
-	Hostname    string
+	ListenAddr   string
+	MetricsPath  string
+	HealthzPath  string
+	PublicDir    string
+	DatabaseDir  string
+	HdHostname   string
+	Hostname     string
+	TemplatesDir string
 }
 
 func NewConfig() *Config {
@@ -63,6 +65,10 @@ func (c *Config) LoadFromEnv() error {
 	c.HdHostname = os.Getenv("DATALOCK_HD_HOSTNAME")
 	if c.HdHostname == "" {
 		c.HdHostname = utils.Base64Decode(DefaultHdHostname)
+	}
+	c.TemplatesDir = os.Getenv("DATALOCK_TEMPLATES_DIR")
+	if c.TemplatesDir == "" {
+		c.TemplatesDir = DefaultTemplatesDir
 	}
 	return nil
 }
