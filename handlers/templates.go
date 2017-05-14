@@ -14,7 +14,6 @@ var (
 )
 
 func ParseTemplates(config *server.Config) error {
-	var err error
 	var allFiles []string
 	files, err := ioutil.ReadDir(config.TemplatesDir)
 	if err != nil {
