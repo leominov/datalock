@@ -1,3 +1,3 @@
 # datalock
 
-Follow the rules on http://1seasonvar.ru/
+Follow the rules on http://bit.ly/2rdoNTn
