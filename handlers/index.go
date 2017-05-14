@@ -38,9 +38,9 @@ func IndexHandler(s *server.Server) http.Handler {
 			Meta: seasonMeta,
 		}
 		if u != nil && len(u.SecureMark) != 0 {
-			err = SecuredPlayerTemplate.Execute(w, vars)
+			err = Templates.ExecuteTemplate(w, "secured", vars)
 		} else {
-			err = PlayerPageTemplate.Execute(w, vars)
+			err = Templates.ExecuteTemplate(w, "standard", vars)
 		}
 		if err != nil {
 			metrics.TemplateExecuteErrorCount.Inc()

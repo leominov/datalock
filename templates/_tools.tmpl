@@ -1,27 +1,4 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>{{.Meta.Title}}</title>
-        <meta name="keywords" content="{{.Meta.Keywords}}">
-        <meta name="description" content="{{.Meta.Description}}">
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <style type="text/css">
-            body {
-                margin: 0;
-                background-color: #000;
-            }
-            iframe {
-                display: block;
-                background: #000;
-                border: none;
-                height: 100vh;
-                width: 100vw;
-            }
-        </style>
-    </head>
-    <body>
-        <iframe src="http://datalock.ru/player/{{.Meta.ID}}" allowfullscreen></iframe>
-        <!-- Yandex.Metrika counter -->
+{{define "metrika"}}
         <script type="text/javascript">
             (function (d, w, c) {
                 (w[c] = w[c] || []).push(function() {
@@ -52,6 +29,4 @@
                 <img src="https://mc.yandex.ru/watch/41725489" style="position:absolute; left:-9999px;" alt="" />
             </div>
         </noscript>
-        <!-- /Yandex.Metrika counter -->
-    </body>
-</html>
+{{end}}

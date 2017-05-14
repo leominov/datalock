@@ -2,22 +2,32 @@ package handlers
 
 import (
 	"html/template"
+	"io/ioutil"
 	"path"
+	"strings"
 
 	"github.com/leominov/datalock/server"
 )
 
 var (
-	SecuredPlayerTemplate *template.Template
-	PlayerPageTemplate    *template.Template
+	Templates *template.Template
 )
 
 func ParseTemplates(config *server.Config) error {
 	var err error
-	if PlayerPageTemplate, err = template.New("master").ParseFiles(path.Join(config.TemplatesDir, "standard_player.html")); err != nil {
+	var allFiles []string
+	files, err := ioutil.ReadDir(config.TemplatesDir)
+	if err != nil {
 		return err
 	}
-	if SecuredPlayerTemplate, err = template.New("master").ParseFiles(path.Join(config.TemplatesDir, "secured_player.html")); err != nil {
+	for _, file := range files {
+		filename := file.Name()
+		if strings.HasSuffix(filename, ".tmpl") {
+			allFiles = append(allFiles, path.Join(config.TemplatesDir, filename))
+		}
+	}
+	Templates, err = template.ParseFiles(allFiles...)
+	if err != nil {
 		return err
 	}
 	return nil
