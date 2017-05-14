@@ -1,4 +1,4 @@
-package seasonvar
+package server
 
 import (
 	"errors"

@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/leominov/datalock/seasonvar"
+	"github.com/leominov/datalock/server"
 	"github.com/leominov/datalock/utils"
 )
 
-func PlaylistHandler(s *seasonvar.Seasonvar) http.Handler {
+func PlaylistHandler(s *server.Server) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		url := s.AbsoluteLink(r.URL.RequestURI())
 		b, err := utils.HttpGetRaw(url)
@@ -16,7 +16,7 @@ func PlaylistHandler(s *seasonvar.Seasonvar) http.Handler {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		pl := new(seasonvar.Playlist)
+		pl := new(server.Playlist)
 		if err := json.Unmarshal(b, &pl); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

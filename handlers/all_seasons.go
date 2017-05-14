@@ -9,7 +9,7 @@ import (
 
 	"gopkg.in/xmlpath.v2"
 
-	"github.com/leominov/datalock/seasonvar"
+	"github.com/leominov/datalock/server"
 	"github.com/leominov/datalock/utils"
 )
 
@@ -27,7 +27,7 @@ type Season struct {
 	Link  string `json:"link"`
 }
 
-func AllSeasonsHandler(s *seasonvar.Seasonvar) http.Handler {
+func AllSeasonsHandler(s *server.Server) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		url := r.URL.Query().Get("url")
 		if len(url) == 0 {

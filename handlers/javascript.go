@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/leominov/datalock/seasonvar"
+	"github.com/leominov/datalock/server"
 	"github.com/leominov/datalock/utils"
 )
 
@@ -15,7 +15,7 @@ var (
 	}
 )
 
-func JavaScriptHandler(s *seasonvar.Seasonvar) http.Handler {
+func JavaScriptHandler(s *server.Server) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		url := s.AbsoluteLink(r.URL.RequestURI())
 		b, err := utils.HttpGet(url)
@@ -23,7 +23,7 @@ func JavaScriptHandler(s *seasonvar.Seasonvar) http.Handler {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		b = strings.Replace(b, seasonvar.Hostname, r.Header.Get("X-HOSTNAME"), -1)
+		b = strings.Replace(b, s.Config.Hostname, r.Header.Get("X-HOSTNAME"), -1)
 		for old, news := range SwitchHdFix {
 			b = strings.Replace(b, old, news, -1)
 		}

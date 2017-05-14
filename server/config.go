@@ -1,6 +1,10 @@
-package seasonvar
+package server
 
-import "os"
+import (
+	"os"
+
+	"github.com/leominov/datalock/utils"
+)
 
 const (
 	DefaultHTTPAddr    = "127.0.0.1:7000"
@@ -8,7 +12,8 @@ const (
 	DefaultMetricsPath = "/metrics"
 	DefaultHealthzPath = "/healthz"
 	DefaultDatabaseDir = "./database"
-	DefaultHdHostname  = "data-hd.datalock.ru"
+	DefaultHdHostname  = "ZGF0YS1oZC5kYXRhbG9jay5ydQ=="
+	DefaultHostname    = "c2Vhc29udmFyLnJ1"
 )
 
 type Config struct {
@@ -18,10 +23,13 @@ type Config struct {
 	PublicDir   string
 	DatabaseDir string
 	HdHostname  string
+	Hostname    string
 }
 
 func NewConfig() *Config {
-	return &Config{}
+	return &Config{
+		Hostname: utils.Base64Decode(DefaultHostname),
+	}
 }
 
 func (c *Config) Load() error {
@@ -54,7 +62,7 @@ func (c *Config) LoadFromEnv() error {
 	}
 	c.HdHostname = os.Getenv("DATALOCK_HD_HOSTNAME")
 	if c.HdHostname == "" {
-		c.HdHostname = DefaultHdHostname
+		c.HdHostname = utils.Base64Decode(DefaultHdHostname)
 	}
 	return nil
 }

@@ -5,17 +5,17 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/leominov/datalock/seasonvar"
+	"github.com/leominov/datalock/server"
 	"github.com/leominov/datalock/utils"
 )
 
-func MeHandler(s *seasonvar.Seasonvar) http.Handler {
+func MeHandler(s *server.Server) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ip := utils.RealIP(r)
 		switch r.Method {
 		case "POST":
 			decoder := json.NewDecoder(r.Body)
-			var u *seasonvar.User
+			var u *server.User
 			err := decoder.Decode(&u)
 			if err != nil {
 				http.Error(w, "Could not decode body", http.StatusInternalServerError)

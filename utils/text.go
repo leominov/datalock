@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/base64"
 	"regexp"
 	"strings"
 )
@@ -17,4 +18,9 @@ func CleanText(str string) string {
 
 func StandardizeSpaces(s string) string {
 	return strings.Join(strings.Fields(strings.TrimSpace(s)), " ")
+}
+
+func Base64Decode(s string) string {
+	r, _ := base64.StdEncoding.DecodeString(s)
+	return string(r)
 }

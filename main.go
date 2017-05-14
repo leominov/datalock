@@ -11,7 +11,7 @@ import (
 	"github.com/braintree/manners"
 	"github.com/leominov/datalock/handlers"
 	"github.com/leominov/datalock/metrics"
-	"github.com/leominov/datalock/seasonvar"
+	"github.com/leominov/datalock/server"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
@@ -26,14 +26,14 @@ func main() {
 		log.Fatal(err)
 	}
 
-	config := seasonvar.NewConfig()
+	config := server.NewConfig()
 	if err := config.Load(); err != nil {
 		log.Fatal(err)
 	}
 
 	log.Printf("HTTP service listening on %s", config.ListenAddr)
 
-	s := seasonvar.New(config)
+	s := server.New(config)
 
 	if err := s.Start(); err != nil {
 		log.Fatal(err)
@@ -43,13 +43,13 @@ func main() {
 	mux.Handle("/", handlers.IndexHandler(s))
 	mux.Handle("/me", handlers.MeHandler(s))
 	mux.Handle("/all_seasons", handlers.AllSeasonsHandler(s))
-	mux.Handle(s.Config.HealthzPath, handlers.HealthzHandler())
-	mux.Handle(s.Config.MetricsPath, promhttp.Handler())
 	mux.Handle("/js/", handlers.ProxyHandler(s))
 	mux.Handle("/tpl/asset/js/", handlers.JavaScriptHandler(s))
 	mux.Handle("/styleP.php", handlers.StyleHandler(s))
 	mux.Handle("/player.php", handlers.ProxyHandler(s))
 	mux.Handle("/playls2/", handlers.PlaylistHandler(s))
+	mux.Handle(s.Config.HealthzPath, handlers.HealthzHandler())
+	mux.Handle(s.Config.MetricsPath, promhttp.Handler())
 
 	httpServer := manners.NewServer()
 	httpServer.Addr = config.ListenAddr

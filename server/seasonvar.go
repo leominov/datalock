@@ -1,4 +1,4 @@
-package seasonvar
+package server
 
 import (
 	"encoding/json"
@@ -16,7 +16,6 @@ import (
 )
 
 const (
-	Hostname         = "seasonvar.ru"
 	SeriesLinkFormat = "http://%s%s"
 )
 
@@ -32,7 +31,7 @@ var (
 	MetaBucket  = []byte("meta")
 )
 
-type Seasonvar struct {
+type Server struct {
 	NodeName string
 	Config   *Config
 	DB       *bolt.DB
@@ -52,15 +51,15 @@ type User struct {
 	SecureMark string `json:"secure_mark"`
 }
 
-func New(config *Config) *Seasonvar {
+func New(config *Config) *Server {
 	hostname, _ := os.Hostname()
-	return &Seasonvar{
+	return &Server{
 		NodeName: hostname,
 		Config:   config,
 	}
 }
 
-func (s *Seasonvar) Start() error {
+func (s *Server) Start() error {
 	var err error
 	s.DB, err = bolt.Open(path.Join(s.Config.DatabaseDir, "datalock.db"), 0600, nil)
 	if err != nil {
@@ -79,15 +78,15 @@ func (s *Seasonvar) Start() error {
 	})
 }
 
-func (s *Seasonvar) Stop() error {
+func (s *Server) Stop() error {
 	return s.DB.Close()
 }
 
-func (s *Seasonvar) AbsoluteLink(link string) string {
-	return fmt.Sprintf(SeriesLinkFormat, Hostname, link)
+func (s *Server) AbsoluteLink(link string) string {
+	return fmt.Sprintf(SeriesLinkFormat, s.Config.Hostname, link)
 }
 
-func (s *Seasonvar) GetCachedSeasonMeta(link string) (*SeasonMeta, error) {
+func (s *Server) GetCachedSeasonMeta(link string) (*SeasonMeta, error) {
 	var seasonMeta *SeasonMeta
 	var err error
 	seasonID, err := s.GetSeasonIDFromLink(link)
@@ -107,7 +106,7 @@ func (s *Seasonvar) GetCachedSeasonMeta(link string) (*SeasonMeta, error) {
 	return seasonMeta, nil
 }
 
-func (s *Seasonvar) collectSeasonMeta(link string) (*SeasonMeta, error) {
+func (s *Server) collectSeasonMeta(link string) (*SeasonMeta, error) {
 	var seasonMeta *SeasonMeta
 	metrics.HttpRequestsTotalCount.Inc()
 	body, err := utils.HttpGet(link)
@@ -145,7 +144,7 @@ func (s *Seasonvar) collectSeasonMeta(link string) (*SeasonMeta, error) {
 	return seasonMeta, nil
 }
 
-func (s *Seasonvar) GetSeasonTitle(body string) (string, error) {
+func (s *Server) GetSeasonTitle(body string) (string, error) {
 	title := seasonTitleRegexp.FindStringSubmatch(body)
 	if len(title) < 1 {
 		metrics.SeasonTitleErrorCount.Inc()
@@ -154,7 +153,7 @@ func (s *Seasonvar) GetSeasonTitle(body string) (string, error) {
 	return title[1], nil
 }
 
-func (s *Seasonvar) GetSeasonKeywords(body string) (string, error) {
+func (s *Server) GetSeasonKeywords(body string) (string, error) {
 	keywords := seasonKeywordsRegexp.FindStringSubmatch(body)
 	if len(keywords) < 1 {
 		metrics.SeasonKeywordsErrorCount.Inc()
@@ -163,7 +162,7 @@ func (s *Seasonvar) GetSeasonKeywords(body string) (string, error) {
 	return keywords[1], nil
 }
 
-func (s *Seasonvar) GetSeasonDescription(body string) (string, error) {
+func (s *Server) GetSeasonDescription(body string) (string, error) {
 	description := seasonDescriptionRegexp.FindStringSubmatch(body)
 	if len(description) < 1 {
 		metrics.SeasonDescriptionErrorCount.Inc()
@@ -172,7 +171,7 @@ func (s *Seasonvar) GetSeasonDescription(body string) (string, error) {
 	return description[1], nil
 }
 
-func (s *Seasonvar) GetSeasonID(body string) (int, error) {
+func (s *Server) GetSeasonID(body string) (int, error) {
 	season := seasonIDRegexp.FindStringSubmatch(body)
 	if len(season) < 1 {
 		metrics.SeasonIDErrorCount.Inc()
@@ -185,7 +184,7 @@ func (s *Seasonvar) GetSeasonID(body string) (int, error) {
 	return i, nil
 }
 
-func (s *Seasonvar) GetSerialID(body string) (int, error) {
+func (s *Server) GetSerialID(body string) (int, error) {
 	serial := serialIDRegexp.FindStringSubmatch(body)
 	if len(serial) < 1 {
 		metrics.SerialIDErrorCount.Inc()
@@ -198,7 +197,7 @@ func (s *Seasonvar) GetSerialID(body string) (int, error) {
 	return i, nil
 }
 
-func (s *Seasonvar) GetSeasonIDFromLink(link string) (int, error) {
+func (s *Server) GetSeasonIDFromLink(link string) (int, error) {
 	season := seasonIDLinkRegexp.FindStringSubmatch(link)
 	if len(season) < 1 {
 		return 0, errors.New("season id not found")
@@ -210,7 +209,7 @@ func (s *Seasonvar) GetSeasonIDFromLink(link string) (int, error) {
 	return i, nil
 }
 
-func (s *Seasonvar) SetUser(u *User) error {
+func (s *Server) SetUser(u *User) error {
 	u.SecureMark = utils.CleanText(u.SecureMark)
 	return s.DB.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket(UsersBucket)
@@ -222,7 +221,7 @@ func (s *Seasonvar) SetUser(u *User) error {
 	})
 }
 
-func (s *Seasonvar) GetUser(ip string) (*User, error) {
+func (s *Server) GetUser(ip string) (*User, error) {
 	var u *User
 	return u, s.DB.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket(UsersBucket)
@@ -237,7 +236,7 @@ func (s *Seasonvar) GetUser(ip string) (*User, error) {
 	})
 }
 
-func (s *Seasonvar) SetSeasonMeta(m *SeasonMeta) error {
+func (s *Server) SetSeasonMeta(m *SeasonMeta) error {
 	return s.DB.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket(MetaBucket)
 		encoded, err := json.Marshal(m)
@@ -248,7 +247,7 @@ func (s *Seasonvar) SetSeasonMeta(m *SeasonMeta) error {
 	})
 }
 
-func (s *Seasonvar) GetSeasonMeta(id int) (*SeasonMeta, error) {
+func (s *Server) GetSeasonMeta(id int) (*SeasonMeta, error) {
 	var m *SeasonMeta
 	return m, s.DB.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket(MetaBucket)
@@ -263,7 +262,7 @@ func (s *Seasonvar) GetSeasonMeta(id int) (*SeasonMeta, error) {
 	})
 }
 
-func (s *Seasonvar) CanShowHD(r *http.Request) bool {
+func (s *Server) CanShowHD(r *http.Request) bool {
 	if coo, err := r.Cookie("hdq"); err == nil && coo.Value != "" {
 		return true
 	}

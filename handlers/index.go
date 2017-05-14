@@ -6,16 +6,16 @@ import (
 	"strings"
 
 	"github.com/leominov/datalock/metrics"
-	"github.com/leominov/datalock/seasonvar"
+	"github.com/leominov/datalock/server"
 	"github.com/leominov/datalock/utils"
 )
 
 type TemplateVars struct {
-	User *seasonvar.User
-	Meta *seasonvar.SeasonMeta
+	User *server.User
+	Meta *server.SeasonMeta
 }
 
-func IndexHandler(s *seasonvar.Seasonvar) http.Handler {
+func IndexHandler(s *server.Server) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ip := utils.RealIP(r)
 		requestURI := r.URL.RequestURI()
