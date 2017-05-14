@@ -48,6 +48,10 @@ func main() {
 	mux.Handle("/styleP.php", handlers.StyleHandler(s))
 	mux.Handle("/player.php", handlers.ProxyHandler(s))
 	mux.Handle("/playls2/", handlers.PlaylistHandler(s))
+
+	fs := http.FileServer(http.Dir(s.Config.PublicDir))
+	mux.Handle("/public/", http.StripPrefix("/public", fs))
+
 	mux.Handle(s.Config.HealthzPath, handlers.HealthzHandler())
 	mux.Handle(s.Config.MetricsPath, promhttp.Handler())
 
