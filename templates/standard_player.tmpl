@@ -15,12 +15,22 @@
                 display: block;
                 background: #000;
                 border: none;
-                height: 100vh;
+                height: 98vh;
                 width: 100vw;
+            }
+            .info {
+                text-align: center;
+                background-color: #FFF;
+                color: #000;
+                width: 100%;
+                padding: 4px;
             }
         </style>
     </head>
     <body>
+        <div class="info">
+            Не работает? Попробуйте <a href="/">новый вариант</a>.
+        </div>
         <iframe src="http://datalock.ru/player/{{.Meta.ID}}" allowfullscreen></iframe>
         {{template "metrika"}}
     </body>
