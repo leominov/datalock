@@ -145,6 +145,9 @@ window.onload = function() {
                 }
                 result = JSON.parse(xhrs.responseText)
                 for (i=0; i<result.suggestions.length; i++) {
+                    if (/serial\-/i.test(result.data[i]) == false) {
+                        continue;
+                    }
                     suggestions.push({
                         'title': result.suggestions[i],
                         'link': result.data[i],
