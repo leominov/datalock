@@ -48,6 +48,7 @@ func main() {
 	mux.Handle("/styleP.php", handlers.StyleHandler(s))
 	mux.Handle("/player.php", handlers.ProxyHandler(s))
 	mux.Handle("/playls2/", handlers.PlaylistHandler(s))
+	mux.Handle("/autocomplete.php", handlers.ProxyHandler(s))
 
 	fs := http.FileServer(http.Dir(s.Config.PublicDir))
 	mux.Handle("/public/", http.StripPrefix("/public", fs))
