@@ -131,5 +131,42 @@ window.onload = function() {
         GetSecureMark();
     };
 
+    var xhrs = new XMLHttpRequest();
+    new autoComplete({
+        selector: 'input[name=search-text]',
+        minChars: 3,
+        source: function(term, suggest) {
+            xhrs.open('GET', '/autocomplete.php?query=' + term, false);
+            xhrs.onload = function() {
+                var suggestions = [];
+                if (xhrs.status != 200 || xhrs.responseText.length == "") {
+                    return
+                }
+                result = JSON.parse(xhrs.responseText)
+                for (i=0; i<result.suggestions.length; i++) {
+                    suggestions.push({
+                        'title': result.suggestions[i],
+                        'link': result.data[i],
+                        'id': result.id[i],
+                    });
+                }
+                suggest(suggestions)
+            }
+            xhrs.send(null);
+        },
+        renderItem: function (item, search) {
+            if (item.link.length == 0) {
+                return '<div class="autocomplete-suggestion" data-link="/">'+item.title+'</div>';
+            }
+            return '<div class="autocomplete-suggestion" data-link="/'+item.link+'"><a href="'+item.link+'">'+item.title+'</a></div>';
+        },
+        onSelect: function(e, term, item) {
+            link = item.getAttribute('data-link');
+            if (link != "/") {
+                location = link;
+            }
+        }
+    });
+
     Init();
 };
