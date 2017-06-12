@@ -131,6 +131,7 @@ window.onload = function() {
         GetSecureMark();
     };
 
+    // https://goodies.pixabay.com/javascript/auto-complete/demo.html
     var xhrs = new XMLHttpRequest();
     new autoComplete({
         selector: 'input[name=search-text]',
