@@ -144,12 +144,12 @@ window.onload = function() {
                     return
                 }
                 result = JSON.parse(xhrs.responseText)
-                for (i=0; i<result.suggestions.length; i++) {
+                for (i=0; i<result.suggestions.valu.length; i++) {
                     if (/serial\-/i.test(result.data[i]) == false) {
                         continue;
                     }
                     suggestions.push({
-                        'title': result.suggestions[i],
+                        'title': result.suggestions.valu[i],
                         'link': result.data[i],
                         'id': result.id[i],
                     });
