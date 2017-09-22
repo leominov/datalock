@@ -1,0 +1,104 @@
+---
+name: 1seasonvar.ru
+env_variables:
+  - APITEST_TELEGRAM_CHATID
+  - APITEST_TELEGRAM_TOKEN
+steps:
+  - note: Checking search result
+    step_type: request
+    method: GET
+    url: http://a.1seasonvar.ru/autocomplete.php?query=house
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+      - source: response_json
+        property: query
+        comparison: equal
+        value: house
+      - source: response_json
+        property: suggestions.valu
+        comparison: has_key
+      - source: response_json
+        property: suggestions.valu.#
+        comparison: is_greater_than
+        value: 0
+      - source: response_json
+        property: suggestions.valu.0
+        comparison: contains
+        value: HOUSE M.D
+      - source: response_json
+        property: data.#
+        comparison: is_greater_than
+        value: 0
+      - source: response_json
+        property: data.0
+        comparison: contains
+        value: season.html
+      - source: response_json
+        property: id.0
+        comparison: is_a_number
+  - note: Checking serial page
+    step_type: request
+    method: GET
+    url: http://a.1seasonvar.ru/serial-12-Doktor_Haus-1-season.html
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+  - note: Checking datalock player
+    step_type: request
+    method: GET
+    url: http://datalock.ru/player/1
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+      - source: response_headers
+        property: Access-Control-Allow-Origin
+        comparison: equal
+        value: "*"
+      - source: response_text
+        comparison: contains
+        value: htmlPlayer
+      - source: response_text
+        comparison: contains
+        value: ;eval(function(y,t,u,p){var lIll=0;var ll1I=0;var Il1l=0;var ll1l=[];var l1lI=[];
+  - note: Checking playlist from datalock player
+    step_type: request
+    method: GET
+    url: http://datalock.ru/playlist/4f6e5fae1fc6898e4d7ac9335940a334/1/list.xml
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+      - source: response_json
+        property: playlist.#
+        comparison: is_greater_than
+        value: 0
+      - source: response_json
+        property: playlist.0.comment
+        comparison: has_key
+      - source: response_json
+        property: playlist.0.comment
+        comparison: contains
+        value: RenTV
+      - source: response_json
+        property: playlist.0.streamsend
+        comparison: equal
+        value: sec
+      - source: response_json
+        property: playlist.0.file
+        comparison: has_key
+      - source: response_json
+        property: playlist.0.file
+        comparison: contains
+        value: 4f6e5fae1fc6898e4d7ac9335940a334
+      - source: response_json
+        property: playlist.0.file
+        comparison: contains
+        value: 7f_
+notification:
+  telegram:
+    chat_id: "{{.APITEST_TELEGRAM_CHATID}}"
+    token: "{{.APITEST_TELEGRAM_TOKEN}}"
