@@ -27,7 +27,7 @@ func IndexHandler(s *server.Server) http.Handler {
 			http.Redirect(w, r, seriesLink, http.StatusFound)
 			return
 		}
-		u, _ := s.GetUser(ip)
+		u := s.GetUser(ip)
 		seasonMeta, err := s.GetCachedSeasonMeta(seriesLink)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -37,11 +37,7 @@ func IndexHandler(s *server.Server) http.Handler {
 			User: u,
 			Meta: seasonMeta,
 		}
-		if u != nil && len(u.SecureMark) != 0 {
-			err = Templates.ExecuteTemplate(w, "secured", vars)
-		} else {
-			err = Templates.ExecuteTemplate(w, "standard", vars)
-		}
+		err = Templates.ExecuteTemplate(w, "secured", vars)
 		if err != nil {
 			metrics.TemplateExecuteErrorCount.Inc()
 			http.Error(w, err.Error(), http.StatusInternalServerError)

@@ -41,7 +41,6 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.Handle("/", handlers.IndexHandler(s))
-	mux.Handle("/me", handlers.MeHandler(s))
 	mux.Handle("/all_seasons", handlers.AllSeasonsHandler(s))
 	mux.Handle("/js/", handlers.ProxyHandler(s))
 	mux.Handle("/tpl/asset/js/", handlers.JavaScriptHandler(s))

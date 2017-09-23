@@ -27,8 +27,7 @@ var (
 	seasonKeywordsRegexp    = regexp.MustCompile(`\<meta\ name\=\"keywords\"\ content\=\"([^"]+)\"`)
 	seasonDescriptionRegexp = regexp.MustCompile(`\<meta\ name\=\"description\"\ content\=\"([^"]+)\"`)
 
-	UsersBucket = []byte("users")
-	MetaBucket  = []byte("meta")
+	MetaBucket = []byte("meta")
 )
 
 type Server struct {
@@ -66,10 +65,6 @@ func (s *Server) Start() error {
 		return err
 	}
 	return s.DB.Update(func(tx *bolt.Tx) error {
-		// Always create Users bucket.
-		if _, err := tx.CreateBucketIfNotExists(UsersBucket); err != nil {
-			return err
-		}
 		// Always create Meta bucket.
 		if _, err := tx.CreateBucketIfNotExists(MetaBucket); err != nil {
 			return err
@@ -209,31 +204,11 @@ func (s *Server) GetSeasonIDFromLink(link string) (int, error) {
 	return i, nil
 }
 
-func (s *Server) SetUser(u *User) error {
-	u.SecureMark = utils.CleanText(u.SecureMark)
-	return s.DB.Update(func(tx *bolt.Tx) error {
-		b := tx.Bucket(UsersBucket)
-		encoded, err := json.Marshal(u)
-		if err != nil {
-			return err
-		}
-		return b.Put([]byte(u.IP), encoded)
-	})
-}
-
-func (s *Server) GetUser(ip string) (*User, error) {
-	var u *User
-	return u, s.DB.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket(UsersBucket)
-		v := b.Get([]byte(ip))
-		if len(v) == 0 {
-			return errors.New("User not found")
-		}
-		if err := json.Unmarshal(v, &u); err != nil {
-			return err
-		}
-		return nil
-	})
+func (s *Server) GetUser(ip string) *User {
+	return &User{
+		IP:         "127.0.0.1",
+		SecureMark: "0",
+	}
 }
 
 func (s *Server) SetSeasonMeta(m *SeasonMeta) error {

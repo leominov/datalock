@@ -98,6 +98,26 @@ steps:
         property: playlist.0.file
         comparison: contains
         value: 7f_
+  - note: Checking playlist with incorrect secureMark
+    step_type: request
+    method: GET
+    url: http://datalock.ru/playlist/0/1/list.xml
+    variables:
+      - source: response_json
+        property: playlist.0.file
+        name: PlaylistFile
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+  - note: Checking access for movie file with incorrect secureMark
+    step_type: request
+    method: HEAD
+    url: "{{.PlaylistFile}}"
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
 notification:
   telegram:
     chat_id: "{{.APITEST_TELEGRAM_CHATID}}"
