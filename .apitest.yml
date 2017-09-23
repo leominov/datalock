@@ -7,7 +7,7 @@ steps:
   - note: Checking search result
     step_type: request
     method: GET
-    url: http://a.1seasonvar.ru/autocomplete.php?query=house
+    url: http://1seasonvar.ru/autocomplete.php?query=house
     assertions:
       - source: response_status
         comparison: equal
@@ -41,7 +41,7 @@ steps:
   - note: Checking serial page
     step_type: request
     method: GET
-    url: http://a.1seasonvar.ru/serial-12-Doktor_Haus-1-season.html
+    url: http://1seasonvar.ru/serial-12-Doktor_Haus-1-season.html
     assertions:
       - source: response_status
         comparison: equal
