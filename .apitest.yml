@@ -15,6 +15,44 @@ steps:
       - source: response_text
         comparison: equal
         value: ok
+  - note: Taking source meta data for checking
+    step_type: request
+    method: GET
+    url: http://seasonvar.ru/serial-4426-TCar__gori-1-season.html
+    variables:
+      - source: response_html
+        property: .//title
+        name: PageTitle
+      - source: response_html
+        property: .//meta[@name='keywords']/@content
+        name: PageKeywords
+      - source: response_html
+        property: .//meta[@name='description']/@content
+        name: PageDescription
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+  - note: Checking meta data
+    step_type: request
+    method: GET
+    url: http://1seasonvar.ru/serial-4426-TCar__gori-1-season.html
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+      - source: response_html
+        property: .//title
+        comparison: equal
+        value: "{{.PageTitle}}"
+      - source: response_html
+        property: .//meta[@name='keywords']/@content
+        comparison: equal
+        value: "{{.PageKeywords}}"
+      - source: response_html
+        property: .//meta[@name='description']/@content
+        comparison: equal
+        value: "{{.PageDescription}}"
   - note: Checking enabled HD button and hostname replace
     step_type: request
     method: GET
