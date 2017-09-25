@@ -17,6 +17,7 @@ func HttpGetRaw(url string) ([]byte, error) {
 	if err != nil {
 		return body, err
 	}
+	req.Header.Del("Accept-Encoding")
 	req.Header.Set("User-Agent", RandomUserAgent())
 	resp, err := client.Do(req)
 	if err != nil {
