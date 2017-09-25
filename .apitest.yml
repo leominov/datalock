@@ -4,6 +4,74 @@ env_variables:
   - APITEST_TELEGRAM_CHATID
   - APITEST_TELEGRAM_TOKEN
 steps:
+  - note: Checking health status
+    step_type: request
+    method: GET
+    url: http://1seasonvar.ru/healthz
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+      - source: response_text
+        comparison: equal
+        value: ok
+  - note: Checking enabled HD button and hostname replace
+    step_type: request
+    method: GET
+    url: http://1seasonvar.ru/tpl/asset/js/pg.player.min.js
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+      - source: response_text
+        comparison: contains
+        value: swichHDdisabled:function(){svfunc.svmodal
+      - source: response_text
+        comparison: contains
+        value: swichHDno:function(){var e="flash";void 0==Cookies.get("hdq")
+      - source: response_text
+        comparison: does_not_contain
+        value: http://seasonvar.ru
+  - note: Checking all_seasons result from first season link
+    step_type: request
+    method: GET
+    url: http://1seasonvar.ru/all_seasons?url=%2Fserial-13911-Zavuchi-0001-sezon.html
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+      - source: response_json
+        property: seasons.#
+        comparison: is_greater_than
+        value: 0
+      - source: response_json
+        property: seasons.0.title
+        comparison: contains
+        value: Vice Principals 1
+      - source: response_json
+        property: seasons.0.link
+        comparison: equal
+        value: /serial-13911-Zavuchi-0001-sezon.html
+  - note: Checking all_seasons result from non-first season link
+    step_type: request
+    method: GET
+    url: http://1seasonvar.ru/all_seasons?url=%2Fserial-16377-Amerikanskaya_istoriya_uzhasov-0007-sezon.html
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+      - source: response_json
+        property: seasons.#
+        comparison: is_greater_than
+        value: 0
+      - source: response_json
+        property: seasons.0.title
+        comparison: contains
+        value: American Horror Story 1
+      - source: response_json
+        property: seasons.0.link
+        comparison: equal
+        value: /serial-3243-Amerikanskaja_istorija_uzhasov-1-season.html
   - note: Checking search result
     step_type: request
     method: GET
