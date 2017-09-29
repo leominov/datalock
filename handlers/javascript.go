@@ -25,7 +25,7 @@ func JavaScriptHandler(s *server.Server) http.Handler {
 		}
 		b = strings.Replace(b, s.Config.Hostname, r.Header.Get("X-HOSTNAME"), -1)
 		for old, news := range SwitchHdFix {
-			b = strings.Replace(b, old, news, -1)
+			b = strings.Replace(b, old, news, 1)
 		}
 		w.Write([]byte(b))
 	})
