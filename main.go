@@ -27,7 +27,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if err := handlers.ParseTemplates(config); err != nil {
+	if err := server.ParseTemplates(config); err != nil {
 		log.Fatal(err)
 	}
 

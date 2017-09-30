@@ -1,19 +1,17 @@
-package handlers
+package server
 
 import (
 	"html/template"
 	"io/ioutil"
 	"path"
 	"strings"
-
-	"github.com/leominov/datalock/server"
 )
 
 var (
 	Templates *template.Template
 )
 
-func ParseTemplates(config *server.Config) error {
+func ParseTemplates(config *Config) error {
 	var allFiles []string
 	files, err := ioutil.ReadDir(config.TemplatesDir)
 	if err != nil {

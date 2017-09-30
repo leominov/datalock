@@ -37,7 +37,7 @@ func IndexHandler(s *server.Server) http.Handler {
 			User: u,
 			Meta: seasonMeta,
 		}
-		err = Templates.ExecuteTemplate(w, "secured", vars)
+		err = server.Templates.ExecuteTemplate(w, "secured", vars)
 		if err != nil {
 			metrics.TemplateExecuteErrorCount.Inc()
 			http.Error(w, err.Error(), http.StatusInternalServerError)
