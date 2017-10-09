@@ -1,5 +1,6 @@
 ---
 name: 1seasonvar.ru
+stop_on_failure: true
 env_variables:
   - APITEST_TELEGRAM_CHATID
   - APITEST_TELEGRAM_TOKEN
