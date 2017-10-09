@@ -64,10 +64,7 @@ steps:
         value: 200
       - source: response_text
         comparison: contains
-        value: swichHDdisabled
-      - source: response_text
-        comparison: contains
-        value: swichHDno
+        value: swichHD
       - source: response_text
         comparison: does_not_contain
         value: http://seasonvar.ru

@@ -8,12 +8,14 @@ import (
 	"net/url"
 	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/leominov/datalock/server"
 	"github.com/leominov/datalock/utils"
 )
 
 var (
+	allowHdReplacer   = strings.NewReplacer("swichHDno", "swichHD")
 	prerollCodeRegexp = regexp.MustCompile(`\<script\ type\=\"text\/javascript\"\>var.*\<\/script\>`)
 	popularRegexp     = regexp.MustCompile(`\<li\ class\=\"label\"\>\<span\ data\-help\-tr\=\"tr\"\ class\=\"svico\-help\"\>.*\<\/span\>\<\/li\>`)
 )
@@ -29,6 +31,7 @@ func playerRewriteBody(resp *http.Response) (err error) {
 	}
 	b = prerollCodeRegexp.ReplaceAll(b, nil)
 	b = popularRegexp.ReplaceAll(b, nil)
+	b = []byte(allowHdReplacer.Replace(string(b)))
 	body := ioutil.NopCloser(bytes.NewReader(b))
 	resp.Body = body
 	resp.ContentLength = int64(len(b))
