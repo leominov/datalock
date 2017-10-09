@@ -48,6 +48,7 @@ func main() {
 	mux.Handle("/tpl/asset/font/", handlers.ProxyHandler(s))
 	mux.Handle("/styleP.php", handlers.StyleHandler(s))
 	mux.Handle("/player.php", handlers.PlayerHandler(s))
+	mux.Handle("/plStat.php", handlers.NoContentHandler(s))
 	mux.Handle("/playls2/", handlers.PlaylistHandler(s))
 	mux.Handle("/autocomplete.php", handlers.ProxyHandler(s))
 

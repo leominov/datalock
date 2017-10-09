@@ -12,13 +12,14 @@ var (
 )
 
 type Playlist struct {
-	Items []Item `json:"playlist"`
+	Items []*Item `json:"playlist"`
 }
 
 type Item struct {
 	Comment    string `json:"comment"`
 	File       string `json:"file"`
 	StreamsEnd string `json:"streamsend"`
+	GALabel    string `json:"galabel"`
 }
 
 func (i *Item) AvailableInHD() bool {
