@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"encoding/json"
+	"encoding/xml"
 	"net/http"
 	"path"
 	"strings"
@@ -11,8 +13,8 @@ import (
 )
 
 type TemplateVars struct {
-	User *server.User
-	Meta *server.SeasonMeta
+	User *server.User       `json:"user"`
+	Meta *server.SeasonMeta `json:"meta"`
 }
 
 func IndexHandler(s *server.Server) http.Handler {
@@ -20,6 +22,8 @@ func IndexHandler(s *server.Server) http.Handler {
 		ip := utils.RealIP(r)
 		requestURI := r.URL.RequestURI()
 		seriesLink := s.AbsoluteLink(requestURI)
+		format := r.URL.Query().Get("_format")
+		r.URL.Query().Del("_format")
 		if requestURI == "/" {
 			http.ServeFile(w, r, path.Join(s.Config.PublicDir, "index.html"))
 			return
@@ -37,10 +41,21 @@ func IndexHandler(s *server.Server) http.Handler {
 			User: u,
 			Meta: seasonMeta,
 		}
-		err = server.Templates.ExecuteTemplate(w, "secured", vars)
-		if err != nil {
-			metrics.TemplateExecuteErrorCount.Inc()
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+		switch format {
+		case "json":
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			encoder := json.NewEncoder(w)
+			encoder.Encode(vars)
+		case "xml":
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			encoder := xml.NewEncoder(w)
+			encoder.Encode(vars)
+		default:
+			err = server.Templates.ExecuteTemplate(w, "secured", vars)
+			if err != nil {
+				metrics.TemplateExecuteErrorCount.Inc()
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+			}
 		}
 	})
 }
