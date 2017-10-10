@@ -5,9 +5,12 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"regexp"
+	"strconv"
 
 	"github.com/leominov/datalock/server"
+	"github.com/leominov/datalock/utils"
 )
 
 var (
@@ -30,8 +33,24 @@ func AllSeriesHandler(s *server.Server) http.Handler {
 	client := &http.Client{}
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		encoder := json.NewEncoder(w)
+		ip := utils.RealIP(r)
+		u := s.GetUser(ip)
 		hd := s.CanShowHD(r)
-		req, err := s.NewPlaylistRequest(r)
+		link := r.URL.Query().Get("url")
+		if len(link) == 0 {
+			http.Error(w, "Incorrect request", http.StatusBadRequest)
+			return
+		}
+		seasonMeta, err := s.GetCachedSeasonMeta(s.AbsoluteLink(link))
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		form := url.Values{}
+		form.Add("id", strconv.Itoa(seasonMeta.ID))
+		form.Add("serial", strconv.Itoa(seasonMeta.Serial))
+		form.Add("secure", u.SecureMark)
+		req, err := s.NewPlaylistRequest(form)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

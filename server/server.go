@@ -289,22 +289,8 @@ func (s *Server) FixReferer(req *http.Request) {
 	req.Header.Set("Referer", refererUrl.String())
 }
 
-func (s *Server) NewPlaylistRequest(r *http.Request) (*http.Request, error) {
-	ip := utils.RealIP(r)
-	u := s.GetUser(ip)
-	seasonID := r.URL.Query().Get("season_id")
-	serialID := r.URL.Query().Get("serial_id")
-	if len(seasonID) == 0 {
-		return nil, errors.New("Season ID must be specified")
-	}
-	if len(serialID) == 0 {
-		return nil, errors.New("Serial ID must be specified")
-	}
-	form := url.Values{}
-	form.Add("id", seasonID)
-	form.Add("serial", serialID)
+func (s *Server) NewPlaylistRequest(form url.Values) (*http.Request, error) {
 	form.Add("type", "html5")
-	form.Add("secure", u.SecureMark)
 	req, err := http.NewRequest("POST", s.AbsoluteLink("/player.php"), strings.NewReader(form.Encode()))
 	if err != nil {
 		return nil, err
