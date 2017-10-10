@@ -5,10 +5,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"os"
 	"path"
 	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/boltdb/bolt"
 	"github.com/leominov/datalock/metrics"
@@ -242,4 +244,73 @@ func (s *Server) CanShowHD(r *http.Request) bool {
 		return true
 	}
 	return false
+}
+
+func (s *Server) GetPlaylist(link string, hd bool) (*Playlist, error) {
+	b, err := utils.HttpGetRaw(link)
+	if err != nil {
+		return nil, err
+	}
+	playlist := new(Playlist)
+	if err := json.Unmarshal(b, &playlist); err != nil {
+		return nil, err
+	}
+	if hd {
+		// Nothing change if switching was failed
+		playlist.SwitchToHD(s.Config.HdHostname)
+	}
+	return playlist, nil
+}
+
+func (s *Server) GetPlaylistsByLinks(links []string, hd bool) ([]*Playlist, error) {
+	playlists := []*Playlist{}
+	for _, link := range links {
+		linkAbs := s.AbsoluteLink(link)
+		playlist, err := s.GetPlaylist(linkAbs, hd)
+		if err != nil {
+			return nil, err
+		}
+		playlists = append(playlists, playlist)
+	}
+	return playlists, nil
+}
+
+func (s *Server) FixReferer(req *http.Request) {
+	refererRaw := req.Header.Get("Referer")
+	if len(refererRaw) == 0 {
+		return
+	}
+	refererUrl, err := url.Parse(refererRaw)
+	if err != nil {
+		req.Header.Del("Referer")
+		return
+	}
+	refererUrl.Host = s.Config.Hostname
+	req.Header.Set("Referer", refererUrl.String())
+}
+
+func (s *Server) NewPlaylistRequest(r *http.Request) (*http.Request, error) {
+	ip := utils.RealIP(r)
+	u := s.GetUser(ip)
+	seasonID := r.URL.Query().Get("season_id")
+	serialID := r.URL.Query().Get("serial_id")
+	if len(seasonID) == 0 {
+		return nil, errors.New("Season ID must be specified")
+	}
+	if len(serialID) == 0 {
+		return nil, errors.New("Serial ID must be specified")
+	}
+	form := url.Values{}
+	form.Add("id", seasonID)
+	form.Add("serial", serialID)
+	form.Add("type", "html5")
+	form.Add("secure", u.SecureMark)
+	req, err := http.NewRequest("POST", s.AbsoluteLink("/player.php"), strings.NewReader(form.Encode()))
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("User-Agent", utils.RandomUserAgent())
+	req.Header.Set("X-Requested-With", "XMLHttpRequest")
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	return req, nil
 }

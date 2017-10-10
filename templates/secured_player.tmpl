@@ -75,7 +75,7 @@
                         return args[+(a.substr(1,a.length-2))||0];
                     });
                 };
-                $.getJSON("/all_seasons", {url: window.location.pathname})
+                $.getJSON("/api/all_seasons", {url: window.location.pathname})
                     .done(function(data) {
                         if (data["seasons"].length <= 1) {
                             return;
@@ -85,6 +85,7 @@
                         });
                         $(".seasons").show();
                     });
+                // $.getJSON("/api/all_series", {season_id: "{{.Meta.ID}}", serial_id: "{{.Meta.Serial}}"});
             });
         </script>
     </body>

@@ -41,16 +41,19 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.Handle("/", handlers.IndexHandler(s))
-	mux.Handle("/all_seasons", handlers.AllSeasonsHandler(s))
+	mux.Handle("/styleP.php", handlers.StyleHandler(s))
+	mux.Handle("/player.php", handlers.PlayerHandler(s))
+	mux.Handle("/plStat.php", handlers.NoContentHandler(s))
+	mux.Handle("/autocomplete.php", handlers.ProxyHandler(s))
+	mux.Handle("/playls2/", handlers.PlaylistHandler(s))
+	// Static files
 	mux.Handle("/js/", handlers.ProxyHandler(s))
 	mux.Handle("/tpl/asset/js/", handlers.JavaScriptHandler(s))
 	mux.Handle("/tpl/asset/css/", handlers.ProxyHandler(s))
 	mux.Handle("/tpl/asset/font/", handlers.ProxyHandler(s))
-	mux.Handle("/styleP.php", handlers.StyleHandler(s))
-	mux.Handle("/player.php", handlers.PlayerHandler(s))
-	mux.Handle("/plStat.php", handlers.NoContentHandler(s))
-	mux.Handle("/playls2/", handlers.PlaylistHandler(s))
-	mux.Handle("/autocomplete.php", handlers.ProxyHandler(s))
+	// Interface helpers
+	mux.Handle("/api/all_seasons", handlers.AllSeasonsHandler(s))
+	mux.Handle("/api/all_series", handlers.AllSeriesHandler(s))
 
 	fs := http.FileServer(http.Dir(s.Config.PublicDir))
 	mux.Handle("/public/", http.StripPrefix("/public", fs))
