@@ -6,7 +6,6 @@ import (
 	"net/url"
 
 	"github.com/leominov/datalock/server"
-	"github.com/leominov/datalock/utils"
 )
 
 var (
@@ -28,7 +27,6 @@ func ProxyHandler(s *server.Server) http.Handler {
 	reverseProxy.ModifyResponse = fixResponseContentType
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		r.Host = u.Hostname()
-		r.Header.Set("User-Agent", utils.RandomUserAgent())
 		reverseProxy.ServeHTTP(w, r)
 	})
 }

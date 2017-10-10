@@ -11,7 +11,6 @@ import (
 	"strings"
 
 	"github.com/leominov/datalock/server"
-	"github.com/leominov/datalock/utils"
 )
 
 var (
@@ -43,7 +42,6 @@ func PlayerHandler(s *server.Server) http.Handler {
 	reverseProxy.ModifyResponse = playerRewriteBody
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		r.Host = u.Hostname()
-		r.Header.Set("User-Agent", utils.RandomUserAgent())
 		r.Header.Del("Accept-Encoding")
 		reverseProxy.ServeHTTP(w, r)
 	})

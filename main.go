@@ -63,7 +63,7 @@ func main() {
 
 	httpServer := manners.NewServer()
 	httpServer.Addr = config.ListenAddr
-	httpServer.Handler = handlers.LoggingHandler(mux)
+	httpServer.Handler = handlers.MiddlewareHandler(s, mux)
 
 	errChan := make(chan error, 10)
 
