@@ -4,9 +4,9 @@ Follow the rules on http://bit.ly/2rdoNTn
 
 ## Information for developers
 
-### Serials details
+### Season details
 
-`GET /serial-15825-Nelyudi-0-season.html?_format=json`
+`GET /api/info_season?url=/serial-15825-Nelyudi-0-season.html`
 
 ### Available seasons
 

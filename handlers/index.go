@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
-	"encoding/xml"
 	"net/http"
 	"path"
 	"strings"
@@ -22,8 +20,6 @@ func IndexHandler(s *server.Server) http.Handler {
 		ip := utils.RealIP(r)
 		requestURI := r.URL.RequestURI()
 		seriesLink := s.AbsoluteLink(requestURI)
-		format := r.URL.Query().Get("_format")
-		r.URL.Query().Del("_format")
 		if requestURI == "/" {
 			http.ServeFile(w, r, path.Join(s.Config.PublicDir, "index.html"))
 			return
@@ -41,21 +37,10 @@ func IndexHandler(s *server.Server) http.Handler {
 			User: u,
 			Meta: seasonMeta,
 		}
-		switch format {
-		case "json":
-			w.Header().Set("Access-Control-Allow-Origin", "*")
-			encoder := json.NewEncoder(w)
-			encoder.Encode(vars)
-		case "xml":
-			w.Header().Set("Access-Control-Allow-Origin", "*")
-			encoder := xml.NewEncoder(w)
-			encoder.Encode(vars)
-		default:
-			err = server.Templates.ExecuteTemplate(w, "secured", vars)
-			if err != nil {
-				metrics.TemplateExecuteErrorCount.Inc()
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-			}
+		err = server.Templates.ExecuteTemplate(w, "secured", vars)
+		if err != nil {
+			metrics.TemplateExecuteErrorCount.Inc()
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 	})
 }

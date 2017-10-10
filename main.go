@@ -54,6 +54,7 @@ func main() {
 	// Interface helpers
 	mux.Handle("/api/all_seasons", handlers.AllSeasonsHandler(s))
 	mux.Handle("/api/all_series", handlers.AllSeriesHandler(s))
+	mux.Handle("/api/info_season", handlers.InfoSeason(s))
 
 	fs := http.FileServer(http.Dir(s.Config.PublicDir))
 	mux.Handle("/public/", http.StripPrefix("/public", fs))
