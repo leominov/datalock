@@ -1,6 +1,8 @@
 ---
 name: 1seasonvar.ru
 stop_on_failure: true
+initial_variables:
+  TestedHostname: 1seasonvar.ru
 env_variables:
   - APITEST_TELEGRAM_CHATID
   - APITEST_TELEGRAM_TOKEN
@@ -8,7 +10,7 @@ steps:
   - note: Checking health status
     step_type: request
     method: GET
-    url: http://1seasonvar.ru/healthz
+    url: http://{{.TestedHostname}}/healthz
     assertions:
       - source: response_status
         comparison: equal
@@ -37,7 +39,7 @@ steps:
   - note: Checking meta data
     step_type: request
     method: GET
-    url: http://1seasonvar.ru/serial-4426-TCar__gori-1-season.html
+    url: http://{{.TestedHostname}}/serial-4426-TCar__gori-1-season.html
     assertions:
       - source: response_status
         comparison: equal
@@ -57,7 +59,7 @@ steps:
   - note: Checking enabled HD button and hostname replace
     step_type: request
     method: GET
-    url: http://1seasonvar.ru/tpl/asset/js/pg.player.min.js
+    url: http://{{.TestedHostname}}/tpl/asset/js/pg.player.min.js
     assertions:
       - source: response_status
         comparison: equal
@@ -71,7 +73,7 @@ steps:
   - note: Checking api/all_seasons result from first season link
     step_type: request
     method: GET
-    url: http://1seasonvar.ru/api/all_seasons?url=%2Fserial-13911-Zavuchi-0001-sezon.html
+    url: http://{{.TestedHostname}}/api/all_seasons?url=%2Fserial-13911-Zavuchi-0001-sezon.html
     assertions:
       - source: response_status
         comparison: equal
@@ -91,7 +93,7 @@ steps:
   - note: Checking api/all_seasons result from non-first season link
     step_type: request
     method: GET
-    url: http://1seasonvar.ru/api/all_seasons?url=%2Fserial-16377-Amerikanskaya_istoriya_uzhasov-00007-sezon.html
+    url: http://{{.TestedHostname}}/api/all_seasons?url=%2Fserial-16377-Amerikanskaya_istoriya_uzhasov-00007-sezon.html
     assertions:
       - source: response_status
         comparison: equal
@@ -108,10 +110,38 @@ steps:
         property: seasons.0.link
         comparison: equal
         value: /serial-3243-Amerikanskaja_istorija_uzhasov-1-season.html
+  - note: Checking api/all_series result
+    step_type: request
+    method: GET
+    url: http://{{.TestedHostname}}/api/all_series?season_id=4426&serial_id=2211
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+      - source: response_json
+        property: "#"
+        comparison: is_greater_than
+        value: 0
+      - source: response_json
+        property: 0.playlist.#
+        comparison: is_greater_than
+        value: 0
+      - source: response_json
+        property: 0.playlist.0.comment
+        comparison: has_key
+      - source: response_json
+        property: 0.playlist.0.file
+        comparison: has_key
+      - source: response_json
+        property: 0.playlist.0.streamsend
+        comparison: has_key
+      - source: response_json
+        property: 0.playlist.0.galabel
+        comparison: has_key
   - note: Checking search result
     step_type: request
     method: GET
-    url: http://1seasonvar.ru/autocomplete.php?query=house
+    url: http://{{.TestedHostname}}/autocomplete.php?query=house
     assertions:
       - source: response_status
         comparison: equal
@@ -145,7 +175,7 @@ steps:
   - note: Checking serial page
     step_type: request
     method: GET
-    url: http://1seasonvar.ru/serial-12-Doktor_Haus-1-season.html
+    url: http://{{.TestedHostname}}/serial-12-Doktor_Haus-1-season.html
     assertions:
       - source: response_status
         comparison: equal
@@ -191,6 +221,9 @@ steps:
         property: playlist.0.streamsend
         comparison: equal
         value: sec
+      - source: response_json
+        property: playlist.0.galabel
+        comparison: has_key
       - source: response_json
         property: playlist.0.file
         comparison: has_key
