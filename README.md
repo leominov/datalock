@@ -45,13 +45,8 @@ Output format:
     "playlist": [{
         "comment": "...",
         "file": "...",
-        "streamsend": "sec",
-        "galabel": "0_0"
-    }, {
-        "comment": "...",
-        "file": "...",
-        "streamsend": "sec",
-        "galabel": "0_0"
+        "streamsend": "...",
+        "galabel": "..."
     }]
 }]
 ```
