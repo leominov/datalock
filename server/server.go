@@ -262,14 +262,15 @@ func (s *Server) GetPlaylist(link string, hd bool) (*Playlist, error) {
 	return playlist, nil
 }
 
-func (s *Server) GetPlaylistsByLinks(links []string, hd bool) ([]*Playlist, error) {
+func (s *Server) GetPlaylistsByLinks(links map[string]string, hd bool) ([]*Playlist, error) {
 	playlists := []*Playlist{}
-	for _, link := range links {
+	for name, link := range links {
 		linkAbs := s.AbsoluteLink(link)
 		playlist, err := s.GetPlaylist(linkAbs, hd)
 		if err != nil {
 			return nil, err
 		}
+		playlist.Name = name
 		playlists = append(playlists, playlist)
 	}
 	return playlists, nil

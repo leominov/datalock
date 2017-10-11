@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/leominov/datalock/server"
+	"github.com/leominov/datalock/utils"
 )
 
 func PlaylistHandler(s *server.Server) http.Handler {
@@ -17,6 +18,7 @@ func PlaylistHandler(s *server.Server) http.Handler {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		pl.Name = utils.GetPlaylistNameByLink(url)
 		w.Header().Set("Content-Type", "application/json")
 		if err := encoder.Encode(pl); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)

@@ -12,6 +12,7 @@ var (
 )
 
 type Playlist struct {
+	Name  string  `json:"name"`
 	Items []*Item `json:"playlist"`
 }
 

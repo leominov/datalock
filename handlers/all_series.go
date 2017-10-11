@@ -6,28 +6,11 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"regexp"
 	"strconv"
 
 	"github.com/leominov/datalock/server"
 	"github.com/leominov/datalock/utils"
 )
-
-var (
-	playlistRegexp = regexp.MustCompile(`\/playls2\/([^/]+)/([^/]+)/([0-9]+)/list.xml`)
-)
-
-func getPlaylistLinks(body []byte) []string {
-	var result []string
-	matches := playlistRegexp.FindAllStringSubmatch(string(body), -1)
-	if len(matches) == 0 {
-		return result
-	}
-	for _, match := range matches {
-		result = append(result, match[0])
-	}
-	return result
-}
 
 func AllSeriesHandler(s *server.Server) http.Handler {
 	client := &http.Client{}
@@ -72,7 +55,7 @@ func AllSeriesHandler(s *server.Server) http.Handler {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		links := getPlaylistLinks(body)
+		links := utils.GetPlaylistLinksFromText(body)
 		if len(links) == 0 {
 			http.Error(w, "Not found.", http.StatusNotFound)
 			return
