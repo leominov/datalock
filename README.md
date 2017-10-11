@@ -27,12 +27,10 @@ Output format:
 Output format:
 
 ```json
-{
-    "seasons": [{
-        "title": "...",
-        "link": "..."
-    }]
-}
+[{
+    "title": "...",
+    "link": "..."
+}]
 ```
 
 ### Available playlists

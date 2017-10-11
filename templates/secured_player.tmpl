@@ -77,10 +77,10 @@
                 };
                 $.getJSON("/api/all_seasons", {url: window.location.pathname})
                     .done(function(data) {
-                        if (data["seasons"].length <= 1) {
+                        if (data.length <= 1) {
                             return;
                         }
-                        data["seasons"].forEach(function(season) {
+                        data.forEach(function(season) {
                             $(".seasons_list").append('<li><a href="{0}">{1}</a></li>'.format(season.link, season.title));
                         });
                         $(".seasons").show();

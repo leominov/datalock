@@ -18,10 +18,6 @@ var (
 	xpathLink    = xmlpath.MustCompile(`.//@href`)
 )
 
-type AllSeasons struct {
-	Seasons []Season `json:"seasons"`
-}
-
 type Season struct {
 	Title string `json:"title"`
 	Link  string `json:"link"`
@@ -44,7 +40,7 @@ func AllSeasonsHandler(s *server.Server) http.Handler {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		as := AllSeasons{[]Season{}}
+		seasons := []Season{}
 		iter := xpathSeasons.Iter(root)
 		for iter.Next() {
 			node := iter.Node()
@@ -53,7 +49,7 @@ func AllSeasonsHandler(s *server.Server) http.Handler {
 			if !ok {
 				continue
 			}
-			as.Seasons = append(as.Seasons, Season{
+			seasons = append(seasons, Season{
 				Title: utils.StandardizeSpaces(title),
 				Link:  strings.TrimSpace(link),
 			})
@@ -61,7 +57,7 @@ func AllSeasonsHandler(s *server.Server) http.Handler {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Content-Type", "application/json")
 		encoder := json.NewEncoder(w)
-		if err := encoder.Encode(as); err != nil {
+		if err := encoder.Encode(seasons); err != nil {
 			http.Error(w, fmt.Sprintf("Cannot encode response data: %v", err), http.StatusInternalServerError)
 			return
 		}

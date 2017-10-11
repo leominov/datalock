@@ -79,15 +79,15 @@ steps:
         comparison: equal
         value: 200
       - source: response_json
-        property: seasons.#
+        property: "#"
         comparison: is_greater_than
         value: 0
       - source: response_json
-        property: seasons.0.title
+        property: 0.title
         comparison: contains
         value: Vice Principals 1
       - source: response_json
-        property: seasons.0.link
+        property: 0.link
         comparison: equal
         value: /serial-13911-Zavuchi-0001-sezon.html
   - note: Checking api/all_seasons result from non-first season link
