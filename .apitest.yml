@@ -110,10 +110,35 @@ steps:
         property: seasons.0.link
         comparison: equal
         value: /serial-3243-Amerikanskaja_istorija_uzhasov-1-season.html
+  - note: Checking api/info_season result
+    step_type: request
+    method: GET
+    url: http://{{.TestedHostname}}/api/info_season?url=%2Fserial-4426-TCar__gori-1-season.html
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+      - source: response_json
+        property: title
+        comparison: has_key
+      - source: response_json
+        property: keywords
+        comparison: has_key
+      - source: response_json
+        property: description
+        comparison: has_key
+      - source: response_json
+        property: id
+        comparison: equal
+        value: 4426
+      - source: response_json
+        property: serial
+        comparison: equal
+        value: 2211
   - note: Checking api/all_series result
     step_type: request
     method: GET
-    url: http://{{.TestedHostname}}/api/all_series?season_id=4426&serial_id=2211
+    url: http://{{.TestedHostname}}/api/all_series?url=%2Fserial-4426-TCar__gori-1-season.html
     assertions:
       - source: response_status
         comparison: equal
