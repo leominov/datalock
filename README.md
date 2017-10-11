@@ -13,8 +13,8 @@ Output format:
 ```json
 {
     "title": "...",
-    "id": 15825,
-    "serial": 9756,
+    "id": 0,
+    "serial": 0,
     "keywords": "...",
     "description": "..."
 }
@@ -30,7 +30,7 @@ Output format:
 {
     "seasons": [{
         "title": "...",
-        "link": "/serial-15825-Nelyudi-0-season.html"
+        "link": "..."
     }]
 }
 ```
@@ -43,17 +43,17 @@ Output format:
 
 ```json
 [{
-    "name": "Hamster",
+    "name": "...",
     "playlist": [{
         "comment": "...",
         "file": "...",
         "streamsend": "sec",
-        "galabel": "15825_482304"
+        "galabel": "0_0"
     }, {
         "comment": "...",
         "file": "...",
         "streamsend": "sec",
-        "galabel": "15825_483231"
+        "galabel": "0_0"
     }]
 },
 ...
