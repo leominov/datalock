@@ -4,7 +4,7 @@ Follow the rules on http://bit.ly/2rdoNTn
 
 ## Information for developers
 
-You can specify the format by adding `&_format=xml` or `&_format=json`.
+You can specify the format by adding `&_format=xml` or `&_format=json`; JSON used as default.
 
 ### Season details
 
