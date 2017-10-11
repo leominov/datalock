@@ -55,7 +55,5 @@ Output format:
         "streamsend": "sec",
         "galabel": "0_0"
     }]
-},
-...
-]
+}]
 ```
