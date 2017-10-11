@@ -52,9 +52,9 @@ func main() {
 	mux.Handle("/tpl/asset/css/", handlers.ProxyHandler(s))
 	mux.Handle("/tpl/asset/font/", handlers.ProxyHandler(s))
 	// Interface helpers
-	mux.Handle("/api/all_seasons", handlers.AllSeasonsHandler(s))
-	mux.Handle("/api/all_series", handlers.AllSeriesHandler(s))
-	mux.Handle("/api/info_season", handlers.InfoSeason(s))
+	mux.Handle("/api/all_seasons", handlers.ApiAllSeasonsHandler(s))
+	mux.Handle("/api/all_series", handlers.ApiAllSeriesHandler(s))
+	mux.Handle("/api/info_season", handlers.ApiInfoSeasonHandler(s))
 
 	fs := http.FileServer(http.Dir(s.Config.PublicDir))
 	mux.Handle("/public/", http.StripPrefix("/public", fs))

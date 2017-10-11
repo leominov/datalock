@@ -7,7 +7,7 @@ import (
 	"github.com/leominov/datalock/server"
 )
 
-func InfoSeason(s *server.Server) http.Handler {
+func ApiInfoSeasonHandler(s *server.Server) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		encoder := json.NewEncoder(w)
 		link := r.URL.Query().Get("url")

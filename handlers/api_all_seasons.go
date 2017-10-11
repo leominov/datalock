@@ -23,7 +23,7 @@ type Season struct {
 	Link  string `json:"link"`
 }
 
-func AllSeasonsHandler(s *server.Server) http.Handler {
+func ApiAllSeasonsHandler(s *server.Server) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		url := r.URL.Query().Get("url")
 		if len(url) == 0 {

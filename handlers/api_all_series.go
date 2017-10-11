@@ -12,7 +12,7 @@ import (
 	"github.com/leominov/datalock/utils"
 )
 
-func AllSeriesHandler(s *server.Server) http.Handler {
+func ApiAllSeriesHandler(s *server.Server) http.Handler {
 	client := &http.Client{}
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		encoder := json.NewEncoder(w)
