@@ -99,15 +99,15 @@ steps:
         comparison: equal
         value: 200
       - source: response_json
-        property: seasons.#
+        property: "#"
         comparison: is_greater_than
         value: 0
       - source: response_json
-        property: seasons.0.title
+        property: 0.title
         comparison: contains
         value: American Horror Story 1
       - source: response_json
-        property: seasons.0.link
+        property: 0.link
         comparison: equal
         value: /serial-3243-Amerikanskaja_istorija_uzhasov-1-season.html
   - note: Checking api/info_season result
