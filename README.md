@@ -4,6 +4,8 @@ Follow the rules on http://bit.ly/2rdoNTn
 
 ## Information for developers
 
+You can specify the format by adding `&_format=xml` or `&_format=json`.
+
 ### Season details
 
 `GET /api/info_season?url=/serial-15825-Nelyudi-0-season.html`

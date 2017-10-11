@@ -3,7 +3,7 @@ package handlers
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
+	"encoding/xml"
 	"net/http"
 	"strings"
 
@@ -55,11 +55,15 @@ func ApiAllSeasonsHandler(s *server.Server) http.Handler {
 			})
 		}
 		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Content-Type", "application/json")
-		encoder := json.NewEncoder(w)
-		if err := encoder.Encode(seasons); err != nil {
-			http.Error(w, fmt.Sprintf("Cannot encode response data: %v", err), http.StatusInternalServerError)
-			return
+		switch r.URL.Query().Get("_format") {
+		case "xml":
+			w.Header().Set("Contern-Type", "application/xml")
+			encoder := xml.NewEncoder(w)
+			encoder.Encode(seasons)
+		default:
+			w.Header().Set("Content-Type", "application/json")
+			encoder := json.NewEncoder(w)
+			encoder.Encode(seasons)
 		}
 	})
 }

@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
+	"encoding/xml"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -15,7 +15,6 @@ import (
 func ApiAllSeriesHandler(s *server.Server) http.Handler {
 	client := &http.Client{}
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		encoder := json.NewEncoder(w)
 		ip := utils.RealIP(r)
 		u := s.GetUser(ip)
 		hd := s.CanShowHD(r)
@@ -66,10 +65,15 @@ func ApiAllSeriesHandler(s *server.Server) http.Handler {
 			return
 		}
 		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Content-Type", "application/json")
-		if err := encoder.Encode(playlists); err != nil {
-			http.Error(w, fmt.Sprintf("Cannot encode response data: %v", err), http.StatusInternalServerError)
-			return
+		switch r.URL.Query().Get("_format") {
+		case "xml":
+			w.Header().Set("Contern-Type", "application/xml")
+			encoder := xml.NewEncoder(w)
+			encoder.Encode(playlists)
+		default:
+			w.Header().Set("Content-Type", "application/json")
+			encoder := json.NewEncoder(w)
+			encoder.Encode(playlists)
 		}
 	})
 }

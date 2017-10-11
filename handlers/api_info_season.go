@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"encoding/xml"
 	"net/http"
 
 	"github.com/leominov/datalock/server"
@@ -9,7 +10,6 @@ import (
 
 func ApiInfoSeasonHandler(s *server.Server) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		encoder := json.NewEncoder(w)
 		link := r.URL.Query().Get("url")
 		seasonMeta, err := s.GetCachedSeasonMeta(s.AbsoluteLink(link))
 		if err != nil {
@@ -17,7 +17,15 @@ func ApiInfoSeasonHandler(s *server.Server) http.Handler {
 			return
 		}
 		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Content-Type", "application/json")
-		encoder.Encode(seasonMeta)
+		switch r.URL.Query().Get("_format") {
+		case "xml":
+			w.Header().Set("Contern-Type", "application/xml")
+			encoder := xml.NewEncoder(w)
+			encoder.Encode(seasonMeta)
+		default:
+			w.Header().Set("Content-Type", "application/json")
+			encoder := json.NewEncoder(w)
+			encoder.Encode(seasonMeta)
+		}
 	})
 }
