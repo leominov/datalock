@@ -67,11 +67,11 @@ func ApiAllSeriesHandler(s *server.Server) http.Handler {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		switch r.URL.Query().Get("_format") {
 		case "xml":
-			w.Header().Set("Contern-Type", "application/xml")
+			w.Header().Set("Contern-Type", "application/xml;charset=utf-8")
 			encoder := xml.NewEncoder(w)
 			encoder.Encode(playlists)
 		default:
-			w.Header().Set("Content-Type", "application/json")
+			w.Header().Set("Content-Type", "application/json;charset=utf-8")
 			encoder := json.NewEncoder(w)
 			encoder.Encode(playlists)
 		}

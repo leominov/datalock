@@ -10,7 +10,7 @@ import (
 
 var (
 	pathToConentTypeMap = map[string]string{
-		"/autocomplete.php": "application/json",
+		"/autocomplete.php": "application/json;charset=utf-8",
 	}
 )
 
