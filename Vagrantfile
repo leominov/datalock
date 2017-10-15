@@ -16,7 +16,7 @@ Vagrant.configure(2) do |config|
         vb.memory = 1024
         vb.cpus = 1
       end
-      node.vm.provision "shell", path: "contrib/vagrant/init.sh"
+      node.vm.provision 'shell', path: 'contrib/vagrant/init.sh'
     end
   end
 end
