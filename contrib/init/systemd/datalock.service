@@ -1,0 +1,15 @@
+[Unit]
+Description=Datalock Application
+Documentation=http://github.com/leominov/datalock
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Environment=DATALOCK_LISTEN_ADDR=127.0.0.1:7000
+Environment=DATALOCK_PUBLIC_DIR=/opt/datalock/public/
+Environment=DATALOCK_DATABASE_DIR=/opt/datalock/database/
+Environment=DATALOCK_TEMPLATES_DIR=/opt/datalock/templates/
+ExecStart=/opt/datalock/datalock
+
+[Install]
+WantedBy=multi-user.target
