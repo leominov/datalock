@@ -1,6 +1,7 @@
 ---
 name: 1seasonvar.ru
 stop_on_failure: true
+retry_on_failure: true
 initial_variables:
   TestedHostname: 1seasonvar.ru
 env_variables:
