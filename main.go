@@ -48,9 +48,11 @@ func main() {
 	mux.Handle("/playls2/", handlers.PlaylistHandler(s))
 	// Static files
 	mux.Handle("/js/", handlers.ProxyHandler(s))
+	mux.Handle("/favicon.ico", handlers.ProxyHandler(s))
 	mux.Handle("/tpl/asset/js/", handlers.JavaScriptHandler(s))
 	mux.Handle("/tpl/asset/css/", handlers.ProxyHandler(s))
 	mux.Handle("/tpl/asset/font/", handlers.ProxyHandler(s))
+	mux.Handle("/tpl/asset/vendor/", handlers.ProxyHandler(s))
 	// Interface helpers
 	mux.Handle("/api/all_seasons", handlers.ApiAllSeasonsHandler(s))
 	mux.Handle("/api/all_series", handlers.ApiAllSeriesHandler(s))
