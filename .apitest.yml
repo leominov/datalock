@@ -94,7 +94,7 @@ steps:
   - note: Checking api/all_seasons result from non-first season link
     step_type: request
     method: GET
-    url: http://{{.TestedHostname}}/api/all_seasons?url=%2Fserial-16377-Amerikanskaya_istoriya_uzhasov-000007-sezon.html
+    url: http://{{.TestedHostname}}/api/all_seasons?url=%2Fserial-16377-Amerikanskaya_istoriya_uzhasov--7-season.html
     assertions:
       - source: response_status
         comparison: equal
