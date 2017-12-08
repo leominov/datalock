@@ -14,8 +14,9 @@ import (
 )
 
 var (
-	allowHdReplacer   = strings.NewReplacer("swichHDno", "swichHD")
-	prerollCodeRegexp = regexp.MustCompile(`\<script\ type\=\"text\/javascript\"\>var.*\<\/script\>`)
+	allowHdReplacer         = strings.NewReplacer("swichHDno", "swichHD")
+	prerollCodeRegexp       = regexp.MustCompile(`\<script\ type\=\"text\/javascript\"\>var.*\<\/script\>`)
+	prerollCodeRegexpUpport = regexp.MustCompile(`\,preroll\:\".*\"`)
 )
 
 func playerRewriteBody(resp *http.Response) (err error) {
@@ -28,6 +29,7 @@ func playerRewriteBody(resp *http.Response) (err error) {
 		return err
 	}
 	b = prerollCodeRegexp.ReplaceAll(b, nil)
+	b = prerollCodeRegexpUpport.ReplaceAll(b, nil)
 	b = []byte(allowHdReplacer.Replace(string(b)))
 	body := ioutil.NopCloser(bytes.NewReader(b))
 	resp.Body = body

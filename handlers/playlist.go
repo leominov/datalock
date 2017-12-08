@@ -20,7 +20,7 @@ func PlaylistHandler(s *server.Server) http.Handler {
 		}
 		pl.Name = utils.GetPlaylistNameByLink(url)
 		w.Header().Set("Content-Type", "application/json")
-		if err := encoder.Encode(pl); err != nil {
+		if err := encoder.Encode(pl.Items); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 	})

@@ -11,7 +11,7 @@ const (
 )
 
 var (
-	playlistRegexp     = regexp.MustCompile(`\/playls2\/([^/]+)/([^/]+)/([0-9]+)/list.xml`)
+	playlistRegexp     = regexp.MustCompile(`\/playls2\/([^/]+)/([^/]+)/([0-9]+)/plist.txt`)
 	playlistNameRegexp = regexp.MustCompile(`/trans([^/]+)/`)
 )
 

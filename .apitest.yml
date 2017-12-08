@@ -94,7 +94,7 @@ steps:
   - note: Checking api/all_seasons result from non-first season link
     step_type: request
     method: GET
-    url: http://{{.TestedHostname}}/api/all_seasons?url=%2Fserial-16377-Amerikanskaya_istoriya_uzhasov--07-sezon.html
+    url: http://{{.TestedHostname}}/api/all_seasons?url=%2Fserial-16377-Amerikanskaya_istoriya_uzhasov--007-sezon.html
     assertions:
       - source: response_status
         comparison: equal
@@ -153,13 +153,16 @@ steps:
         comparison: is_greater_than
         value: 0
       - source: response_json
-        property: 0.playlist.0.comment
+        property: 0.playlist.0.id
+        comparison: has_key
+      - source: response_json
+        property: 0.playlist.0.title
+        comparison: has_key
+      - source: response_json
+        property: 0.playlist.0.subtitle
         comparison: has_key
       - source: response_json
         property: 0.playlist.0.file
-        comparison: has_key
-      - source: response_json
-        property: 0.playlist.0.streamsend
         comparison: has_key
       - source: response_json
         property: 0.playlist.0.galabel
@@ -206,6 +209,33 @@ steps:
       - source: response_status
         comparison: equal
         value: 200
+  - note: Checking playlist from seasonvar player
+    step_type: request
+    method: GET
+    url: http://{{.TestedHostname}}/playls2/08/trans/16626/plist.txt
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+      - source: response_json
+        property: "#"
+        comparison: is_greater_than
+        value: 0
+      - source: response_json
+        property: 0.id
+        comparison: has_key
+      - source: response_json
+        property: 0.title
+        comparison: has_key
+      - source: response_json
+        property: 0.subtitle
+        comparison: has_key
+      - source: response_json
+        property: 0.file
+        comparison: has_key
+      - source: response_json
+        property: 0.galabel
+        comparison: has_key
   - note: Checking datalock player
     step_type: request
     method: GET

@@ -17,14 +17,15 @@ type Playlist struct {
 }
 
 type Item struct {
-	Comment    string `json:"comment"`
-	File       string `json:"file"`
-	StreamsEnd string `json:"streamsend"`
-	GALabel    string `json:"galabel"`
+	ID       string `json:"id"`
+	Title    string `json:"title"`
+	Subtitle string `json:"subtitle"`
+	File     string `json:"file"`
+	GALabel  string `json:"galabel"`
 }
 
 func (i *Item) AvailableInHD() bool {
-	index := strings.Index(i.Comment, "HD")
+	index := strings.Index(i.Title, "HD")
 	if index >= 0 {
 		return true
 	}

@@ -252,7 +252,7 @@ func (s *Server) GetPlaylist(link string, hd bool) (*Playlist, error) {
 		return nil, err
 	}
 	playlist := new(Playlist)
-	if err := json.Unmarshal(b, &playlist); err != nil {
+	if err := json.Unmarshal(b, &playlist.Items); err != nil {
 		return nil, err
 	}
 	if hd {
@@ -269,6 +269,9 @@ func (s *Server) GetPlaylistsByLinks(links map[string]string, hd bool) ([]*Playl
 		playlist, err := s.GetPlaylist(linkAbs, hd)
 		if err != nil {
 			return nil, err
+		}
+		if len(playlist.Items) == 0 {
+			continue
 		}
 		playlist.Name = name
 		playlists = append(playlists, playlist)
