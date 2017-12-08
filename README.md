@@ -45,9 +45,10 @@ Output format:
 [{
     "name": "...",
     "playlist": [{
-        "comment": "...",
+        "id": "...",
+        "title": "...",
+        "subtitle": "...",
         "file": "...",
-        "streamsend": "...",
         "galabel": "..."
     }]
 }]
