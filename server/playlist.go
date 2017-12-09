@@ -17,11 +17,14 @@ type Playlist struct {
 }
 
 type Item struct {
-	ID       string `json:"id"`
-	Title    string `json:"title"`
-	Subtitle string `json:"subtitle"`
-	File     string `json:"file"`
-	GALabel  string `json:"galabel"`
+	ID         string `json:"id,omitempty"`
+	Title      string `json:"title,omitempty"`
+	Comment    string `json:"comment,omitempty"`
+	Subtitle   string `json:"subtitle,omitempty"`
+	Sub        string `json:"sub,omitempty"`
+	Streamsend string `json:"streamsend,omitempty"`
+	File       string `json:"file"`
+	GALabel    string `json:"galabel"`
 }
 
 func (i *Item) AvailableInHD() bool {

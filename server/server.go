@@ -246,14 +246,20 @@ func (s *Server) CanShowHD(r *http.Request) bool {
 	return false
 }
 
-func (s *Server) GetPlaylist(link string, hd bool) (*Playlist, error) {
+func (s *Server) GetPlaylist(link string, hd, arrayResponse bool) (*Playlist, error) {
 	b, err := utils.HttpGetRaw(link)
 	if err != nil {
 		return nil, err
 	}
 	playlist := new(Playlist)
-	if err := json.Unmarshal(b, &playlist.Items); err != nil {
-		return nil, err
+	if arrayResponse {
+		if err := json.Unmarshal(b, &playlist.Items); err != nil {
+			return nil, err
+		}
+	} else {
+		if err := json.Unmarshal(b, &playlist); err != nil {
+			return nil, err
+		}
 	}
 	if hd {
 		// Nothing change if switching was failed
@@ -266,7 +272,7 @@ func (s *Server) GetPlaylistsByLinks(links map[string]string, hd bool) ([]*Playl
 	playlists := []*Playlist{}
 	for name, link := range links {
 		linkAbs := s.AbsoluteLink(link)
-		playlist, err := s.GetPlaylist(linkAbs, hd)
+		playlist, err := s.GetPlaylist(linkAbs, hd, false)
 		if err != nil {
 			return nil, err
 		}

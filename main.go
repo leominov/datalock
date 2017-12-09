@@ -46,6 +46,7 @@ func main() {
 	mux.Handle("/plStat.php", handlers.NoContentHandler(s))
 	mux.Handle("/autocomplete.php", handlers.ProxyHandler(s))
 	mux.Handle("/playls2/", handlers.PlaylistHandler(s))
+	mux.Handle("/crossdomain.xml", handlers.CrossdomainHandler(s))
 	// Static files
 	mux.Handle("/js/", handlers.ProxyHandler(s))
 	mux.Handle("/favicon.ico", handlers.ProxyHandler(s))
