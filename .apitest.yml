@@ -159,9 +159,6 @@ steps:
         property: 0.playlist.0.title
         comparison: has_key
       - source: response_json
-        property: 0.playlist.0.subtitle
-        comparison: has_key
-      - source: response_json
         property: 0.playlist.0.file
         comparison: has_key
       - source: response_json
@@ -209,7 +206,7 @@ steps:
       - source: response_status
         comparison: equal
         value: 200
-  - note: Checking playlist from seasonvar player
+  - note: Checking playlist from seasonvar player (array)
     step_type: request
     method: GET
     url: http://{{.TestedHostname}}/playls2/08/trans/16626/plist.txt
@@ -228,13 +225,40 @@ steps:
         property: 0.title
         comparison: has_key
       - source: response_json
-        property: 0.subtitle
-        comparison: has_key
-      - source: response_json
         property: 0.file
         comparison: has_key
       - source: response_json
         property: 0.galabel
+        comparison: has_key
+  - note: Checking playlist from seasonvar player
+    step_type: request
+    method: GET
+    url: http://{{.TestedHostname}}/playls2/08/trans/16626/list.xml
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+      - source: response_json
+        property: name
+        comparison: has_key
+      - source: response_json
+        property: playlist
+        comparison: has_key
+      - source: response_json
+        property: playlist.#
+        comparison: is_greater_than
+        value: 0
+      - source: response_json
+        property: playlist.0.comment
+        comparison: has_key
+      - source: response_json
+        property: playlist.0.streamsend
+        comparison: has_key
+      - source: response_json
+        property: playlist.0.file
+        comparison: has_key
+      - source: response_json
+        property: playlist.0.galabel
         comparison: has_key
   - note: Checking datalock player
     step_type: request
