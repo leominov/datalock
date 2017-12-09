@@ -45,6 +45,34 @@ func (i *Item) SwitchToHD(hdHostname string) error {
 	return nil
 }
 
+func (i *Item) RemoveHostnameFromSubtitleLink() error {
+	if len(i.Sub) != 0 {
+		u, err := url.Parse(i.Sub)
+		if err != nil {
+			return err
+		}
+		i.Sub = u.Path + "?" + u.RawQuery
+	}
+	if len(i.Subtitle) != 0 {
+		u, err := url.Parse(i.Subtitle)
+		if err != nil {
+			return err
+		}
+		i.Subtitle = u.Path + "?" + u.RawQuery
+	}
+	return nil
+}
+
+func (p *Playlist) UpdateSubtitleLinks() error {
+	for id, item := range p.Items {
+		if err := item.RemoveHostnameFromSubtitleLink(); err != nil {
+			return err
+		}
+		p.Items[id] = item
+	}
+	return nil
+}
+
 func (p *Playlist) SwitchToHD(hdHostname string) error {
 	var counter int
 	if len(p.Items) == 0 {

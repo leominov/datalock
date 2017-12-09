@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -265,6 +266,9 @@ func (s *Server) GetPlaylist(link string, hd, arrayResponse bool) (*Playlist, er
 		// Nothing change if switching was failed
 		playlist.SwitchToHD(s.Config.HdHostname)
 	}
+	if err := playlist.UpdateSubtitleLinks(); err != nil {
+		log.Println(err)
+	}
 	return playlist, nil
 }
 
@@ -272,7 +276,7 @@ func (s *Server) GetPlaylistsByLinks(links map[string]string, hd bool) ([]*Playl
 	playlists := []*Playlist{}
 	for name, link := range links {
 		linkAbs := s.AbsoluteLink(link)
-		playlist, err := s.GetPlaylist(linkAbs, hd, false)
+		playlist, err := s.GetPlaylist(linkAbs, hd, true)
 		if err != nil {
 			return nil, err
 		}

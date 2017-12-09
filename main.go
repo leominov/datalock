@@ -49,6 +49,7 @@ func main() {
 	mux.Handle("/crossdomain.xml", handlers.CrossdomainHandler(s))
 	// Static files
 	mux.Handle("/js/", handlers.ProxyHandler(s))
+	mux.Handle("/sub/", handlers.ProxyHandler(s))
 	mux.Handle("/favicon.ico", handlers.ProxyHandler(s))
 	mux.Handle("/tpl/asset/js/", handlers.JavaScriptHandler(s))
 	mux.Handle("/tpl/asset/css/", handlers.ProxyHandler(s))
