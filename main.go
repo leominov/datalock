@@ -13,14 +13,22 @@ import (
 	"github.com/leominov/datalock/metrics"
 	"github.com/leominov/datalock/server"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/prometheus/common/version"
 )
 
 func init() {
 	metrics.InitMetrics()
 }
 
+func getVersion() string {
+	if len(version.Version) == 0 {
+		return "X.X"
+	}
+	return version.Version
+}
+
 func main() {
-	log.Println("Starting datalock...")
+	log.Printf("Starting datalock %s...", getVersion())
 
 	config := server.NewConfig()
 	if err := config.Load(); err != nil {
