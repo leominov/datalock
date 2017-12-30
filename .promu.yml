@@ -17,6 +17,8 @@ tarball:
   files:
     - README.md
     - LICENSE
+    - public
+    - templates
 crossbuild:
   platforms:
     - linux/amd64
