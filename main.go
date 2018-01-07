@@ -55,6 +55,7 @@ func main() {
 	mux.Handle("/autocomplete.php", handlers.ProxyHandler(s))
 	mux.Handle("/playls2/", handlers.PlaylistHandler(s))
 	mux.Handle("/crossdomain.xml", handlers.CrossdomainHandler(s))
+	mux.Handle("/robots.txt", handlers.ProxyHandler(s))
 	mux.Handle("/sitemap.xml", handlers.ProxyHandler(s))
 	// Static files
 	mux.Handle("/js/", handlers.ProxyHandler(s))
