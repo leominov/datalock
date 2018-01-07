@@ -53,6 +53,7 @@ func main() {
 	mux.Handle("/player.php", handlers.PlayerHandler(s))
 	mux.Handle("/plStat.php", handlers.NoContentHandler(s))
 	mux.Handle("/autocomplete.php", handlers.ProxyHandler(s, false))
+	mux.Handle("/tagautocomplete.php", handlers.ProxyHandler(s, false))
 	mux.Handle("/playls2/", handlers.PlaylistHandler(s))
 	mux.Handle("/crossdomain.xml", handlers.CrossdomainHandler(s))
 	mux.Handle("/robots.txt", handlers.ProxyHandler(s, true))
@@ -63,9 +64,7 @@ func main() {
 	mux.Handle("/sub/", handlers.ProxyHandler(s, false))
 	mux.Handle("/favicon.ico", handlers.ProxyHandler(s, false))
 	mux.Handle("/tpl/asset/js/", handlers.JavaScriptHandler(s))
-	mux.Handle("/tpl/asset/css/", handlers.ProxyHandler(s, false))
-	mux.Handle("/tpl/asset/font/", handlers.ProxyHandler(s, false))
-	mux.Handle("/tpl/asset/vendor/", handlers.ProxyHandler(s, false))
+	mux.Handle("/tpl/asset/", handlers.ProxyHandler(s, false))
 	// Interface helpers
 	mux.Handle("/api/all_seasons", handlers.ApiAllSeasonsHandler(s))
 	mux.Handle("/api/all_series", handlers.ApiAllSeriesHandler(s))
