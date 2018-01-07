@@ -260,6 +260,22 @@ steps:
       - source: response_json
         property: playlist.0.galabel
         comparison: has_key
+  - note: Checking robots.txt
+    step_type: request
+    method: GET
+    url: http://{{.TestedHostname}}/robots.txt
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+  - note: Checking sitemap.xml
+    step_type: request
+    method: GET
+    url: http://{{.TestedHostname}}/sitemap.xml
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
   - note: Checking datalock player
     step_type: request
     method: GET
