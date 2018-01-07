@@ -1,9 +1,11 @@
 package server
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
@@ -313,4 +315,21 @@ func (s *Server) NewPlaylistRequest(form url.Values) (*http.Request, error) {
 	req.Header.Set("X-Requested-With", "XMLHttpRequest")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	return req, nil
+}
+
+func (s *Server) UpdateHostnameResponseBody(r *http.Response) error {
+	b, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		return err
+	}
+	err = r.Body.Close()
+	if err != nil {
+		return err
+	}
+	b = bytes.Replace(b, []byte(s.Config.Hostname), []byte(s.Config.PublicHostname), -1)
+	body := ioutil.NopCloser(bytes.NewReader(b))
+	r.Body = body
+	r.ContentLength = int64(len(b))
+	r.Header.Set("Content-Length", strconv.Itoa(len(b)))
+	return nil
 }

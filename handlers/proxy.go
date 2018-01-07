@@ -21,10 +21,14 @@ func fixResponseContentType(r *http.Response) error {
 	return nil
 }
 
-func ProxyHandler(s *server.Server) http.Handler {
+func ProxyHandler(s *server.Server, updateHostname bool) http.Handler {
 	u, _ := url.Parse(s.AbsoluteLink("/"))
 	reverseProxy := httputil.NewSingleHostReverseProxy(u)
-	reverseProxy.ModifyResponse = fixResponseContentType
+	if updateHostname {
+		reverseProxy.ModifyResponse = s.UpdateHostnameResponseBody
+	} else {
+		reverseProxy.ModifyResponse = fixResponseContentType
+	}
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		r.Host = u.Hostname()
 		reverseProxy.ServeHTTP(w, r)
