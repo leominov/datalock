@@ -16,6 +16,7 @@ build:
 tarball:
   files:
     - README.md
+    - CONFIGURATION.md
     - LICENSE
     - public
     - templates
