@@ -11,7 +11,7 @@ var (
 	client http.Client
 )
 
-func HttpGetRaw(url string) ([]byte, error) {
+func HttpGetRaw(url string, headers map[string]string) ([]byte, error) {
 	var body []byte
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -19,6 +19,9 @@ func HttpGetRaw(url string) ([]byte, error) {
 	}
 	req.Header.Del("Accept-Encoding")
 	req.Header.Set("User-Agent", RandomUserAgent())
+	for key, value := range headers {
+		req.Header.Set(key, value)
+	}
 	resp, err := client.Do(req)
 	if err != nil {
 		return body, err
@@ -36,7 +39,7 @@ func HttpGetRaw(url string) ([]byte, error) {
 
 func HttpGet(url string) (string, error) {
 	var body string
-	b, err := HttpGetRaw(url)
+	b, err := HttpGetRaw(url, map[string]string{})
 	if err != nil {
 		return body, err
 	}

@@ -30,7 +30,7 @@ func ApiAllSeasonsHandler(s *server.Server) http.Handler {
 			http.Error(w, "Incorrect request", http.StatusBadRequest)
 			return
 		}
-		b, err := utils.HttpGetRaw(s.AbsoluteLink(url))
+		b, err := utils.HttpGetRaw(s.AbsoluteLink(url), map[string]string{})
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

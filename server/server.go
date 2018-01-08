@@ -250,7 +250,7 @@ func (s *Server) CanShowHD(r *http.Request) bool {
 }
 
 func (s *Server) GetPlaylist(link string, hd, arrayResponse bool) (*Playlist, error) {
-	b, err := utils.HttpGetRaw(link)
+	b, err := utils.HttpGetRaw(link, map[string]string{})
 	if err != nil {
 		return nil, err
 	}

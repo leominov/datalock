@@ -53,3 +53,48 @@ Output format:
     }]
 }]
 ```
+
+### Feeds
+
+#### Updated series
+
+`GET /api/updated_series`
+
+Output format:
+
+```json
+[{
+    "name": "...",
+    "link": "...",
+    "comment": "..."
+}]
+```
+
+#### Popular series
+
+`GET /api/popular_series`
+
+Output format:
+
+```json
+[{
+    "name": "...",
+    "link": "...",
+    "comment": "..."
+}]
+```
+
+
+#### New series
+
+`GET /api/new_series`
+
+Output format:
+
+```json
+[{
+    "name": "...",
+    "link": "...",
+    "comment": "..."
+}]
+```

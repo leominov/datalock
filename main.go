@@ -71,6 +71,13 @@ func main() {
 	mux.Handle("/api/all_series", handlers.ApiAllSeriesHandler(s))
 	mux.Handle("/api/info_season", handlers.ApiInfoSeasonHandler(s))
 
+	// http://seasonvar.ru/ajax.php?mode=new
+	mux.Handle("/api/updated_series", handlers.ApiListSeriesHandler(s, "new"))
+	// http://seasonvar.ru/ajax.php?mode=pop
+	mux.Handle("/api/popular_series", handlers.ApiListSeriesHandler(s, "pop"))
+	// http://seasonvar.ru/ajax.php?mode=newest
+	mux.Handle("/api/new_series", handlers.ApiListSeriesHandler(s, "newest"))
+
 	fs := http.FileServer(http.Dir(s.Config.PublicDir))
 	mux.Handle("/public/", http.StripPrefix("/public", fs))
 
