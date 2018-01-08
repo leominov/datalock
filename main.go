@@ -58,6 +58,7 @@ func main() {
 	mux.Handle("/crossdomain.xml", handlers.CrossdomainHandler(s))
 	mux.Handle("/robots.txt", handlers.ProxyHandler(s, true))
 	mux.Handle("/sitemap.xml", handlers.ProxyHandler(s, true))
+	mux.Handle("/rss.php", handlers.ProxyHandler(s, true))
 	// Static files
 	mux.Handle("/uppod/", handlers.ProxyHandler(s, false))
 	mux.Handle("/js/", handlers.ProxyHandler(s, false))
