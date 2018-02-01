@@ -7,13 +7,16 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"time"
 
 	"github.com/leominov/datalock/server"
 	"github.com/leominov/datalock/utils"
 )
 
 func ApiAllSeriesHandler(s *server.Server) http.Handler {
-	client := &http.Client{}
+	client := &http.Client{
+		Timeout: 2 * time.Second,
+	}
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ip := utils.RealIP(r)
 		u := s.GetUser(ip)
@@ -44,12 +47,8 @@ func ApiAllSeriesHandler(s *server.Server) http.Handler {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		defer resp.Body.Close()
 		body, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		err = resp.Body.Close()
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
