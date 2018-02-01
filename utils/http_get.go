@@ -20,7 +20,8 @@ func HttpGetRaw(url string, headers map[string]string) ([]byte, error) {
 		req.Header.Set(key, value)
 	}
 	client := &http.Client{
-		Timeout: 2 * time.Second,
+		Transport: http.DefaultTransport,
+		Timeout:   2 * time.Second,
 	}
 	resp, err := client.Do(req)
 	if err != nil {

@@ -41,6 +41,7 @@ func playerRewriteBody(resp *http.Response) (err error) {
 func PlayerHandler(s *server.Server) http.Handler {
 	u, _ := url.Parse(s.AbsoluteLink("/"))
 	reverseProxy := httputil.NewSingleHostReverseProxy(u)
+	reverseProxy.Transport = http.DefaultTransport
 	reverseProxy.ModifyResponse = playerRewriteBody
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		r.Host = u.Hostname()

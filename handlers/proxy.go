@@ -24,6 +24,7 @@ func fixResponseContentType(r *http.Response) error {
 func ProxyHandler(s *server.Server, updateHostname bool) http.Handler {
 	u, _ := url.Parse(s.AbsoluteLink("/"))
 	reverseProxy := httputil.NewSingleHostReverseProxy(u)
+	reverseProxy.Transport = http.DefaultTransport
 	if updateHostname {
 		reverseProxy.ModifyResponse = s.UpdateHostnameResponseBody
 	} else {
