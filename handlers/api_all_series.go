@@ -26,7 +26,7 @@ func ApiAllSeriesHandler(s *server.Server) http.Handler {
 			http.Error(w, "Incorrect request", http.StatusBadRequest)
 			return
 		}
-		seasonMeta, err := s.GetCachedSeasonMeta(s.AbsoluteLink(link))
+		seasonMeta, hitCache, err := s.GetCachedSeasonMeta(s.AbsoluteLink(link))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -63,6 +63,7 @@ func ApiAllSeriesHandler(s *server.Server) http.Handler {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		w.Header().Set("X-Cache", server.BoolAsHit(hitCache))
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		switch r.URL.Query().Get("_format") {
 		case "xml":

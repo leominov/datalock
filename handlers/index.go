@@ -20,7 +20,7 @@ func IndexHandler(s *server.Server) http.Handler {
 		ip := utils.RealIP(r)
 		requestURI := r.URL.RequestURI()
 		seriesLink := s.AbsoluteLink(requestURI)
-		if requestURI == "/" {
+		if r.URL.Path == "/" {
 			http.ServeFile(w, r, path.Join(s.Config.PublicDir, "index.html"))
 			return
 		} else if strings.Index(requestURI, ".html") == -1 {
@@ -28,7 +28,7 @@ func IndexHandler(s *server.Server) http.Handler {
 			return
 		}
 		u := s.GetUser(ip)
-		seasonMeta, err := s.GetCachedSeasonMeta(seriesLink)
+		seasonMeta, hitCache, err := s.GetCachedSeasonMeta(seriesLink)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -37,6 +37,7 @@ func IndexHandler(s *server.Server) http.Handler {
 			User: u,
 			Meta: seasonMeta,
 		}
+		w.Header().Set("X-Cache", server.BoolAsHit(hitCache))
 		err = server.Templates.ExecuteTemplate(w, "secured", vars)
 		if err != nil {
 			metrics.TemplateExecuteErrorCount.Inc()

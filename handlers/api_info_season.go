@@ -11,11 +11,12 @@ import (
 func ApiInfoSeasonHandler(s *server.Server) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		link := r.URL.Query().Get("url")
-		seasonMeta, err := s.GetCachedSeasonMeta(s.AbsoluteLink(link))
+		seasonMeta, hitCache, err := s.GetCachedSeasonMeta(s.AbsoluteLink(link))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		w.Header().Set("X-Cache", server.BoolAsHit(hitCache))
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		switch r.URL.Query().Get("_format") {
 		case "xml":

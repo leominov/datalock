@@ -63,6 +63,13 @@ func New(config *Config) *Server {
 	}
 }
 
+func BoolAsHit(hitCache bool) string {
+	if hitCache {
+		return "HIT"
+	}
+	return "MISS"
+}
+
 func (s *Server) Start() error {
 	var err error
 	s.DB, err = bolt.Open(path.Join(s.Config.DatabaseDir, "datalock.db"), 0600, nil)
@@ -86,24 +93,28 @@ func (s *Server) AbsoluteLink(link string) string {
 	return fmt.Sprintf(SeriesLinkFormat, s.Config.Hostname, link)
 }
 
-func (s *Server) GetCachedSeasonMeta(link string) (*SeasonMeta, error) {
+func (s *Server) GetCachedSeasonMeta(link string) (*SeasonMeta, bool, error) {
 	var seasonMeta *SeasonMeta
 	var err error
+	var hitCache bool
 	seasonID, err := s.GetSeasonIDFromLink(link)
 	if err != nil {
-		return nil, err
+		return nil, false, err
 	}
 	seasonMeta, err = s.GetSeasonMeta(seasonID)
 	if err != nil {
+		hitCache = false
 		seasonMeta, err = s.collectSeasonMeta(link)
 		if err != nil {
-			return nil, err
+			return nil, false, err
 		}
+	} else {
+		hitCache = true
 	}
 	if err := s.SetSeasonMeta(seasonMeta); err != nil {
-		return nil, err
+		return nil, hitCache, err
 	}
-	return seasonMeta, nil
+	return seasonMeta, hitCache, nil
 }
 
 func (s *Server) collectSeasonMeta(link string) (*SeasonMeta, error) {
