@@ -1,7 +1,6 @@
 ---
 name: 1seasonvar.ru
 stop_on_failure: true
-retry_on_failure: true
 initial_variables:
   TestedHostname: 1seasonvar.ru
 env_variables:
@@ -351,6 +350,18 @@ steps:
       - source: response_status
         comparison: equal
         value: 200
+  - note: Checking rublacklist.net
+    step_type: request
+    method: GET
+    url: https://reestr.rublacklist.net/search/?q=1seasonvar.ru
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+      - source: response_html
+        property: .//td[@class='url_rec']/#
+        comparison: equal
+        value: 1
 notification:
   telegram:
     chat_id: "{{.APITEST_TELEGRAM_CHATID}}"
