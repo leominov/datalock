@@ -1,0 +1,12 @@
+---
+workspace:
+  base: /go
+  path: src/github.com/leominov/datalock
+pipeline:
+  deploy_apitest:
+    image: drone-artifact-deploy:latest
+    profile: datalock_apitest_paradev
+    user: buildagent
+    volumes:
+      - /opt/drone/drone-agent/.ssh:/root/.ssh
+      - /opt/drone/drone-agent/profiles:/profiles
