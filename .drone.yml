@@ -3,6 +3,7 @@ workspace:
   base: /go
   path: src/github.com/leominov/datalock
 pipeline:
+  # .apitest.yml
   deploy_apitest:
     image: drone-artifact-deploy:latest
     profile: datalock_apitest_paradev
