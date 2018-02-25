@@ -11,7 +11,7 @@ pipeline:
       - /opt/drone/drone-agent/.ssh:/root/.ssh
       - /opt/drone/drone-agent/profiles:/profiles
   deploy_nginx:
-    image: drone-artifact-deploy:lates
+    image: drone-artifact-deploy:latest
     profile: datalock_nginx_baloo
     user: root
     volumes:
