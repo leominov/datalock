@@ -359,7 +359,7 @@ steps:
         comparison: equal
         value: 200
       - source: response_html
-        property: .//td[@class='url_rec']/#
+        property: .//tr[@class='t431__evenrow']/#
         comparison: equal
         value: 1
 notification:
