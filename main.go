@@ -3,10 +3,12 @@ package main
 import (
 	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/braintree/manners"
 	"github.com/leominov/datalock/handlers"
@@ -28,6 +30,8 @@ func getVersion() string {
 }
 
 func main() {
+	rand.Seed(time.Now().UTC().UnixNano())
+
 	log.Printf("Starting datalock %s...", getVersion())
 
 	config := server.NewConfig()

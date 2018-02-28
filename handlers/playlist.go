@@ -9,6 +9,20 @@ import (
 	"github.com/leominov/datalock/utils"
 )
 
+func IsShuffleEnabled(r *http.Request) bool {
+	cookie, err := r.Cookie("shuffle")
+	if err != nil {
+		return false
+	}
+	if cookie == nil {
+		return false
+	}
+	if len(cookie.Value) == 0 {
+		return false
+	}
+	return true
+}
+
 func PlaylistHandler(s *server.Server) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		arrayResponse := false
@@ -23,6 +37,9 @@ func PlaylistHandler(s *server.Server) http.Handler {
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
+		}
+		if IsShuffleEnabled(r) {
+			utils.Shuffle(pl.Items)
 		}
 		pl.Name = utils.GetPlaylistNameByLink(url)
 		w.Header().Set("Content-Type", "application/json")
