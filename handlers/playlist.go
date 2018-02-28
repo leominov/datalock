@@ -39,6 +39,7 @@ func PlaylistHandler(s *server.Server) http.Handler {
 			return
 		}
 		if IsShuffleEnabled(r) {
+			// TODO(l.aminov): Shuffle by stored value
 			utils.Shuffle(pl.Items)
 		}
 		pl.Name = utils.GetPlaylistNameByLink(url)
