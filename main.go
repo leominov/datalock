@@ -54,6 +54,9 @@ func main() {
 	mux.Handle("/plStat.php", handlers.NoContentHandler(s))
 	mux.Handle("/autocomplete.php", handlers.ProxyHandler(s, false))
 	mux.Handle("/tagautocomplete.php", handlers.ProxyHandler(s, false))
+	// Examples:
+	// /playls2/08/trans/16912/plist.txt
+	// /playls2/08/trans/16912/list.xml
 	mux.Handle("/playls2/", handlers.PlaylistHandler(s))
 	mux.Handle("/crossdomain.xml", handlers.CrossdomainHandler(s))
 	mux.Handle("/robots.txt", handlers.ProxyHandler(s, true))
