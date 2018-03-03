@@ -12,7 +12,7 @@ Follow the rules on http://bit.ly/2rdoNTn
 `GET /api/info_season?url=/serial-15825-Nelyudi-0-season.html`
 
 * Type: `Object`
-* Shuffle supported: `false`
+* Shuffle support: `false`
 
 Output format:
 
@@ -31,7 +31,7 @@ Output format:
 `GET /api/all_seasons?url=/serial-15825-Nelyudi-0-season.html`
 
 * Type: `Array`
-* Shuffle supported: `true`
+* Shuffle support: `true`
 
 Output format:
 
@@ -47,7 +47,7 @@ Output format:
 `GET /api/all_series?url=/serial-15825-Nelyudi-0-season.html`
 
 * Type: `Array`
-* Shuffle supported: `true`
+* Shuffle support: `true`
 
 Output format:
 
@@ -71,7 +71,7 @@ Output format:
 `GET /api/updated_series`
 
 * Type: `Array`
-* Shuffle supported: `true`
+* Shuffle support: `true`
 
 Output format:
 
@@ -88,7 +88,7 @@ Output format:
 `GET /api/popular_series`
 
 * Type: `Array`
-* Shuffle supported: `true`
+* Shuffle support: `true`
 
 Output format:
 
@@ -106,7 +106,7 @@ Output format:
 `GET /api/new_series`
 
 * Type: `Array`
-* Shuffle supported: `true`
+* Shuffle support: `true`
 
 Output format:
 
