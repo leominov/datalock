@@ -1,9 +1,4 @@
 window.onload = function() {
-    function Init() {
-        // Setup HTML5 on start
-        document.cookie = "playerHtml=true";
-    }
-
     // https://goodies.pixabay.com/javascript/auto-complete/demo.html
     var xhrs = new XMLHttpRequest();
     new autoComplete({
@@ -44,6 +39,4 @@ window.onload = function() {
             }
         }
     });
-
-    Init();
 };

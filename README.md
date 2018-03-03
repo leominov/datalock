@@ -4,11 +4,15 @@ Follow the rules on http://bit.ly/2rdoNTn
 
 ## Information for developers
 
-You can specify the format by adding `&_format=xml` or `&_format=json`; JSON is used as the default data format.
+* You can specify the format by adding `&_format=xml` or `&_format=json`; JSON is used as the default data format.
+* You can shuffle response in methods that returns collections by adding `&_shuffle=0` or via Cookie `shuffle`; Shuffle can be based on any specified integer value or by current time if value set as `0`; Note that nested collections will be shuffled too.
 
 ### Season details
 
 `GET /api/info_season?url=/serial-15825-Nelyudi-0-season.html`
+
+* Type: `Object`
+* Shuffle supported: `false`
 
 Output format:
 
@@ -26,6 +30,9 @@ Output format:
 
 `GET /api/all_seasons?url=/serial-15825-Nelyudi-0-season.html`
 
+* Type: `Array`
+* Shuffle supported: `true`
+
 Output format:
 
 ```json
@@ -38,6 +45,9 @@ Output format:
 ### Available playlists
 
 `GET /api/all_series?url=/serial-15825-Nelyudi-0-season.html`
+
+* Type: `Array`
+* Shuffle supported: `true`
 
 Output format:
 
@@ -60,6 +70,9 @@ Output format:
 
 `GET /api/updated_series`
 
+* Type: `Array`
+* Shuffle supported: `true`
+
 Output format:
 
 ```json
@@ -73,6 +86,9 @@ Output format:
 #### Popular series
 
 `GET /api/popular_series`
+
+* Type: `Array`
+* Shuffle supported: `true`
 
 Output format:
 
@@ -88,6 +104,9 @@ Output format:
 #### New series
 
 `GET /api/new_series`
+
+* Type: `Array`
+* Shuffle supported: `true`
 
 Output format:
 

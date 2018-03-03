@@ -63,6 +63,11 @@ func ApiAllSeriesHandler(s *server.Server) http.Handler {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		if val, ok := utils.IsShuffleEnabled(r); ok {
+			for _, playlist := range playlists {
+				utils.ShuffleByInt64(playlist.Items, val)
+			}
+		}
 		w.Header().Set("X-Cache", server.BoolAsHit(hitCache))
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		switch r.URL.Query().Get("_format") {

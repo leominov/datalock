@@ -75,6 +75,9 @@ func ApiListSeriesHandler(s *server.Server, listType string) http.Handler {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		if val, ok := utils.IsShuffleEnabled(r); ok {
+			utils.ShuffleByInt64(series, val)
+		}
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		switch r.URL.Query().Get("_format") {
 		case "xml":

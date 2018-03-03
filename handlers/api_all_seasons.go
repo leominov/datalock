@@ -54,6 +54,9 @@ func ApiAllSeasonsHandler(s *server.Server) http.Handler {
 				Link:  strings.TrimSpace(link),
 			})
 		}
+		if val, ok := utils.IsShuffleEnabled(r); ok {
+			utils.ShuffleByInt64(seasons, val)
+		}
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		switch r.URL.Query().Get("_format") {
 		case "xml":
