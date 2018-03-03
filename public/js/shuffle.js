@@ -15,7 +15,7 @@ $(function() {
 		if (IsShuffleCookieExists()) {
 			$.removeCookie(CookieName);
 		} else {
-			$.cookie(CookieName, Date.now())
+			$.cookie(CookieName, Date.now(), {expires: 365});
 		}
 		$(".shuffle-button").toggleClass("act");
 		location.reload(true);
