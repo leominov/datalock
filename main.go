@@ -76,6 +76,7 @@ func main() {
 	// Interface helpers
 	mux.Handle("/api/all_seasons", handlers.ApiAllSeasonsHandler(s))
 	mux.Handle("/api/all_series", handlers.ApiAllSeriesHandler(s))
+	mux.Handle("/api/all_season_series", handlers.ApiAllSeriesHandler(s))
 	mux.Handle("/api/info_season", handlers.ApiInfoSeasonHandler(s))
 
 	// http://seasonvar.ru/ajax.php?mode=new

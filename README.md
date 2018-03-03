@@ -46,6 +46,8 @@ Output format:
 
 `GET /api/all_series?url=/serial-15825-Nelyudi-0-season.html`
 
+> ***Note*** Method `/api/all_series` will be replaced to `/api/all_season_series` soon.
+
 * Type: `Array`
 * Shuffle support: `true`
 
