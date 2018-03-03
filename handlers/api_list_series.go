@@ -2,8 +2,6 @@ package handlers
 
 import (
 	"bytes"
-	"encoding/json"
-	"encoding/xml"
 	"fmt"
 	"net/http"
 	"regexp"
@@ -79,15 +77,6 @@ func ApiListSeriesHandler(s *server.Server, listType string) http.Handler {
 			utils.ShuffleByInt64(series, val)
 		}
 		w.Header().Set("Access-Control-Allow-Origin", "*")
-		switch r.URL.Query().Get("_format") {
-		case "xml":
-			w.Header().Set("Contern-Type", "application/xml;charset=utf-8")
-			encoder := xml.NewEncoder(w)
-			encoder.Encode(series)
-		default:
-			w.Header().Set("Content-Type", "application/json;charset=utf-8")
-			encoder := json.NewEncoder(w)
-			encoder.Encode(series)
-		}
+		utils.FormatResponse(w, r, series)
 	})
 }

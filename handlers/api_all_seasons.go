@@ -2,8 +2,6 @@ package handlers
 
 import (
 	"bytes"
-	"encoding/json"
-	"encoding/xml"
 	"net/http"
 	"strings"
 
@@ -58,15 +56,6 @@ func ApiAllSeasonsHandler(s *server.Server) http.Handler {
 			utils.ShuffleByInt64(seasons, val)
 		}
 		w.Header().Set("Access-Control-Allow-Origin", "*")
-		switch r.URL.Query().Get("_format") {
-		case "xml":
-			w.Header().Set("Contern-Type", "application/xml;charset=utf-8")
-			encoder := xml.NewEncoder(w)
-			encoder.Encode(seasons)
-		default:
-			w.Header().Set("Content-Type", "application/json;charset=utf-8")
-			encoder := json.NewEncoder(w)
-			encoder.Encode(seasons)
-		}
+		utils.FormatResponse(w, r, seasons)
 	})
 }

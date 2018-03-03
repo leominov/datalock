@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
-	"encoding/xml"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -70,15 +68,6 @@ func ApiAllSeriesHandler(s *server.Server) http.Handler {
 		}
 		w.Header().Set("X-Cache", server.BoolAsHit(hitCache))
 		w.Header().Set("Access-Control-Allow-Origin", "*")
-		switch r.URL.Query().Get("_format") {
-		case "xml":
-			w.Header().Set("Contern-Type", "application/xml;charset=utf-8")
-			encoder := xml.NewEncoder(w)
-			encoder.Encode(playlists)
-		default:
-			w.Header().Set("Content-Type", "application/json;charset=utf-8")
-			encoder := json.NewEncoder(w)
-			encoder.Encode(playlists)
-		}
+		utils.FormatResponse(w, r, playlists)
 	})
 }
