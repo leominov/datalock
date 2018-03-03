@@ -1,21 +1,24 @@
 $(function() {
-	const cookieName = "shuffle";
+	const CookieName = "shuffle";
 	function IsShuffleCookieExists() {
-		if (typeof $.cookie(cookieName) != "undefined") {
+		if (typeof $.cookie(CookieName) != "undefined") {
 			return true;
 		}
 		return false;
 	}
-	if (IsShuffleCookieExists()) {
-		$(".shuffle-button").addClass("act");
+	function Init() {
+		if (IsShuffleCookieExists()) {
+			$(".shuffle-button").addClass("act");
+		}
 	}
 	$(".shuffle-button").click(function(){
 		if (IsShuffleCookieExists()) {
-			$.removeCookie(cookieName);
+			$.removeCookie(CookieName);
 		} else {
-			$.cookie(cookieName, Date.now())
+			$.cookie(CookieName, Date.now())
 		}
 		$(".shuffle-button").toggleClass("act");
 		location.reload(true);
 	});
+	Init();
 });
