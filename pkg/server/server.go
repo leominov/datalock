@@ -16,6 +16,7 @@ import (
 	"strings"
 
 	"github.com/boltdb/bolt"
+	"github.com/leominov/datalock/pkg/api"
 	"github.com/leominov/datalock/pkg/metrics"
 	"github.com/leominov/datalock/pkg/util/httpget"
 	"github.com/leominov/datalock/pkg/util/useragent"
@@ -262,12 +263,12 @@ func (s *Server) CanShowHD(r *http.Request) bool {
 	return false
 }
 
-func (s *Server) GetPlaylist(link string, hd, arrayResponse bool) (*Playlist, error) {
+func (s *Server) GetPlaylist(link string, hd, arrayResponse bool) (*api.Playlist, error) {
 	b, err := httpget.HttpGetRaw(link, map[string]string{})
 	if err != nil {
 		return nil, err
 	}
-	playlist := new(Playlist)
+	playlist := new(api.Playlist)
 	if arrayResponse {
 		if err := json.Unmarshal(b, &playlist.Items); err != nil {
 			return nil, err
@@ -287,8 +288,8 @@ func (s *Server) GetPlaylist(link string, hd, arrayResponse bool) (*Playlist, er
 	return playlist, nil
 }
 
-func (s *Server) GetPlaylistsByLinks(links map[string]string, hd bool) ([]*Playlist, error) {
-	playlists := []*Playlist{}
+func (s *Server) GetPlaylistsByLinks(links map[string]string, hd bool) ([]*api.Playlist, error) {
+	playlists := []*api.Playlist{}
 	for name, link := range links {
 		linkAbs := s.AbsoluteLink(link)
 		playlist, err := s.GetPlaylist(linkAbs, hd, true)

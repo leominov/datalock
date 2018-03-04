@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/leominov/datalock/pkg/api"
 	"github.com/leominov/datalock/pkg/server"
 	"github.com/leominov/datalock/pkg/util/httpget"
 	"github.com/leominov/datalock/pkg/util/responseformat"
@@ -22,14 +23,8 @@ var (
 	reInsideWhitespaces = regexp.MustCompile(`[\s\p{Zs}]{2,}`)
 )
 
-type Series struct {
-	Name    string `json:"name"`
-	Link    string `json:"link"`
-	Comment string `json:"comment"`
-}
-
-func getSeriesListFromBody(body []byte) ([]Series, error) {
-	series := []Series{}
+func getSeriesListFromBody(body []byte) ([]api.Series, error) {
+	series := []api.Series{}
 	root, err := xmlpath.ParseHTML(bytes.NewReader(body))
 	if err != nil {
 		return series, err
@@ -51,7 +46,7 @@ func getSeriesListFromBody(body []byte) ([]Series, error) {
 		}
 		number = strings.TrimSpace(number)
 		number = reInsideWhitespaces.ReplaceAllString(number, " ")
-		series = append(series, Series{
+		series = append(series, api.Series{
 			Link:    link,
 			Name:    name,
 			Comment: number,

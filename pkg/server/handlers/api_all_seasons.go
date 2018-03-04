@@ -7,6 +7,7 @@ import (
 
 	"gopkg.in/xmlpath.v2"
 
+	"github.com/leominov/datalock/pkg/api"
 	"github.com/leominov/datalock/pkg/server"
 	"github.com/leominov/datalock/pkg/util/httpget"
 	"github.com/leominov/datalock/pkg/util/responseformat"
@@ -18,11 +19,6 @@ var (
 	xpathSeasons = xmlpath.MustCompile(`.//ul[contains(@class,'tabs-result')]/li[contains(@class,'act')]/h2`)
 	xpathLink    = xmlpath.MustCompile(`.//@href`)
 )
-
-type Season struct {
-	Title string `json:"title"`
-	Link  string `json:"link"`
-}
 
 func ApiAllSeasonsHandler(s *server.Server) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -41,7 +37,7 @@ func ApiAllSeasonsHandler(s *server.Server) http.Handler {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		seasons := []Season{}
+		seasons := []api.Season{}
 		iter := xpathSeasons.Iter(root)
 		for iter.Next() {
 			node := iter.Node()
@@ -50,7 +46,7 @@ func ApiAllSeasonsHandler(s *server.Server) http.Handler {
 			if !ok {
 				continue
 			}
-			seasons = append(seasons, Season{
+			seasons = append(seasons, api.Season{
 				Title: text.StandardizeSpaces(title),
 				Link:  strings.TrimSpace(link),
 			})
