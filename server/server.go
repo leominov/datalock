@@ -36,9 +36,10 @@ var (
 )
 
 type Server struct {
-	NodeName string
-	Config   *Config
-	DB       *bolt.DB
+	NodeName        string
+	Config          *Config
+	DB              *bolt.DB
+	reloadTemplates bool
 }
 
 type SeasonMeta struct {
@@ -343,4 +344,17 @@ func (s *Server) UpdateHostnameResponseBody(r *http.Response) error {
 	r.ContentLength = int64(len(b))
 	r.Header.Set("Content-Length", strconv.Itoa(len(b)))
 	return nil
+}
+
+func (s *Server) MarkFlushTemplatesCache() {
+	s.reloadTemplates = true
+}
+
+func (s *Server) FlushTemplatesCache() {
+	if !s.reloadTemplates {
+		return
+	}
+	log.Println("Clearing templates cache")
+	s.reloadTemplates = false
+	ParseTemplates(s.Config)
 }

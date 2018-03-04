@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"math/rand"
 	"net/http"
@@ -103,7 +102,7 @@ func main() {
 	}()
 
 	signalChan := make(chan os.Signal, 1)
-	signal.Notify(signalChan, syscall.SIGINT, syscall.SIGTERM)
+	signal.Notify(signalChan, syscall.SIGINT, syscall.SIGTERM, syscall.SIGUSR1)
 
 	for {
 		select {
@@ -112,13 +111,19 @@ func main() {
 				log.Fatal(err)
 			}
 		case signal := <-signalChan:
-			log.Println(fmt.Sprintf("Captured %v. Exiting...", signal))
-			httpServer.BlockingClose()
-			if err := s.Stop(); err != nil {
-				log.Fatal(err)
+			switch signal {
+			case syscall.SIGUSR1:
+				log.Printf("Captured %v. Flush templates cache on next execution", signal)
+				s.MarkFlushTemplatesCache()
+			default:
+				log.Printf("Captured %v. Exiting...", signal)
+				httpServer.BlockingClose()
+				if err := s.Stop(); err != nil {
+					log.Fatal(err)
+				}
+				log.Println("Bye")
+				os.Exit(0)
 			}
-			log.Println("Bye")
-			os.Exit(0)
 		}
 	}
 }
