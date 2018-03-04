@@ -27,4 +27,3 @@ dependencies-stamp
 .tarballs/
 coverage.out
 debug.test
-./datalock
