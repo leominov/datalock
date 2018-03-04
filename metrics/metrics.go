@@ -16,12 +16,12 @@ var (
 
 	HttpRequestsErrorCount = prometheus.NewCounter(prometheus.CounterOpts{
 		Name: prometheus.BuildFQName(namespace, "", "http_requests_error_count"),
-		Help: "How many errors while requesting remote data",
+		Help: "How many errors while requesting remote data.",
 	})
 
 	HttpRequestsTotalCount = prometheus.NewCounter(prometheus.CounterOpts{
 		Name: prometheus.BuildFQName(namespace, "", "http_requests_total_count"),
-		Help: "How many requesting remote data",
+		Help: "How many requesting remote data.",
 	})
 
 	TemplateExecuteErrorCount = prometheus.NewCounter(prometheus.CounterOpts{
