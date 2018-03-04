@@ -11,7 +11,7 @@ import (
 	"github.com/leominov/datalock/utils"
 )
 
-func ApiAllSeriesHandler(s *server.Server) http.Handler {
+func ApiAllSeasonSeriesHandler(s *server.Server) http.Handler {
 	client := &http.Client{
 		Timeout: 2 * time.Second,
 	}

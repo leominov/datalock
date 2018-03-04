@@ -75,8 +75,8 @@ func main() {
 	mux.Handle("/tpl/asset/", handlers.ProxyHandler(s, false))
 	// Interface helpers
 	mux.Handle("/api/all_seasons", handlers.ApiAllSeasonsHandler(s))
-	mux.Handle("/api/all_series", handlers.ApiAllSeriesHandler(s))
-	mux.Handle("/api/all_season_series", handlers.ApiAllSeriesHandler(s))
+	mux.Handle("/api/all_season_series", handlers.ApiAllSeasonSeriesHandler(s))
+	mux.Handle("/api/all_series", handlers.ApiAllSeasonSeriesHandler(s))
 	mux.Handle("/api/info_season", handlers.ApiInfoSeasonHandler(s))
 
 	// http://seasonvar.ru/ajax.php?mode=new
