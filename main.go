@@ -113,7 +113,7 @@ func main() {
 		case signal := <-signalChan:
 			switch signal {
 			case syscall.SIGUSR1:
-				log.Printf("Captured %v. Flush templates cache on next execution", signal)
+				log.Printf("Captured %v. Flush templates cache on next HTTP-request", signal)
 				s.MarkFlushTemplatesCache()
 			default:
 				log.Printf("Captured %v. Exiting...", signal)
