@@ -119,3 +119,8 @@ Output format:
     "comment": "..."
 }]
 ```
+
+### Health checks
+
+* `GET /healthz` – Must returns `ok`;
+* `GET /metrics` – Returns metrics for Prometheus.
