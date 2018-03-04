@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/leominov/datalock/server"
+	"github.com/leominov/datalock/pkg/server"
 )
 
 var (

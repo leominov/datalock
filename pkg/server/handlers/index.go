@@ -5,9 +5,9 @@ import (
 	"path"
 	"strings"
 
-	"github.com/leominov/datalock/metrics"
-	"github.com/leominov/datalock/server"
-	"github.com/leominov/datalock/utils"
+	"github.com/leominov/datalock/pkg/metrics"
+	"github.com/leominov/datalock/pkg/server"
+	"github.com/leominov/datalock/pkg/utils"
 )
 
 type TemplateVars struct {

@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"path/filepath"
 
-	"github.com/leominov/datalock/server"
-	"github.com/leominov/datalock/utils"
+	"github.com/leominov/datalock/pkg/server"
+	"github.com/leominov/datalock/pkg/utils"
 )
 
 func PlaylistHandler(s *server.Server) http.Handler {

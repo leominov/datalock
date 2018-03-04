@@ -16,8 +16,8 @@ import (
 	"strings"
 
 	"github.com/boltdb/bolt"
-	"github.com/leominov/datalock/metrics"
-	"github.com/leominov/datalock/utils"
+	"github.com/leominov/datalock/pkg/metrics"
+	"github.com/leominov/datalock/pkg/utils"
 )
 
 const (

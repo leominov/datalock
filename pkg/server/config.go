@@ -3,7 +3,7 @@ package server
 import (
 	"os"
 
-	"github.com/leominov/datalock/utils"
+	"github.com/leominov/datalock/pkg/utils"
 )
 
 const (

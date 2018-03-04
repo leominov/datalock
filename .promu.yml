@@ -5,6 +5,10 @@ verbose: true
 repository:
   path: github.com/leominov/datalock
 build:
+  prefix: .
+  binaries:
+    - name: datalock
+      path: ./cmd/datalock
   flags: -a -tags netgo
   ldflags: |
     -s

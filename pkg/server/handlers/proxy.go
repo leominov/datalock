@@ -5,7 +5,7 @@ import (
 	"net/http/httputil"
 	"net/url"
 
-	"github.com/leominov/datalock/server"
+	"github.com/leominov/datalock/pkg/server"
 )
 
 var (

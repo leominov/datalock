@@ -3,8 +3,8 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/leominov/datalock/server"
-	"github.com/leominov/datalock/utils"
+	"github.com/leominov/datalock/pkg/server"
+	"github.com/leominov/datalock/pkg/utils"
 )
 
 func ApiInfoSeasonHandler(s *server.Server) http.Handler {

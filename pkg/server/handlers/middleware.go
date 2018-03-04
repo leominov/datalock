@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/leominov/datalock/server"
-	"github.com/leominov/datalock/utils"
+	"github.com/leominov/datalock/pkg/server"
+	"github.com/leominov/datalock/pkg/utils"
 )
 
 const (

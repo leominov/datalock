@@ -7,8 +7,8 @@ import (
 
 	"gopkg.in/xmlpath.v2"
 
-	"github.com/leominov/datalock/server"
-	"github.com/leominov/datalock/utils"
+	"github.com/leominov/datalock/pkg/server"
+	"github.com/leominov/datalock/pkg/utils"
 )
 
 var (

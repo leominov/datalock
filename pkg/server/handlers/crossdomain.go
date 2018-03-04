@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/leominov/datalock/server"
+	"github.com/leominov/datalock/pkg/server"
 )
 
 const crossdomainContent = `<cross-domain-policy>
