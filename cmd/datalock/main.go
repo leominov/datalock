@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"log"
 	"math/rand"
 	"net/http"
@@ -17,6 +19,10 @@ import (
 	"github.com/prometheus/common/version"
 )
 
+var (
+	showVersion = flag.Bool("version", false, "Show version and exit")
+)
+
 func init() {
 	metrics.InitMetrics()
 }
@@ -29,7 +35,13 @@ func getVersion() string {
 }
 
 func main() {
+	flag.Parse()
 	rand.Seed(time.Now().UTC().UnixNano())
+
+	if *showVersion {
+		fmt.Printf("datalock %v\n", getVersion())
+		return
+	}
 
 	log.Printf("Starting datalock %s...", getVersion())
 
