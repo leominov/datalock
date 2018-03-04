@@ -3,7 +3,7 @@ package server
 import (
 	"os"
 
-	"github.com/leominov/datalock/pkg/utils"
+	"github.com/leominov/datalock/pkg/util/text"
 )
 
 const (
@@ -32,7 +32,7 @@ type Config struct {
 
 func NewConfig() *Config {
 	return &Config{
-		Hostname: utils.Base64Decode(DefaultHostname),
+		Hostname: text.Base64Decode(DefaultHostname),
 	}
 }
 
@@ -66,11 +66,11 @@ func (c *Config) LoadFromEnv() error {
 	}
 	c.HdHostname = os.Getenv("DATALOCK_HD_HOSTNAME")
 	if c.HdHostname == "" {
-		c.HdHostname = utils.Base64Decode(DefaultHdHostname)
+		c.HdHostname = text.Base64Decode(DefaultHdHostname)
 	}
 	c.PublicHostname = os.Getenv("DATALOCK_PUBLIC_HOSTNAME")
 	if c.PublicHostname == "" {
-		c.PublicHostname = utils.Base64Decode(DefaultPublicHostname)
+		c.PublicHostname = text.Base64Decode(DefaultPublicHostname)
 	}
 	c.TemplatesDir = os.Getenv("DATALOCK_TEMPLATES_DIR")
 	if c.TemplatesDir == "" {

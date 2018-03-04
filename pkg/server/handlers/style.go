@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/leominov/datalock/pkg/server"
-	"github.com/leominov/datalock/pkg/utils"
+	"github.com/leominov/datalock/pkg/util/httpget"
 )
 
 func StyleHandler(s *server.Server) http.Handler {
@@ -14,7 +14,7 @@ func StyleHandler(s *server.Server) http.Handler {
 		if s.CanShowHD(r) {
 			url = strings.Replace(url, "=m", "=hd", -1)
 		}
-		b, err := utils.HttpGetRaw(url, map[string]string{})
+		b, err := httpget.HttpGetRaw(url, map[string]string{})
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

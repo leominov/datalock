@@ -17,7 +17,8 @@ import (
 
 	"github.com/boltdb/bolt"
 	"github.com/leominov/datalock/pkg/metrics"
-	"github.com/leominov/datalock/pkg/utils"
+	"github.com/leominov/datalock/pkg/util/httpget"
+	"github.com/leominov/datalock/pkg/util/useragent"
 )
 
 const (
@@ -121,7 +122,7 @@ func (s *Server) GetCachedSeasonMeta(link string) (*SeasonMeta, bool, error) {
 func (s *Server) collectSeasonMeta(link string) (*SeasonMeta, error) {
 	var seasonMeta *SeasonMeta
 	metrics.HttpRequestsTotalCount.Inc()
-	body, err := utils.HttpGet(link)
+	body, err := httpget.HttpGet(link)
 	if err != nil {
 		metrics.HttpRequestsErrorCount.Inc()
 		return nil, err
@@ -262,7 +263,7 @@ func (s *Server) CanShowHD(r *http.Request) bool {
 }
 
 func (s *Server) GetPlaylist(link string, hd, arrayResponse bool) (*Playlist, error) {
-	b, err := utils.HttpGetRaw(link, map[string]string{})
+	b, err := httpget.HttpGetRaw(link, map[string]string{})
 	if err != nil {
 		return nil, err
 	}
@@ -323,7 +324,7 @@ func (s *Server) NewPlaylistRequest(form url.Values) (*http.Request, error) {
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("User-Agent", utils.RandomUserAgent())
+	req.Header.Set("User-Agent", useragent.Random())
 	req.Header.Set("X-Requested-With", "XMLHttpRequest")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	return req, nil

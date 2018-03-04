@@ -1,4 +1,4 @@
-package utils
+package playlist
 
 import (
 	"net/url"

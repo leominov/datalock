@@ -1,4 +1,4 @@
-package utils
+package responseformat
 
 import (
 	"encoding/json"
@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func FormatResponse(w http.ResponseWriter, r *http.Request, body interface{}) {
+func Process(w http.ResponseWriter, r *http.Request, body interface{}) {
 	switch r.URL.Query().Get("_format") {
 	case "xml":
 		w.Header().Set("Contern-Type", "application/xml;charset=utf-8")

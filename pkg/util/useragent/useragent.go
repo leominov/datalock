@@ -1,4 +1,4 @@
-package utils
+package useragent
 
 import "math/rand"
 
@@ -26,6 +26,6 @@ var (
 	}
 )
 
-func RandomUserAgent() string {
+func Random() string {
 	return UserAgents[rand.Intn(len(UserAgents))]
 }

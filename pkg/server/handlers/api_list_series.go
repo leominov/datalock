@@ -8,7 +8,9 @@ import (
 	"strings"
 
 	"github.com/leominov/datalock/pkg/server"
-	"github.com/leominov/datalock/pkg/utils"
+	"github.com/leominov/datalock/pkg/util/httpget"
+	"github.com/leominov/datalock/pkg/util/responseformat"
+	"github.com/leominov/datalock/pkg/util/shuffle"
 	xmlpath "gopkg.in/xmlpath.v2"
 )
 
@@ -61,7 +63,7 @@ func getSeriesListFromBody(body []byte) ([]Series, error) {
 func ApiListSeriesHandler(s *server.Server, listType string) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		url := s.AbsoluteLink(fmt.Sprintf("/ajax.php?mode=%s", listType))
-		b, err := utils.HttpGetRaw(url, map[string]string{
+		b, err := httpget.HttpGetRaw(url, map[string]string{
 			"X-Requested-With": "XMLHttpRequest",
 		})
 		if err != nil {
@@ -73,10 +75,10 @@ func ApiListSeriesHandler(s *server.Server, listType string) http.Handler {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		if val, ok := utils.IsShuffleEnabled(r); ok {
-			utils.ShuffleByInt64(series, val)
+		if val, ok := shuffle.IsShuffleEnabled(r); ok {
+			shuffle.ShuffleByInt64(series, val)
 		}
 		w.Header().Set("Access-Control-Allow-Origin", "*")
-		utils.FormatResponse(w, r, series)
+		responseformat.Process(w, r, series)
 	})
 }

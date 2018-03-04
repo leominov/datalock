@@ -8,7 +8,10 @@ import (
 	"time"
 
 	"github.com/leominov/datalock/pkg/server"
-	"github.com/leominov/datalock/pkg/utils"
+	"github.com/leominov/datalock/pkg/util/playlist"
+	"github.com/leominov/datalock/pkg/util/request"
+	"github.com/leominov/datalock/pkg/util/responseformat"
+	"github.com/leominov/datalock/pkg/util/shuffle"
 )
 
 func ApiAllSeasonSeriesHandler(s *server.Server) http.Handler {
@@ -16,7 +19,7 @@ func ApiAllSeasonSeriesHandler(s *server.Server) http.Handler {
 		Timeout: 2 * time.Second,
 	}
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		ip := utils.RealIP(r)
+		ip := request.RealIP(r)
 		u := s.GetUser(ip)
 		hd := s.CanShowHD(r)
 		link := r.URL.Query().Get("url")
@@ -51,7 +54,7 @@ func ApiAllSeasonSeriesHandler(s *server.Server) http.Handler {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		links := utils.GetPlaylistLinksFromText(body)
+		links := playlist.GetPlaylistLinksFromText(body)
 		if len(links) == 0 {
 			http.Error(w, "Not found.", http.StatusNotFound)
 			return
@@ -61,13 +64,13 @@ func ApiAllSeasonSeriesHandler(s *server.Server) http.Handler {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		if val, ok := utils.IsShuffleEnabled(r); ok {
+		if val, ok := shuffle.IsShuffleEnabled(r); ok {
 			for _, playlist := range playlists {
-				utils.ShuffleByInt64(playlist.Items, val)
+				shuffle.ShuffleByInt64(playlist.Items, val)
 			}
 		}
 		w.Header().Set("X-Cache", server.BoolAsHit(hitCache))
 		w.Header().Set("Access-Control-Allow-Origin", "*")
-		utils.FormatResponse(w, r, playlists)
+		responseformat.Process(w, r, playlists)
 	})
 }

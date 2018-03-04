@@ -8,7 +8,10 @@ import (
 	"gopkg.in/xmlpath.v2"
 
 	"github.com/leominov/datalock/pkg/server"
-	"github.com/leominov/datalock/pkg/utils"
+	"github.com/leominov/datalock/pkg/util/httpget"
+	"github.com/leominov/datalock/pkg/util/responseformat"
+	"github.com/leominov/datalock/pkg/util/shuffle"
+	"github.com/leominov/datalock/pkg/util/text"
 )
 
 var (
@@ -28,7 +31,7 @@ func ApiAllSeasonsHandler(s *server.Server) http.Handler {
 			http.Error(w, "Incorrect request", http.StatusBadRequest)
 			return
 		}
-		b, err := utils.HttpGetRaw(s.AbsoluteLink(url), map[string]string{})
+		b, err := httpget.HttpGetRaw(s.AbsoluteLink(url), map[string]string{})
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -48,14 +51,14 @@ func ApiAllSeasonsHandler(s *server.Server) http.Handler {
 				continue
 			}
 			seasons = append(seasons, Season{
-				Title: utils.StandardizeSpaces(title),
+				Title: text.StandardizeSpaces(title),
 				Link:  strings.TrimSpace(link),
 			})
 		}
-		if val, ok := utils.IsShuffleEnabled(r); ok {
-			utils.ShuffleByInt64(seasons, val)
+		if val, ok := shuffle.IsShuffleEnabled(r); ok {
+			shuffle.ShuffleByInt64(seasons, val)
 		}
 		w.Header().Set("Access-Control-Allow-Origin", "*")
-		utils.FormatResponse(w, r, seasons)
+		responseformat.Process(w, r, seasons)
 	})
 }

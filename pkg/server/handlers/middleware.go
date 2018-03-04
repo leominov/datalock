@@ -5,7 +5,8 @@ import (
 	"net/http"
 
 	"github.com/leominov/datalock/pkg/server"
-	"github.com/leominov/datalock/pkg/utils"
+	"github.com/leominov/datalock/pkg/util/request"
+	"github.com/leominov/datalock/pkg/util/useragent"
 )
 
 const (
@@ -16,9 +17,9 @@ func MiddlewareHandler(s *server.Server, h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		s.FixReferer(r)
 		s.FlushTemplatesCache()
-		ip := utils.RealIP(r)
+		ip := request.RealIP(r)
 		log.Printf(logginFormat, ip, r.Method, r.URL.Path, r.Proto, r.UserAgent())
-		r.Header.Set("User-Agent", utils.RandomUserAgent())
+		r.Header.Set("User-Agent", useragent.Random())
 		h.ServeHTTP(w, r)
 	})
 }

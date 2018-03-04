@@ -1,4 +1,4 @@
-package utils
+package httpget
 
 import (
 	"fmt"
@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/leominov/datalock/pkg/util/useragent"
 )
 
 func HttpGetRaw(url string, headers map[string]string) ([]byte, error) {
@@ -15,7 +17,7 @@ func HttpGetRaw(url string, headers map[string]string) ([]byte, error) {
 		return body, err
 	}
 	req.Header.Del("Accept-Encoding")
-	req.Header.Set("User-Agent", RandomUserAgent())
+	req.Header.Set("User-Agent", useragent.Random())
 	for key, value := range headers {
 		req.Header.Set(key, value)
 	}

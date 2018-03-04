@@ -6,7 +6,8 @@ import (
 	"path/filepath"
 
 	"github.com/leominov/datalock/pkg/server"
-	"github.com/leominov/datalock/pkg/utils"
+	"github.com/leominov/datalock/pkg/util/playlist"
+	"github.com/leominov/datalock/pkg/util/shuffle"
 )
 
 func PlaylistHandler(s *server.Server) http.Handler {
@@ -24,10 +25,10 @@ func PlaylistHandler(s *server.Server) http.Handler {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		if val, ok := utils.IsShuffleEnabled(r); ok {
-			utils.ShuffleByInt64(pl.Items, val)
+		if val, ok := shuffle.IsShuffleEnabled(r); ok {
+			shuffle.ShuffleByInt64(pl.Items, val)
 		}
-		pl.Name = utils.GetPlaylistNameByLink(url)
+		pl.Name = playlist.GetPlaylistNameByLink(url)
 		w.Header().Set("Content-Type", "application/json")
 		if arrayResponse {
 			if err := encoder.Encode(pl.Items); err != nil {

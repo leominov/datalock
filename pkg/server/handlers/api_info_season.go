@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/leominov/datalock/pkg/server"
-	"github.com/leominov/datalock/pkg/utils"
+	"github.com/leominov/datalock/pkg/util/responseformat"
 )
 
 func ApiInfoSeasonHandler(s *server.Server) http.Handler {
@@ -17,6 +17,6 @@ func ApiInfoSeasonHandler(s *server.Server) http.Handler {
 		}
 		w.Header().Set("X-Cache", server.BoolAsHit(hitCache))
 		w.Header().Set("Access-Control-Allow-Origin", "*")
-		utils.FormatResponse(w, r, seasonMeta)
+		responseformat.Process(w, r, seasonMeta)
 	})
 }

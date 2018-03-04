@@ -5,13 +5,13 @@ import (
 	"strings"
 
 	"github.com/leominov/datalock/pkg/server"
-	"github.com/leominov/datalock/pkg/utils"
+	"github.com/leominov/datalock/pkg/util/httpget"
 )
 
 func JavaScriptHandler(s *server.Server) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		url := s.AbsoluteLink(r.URL.RequestURI())
-		b, err := utils.HttpGet(url)
+		b, err := httpget.HttpGet(url)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

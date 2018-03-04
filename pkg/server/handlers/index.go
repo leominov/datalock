@@ -7,7 +7,7 @@ import (
 
 	"github.com/leominov/datalock/pkg/metrics"
 	"github.com/leominov/datalock/pkg/server"
-	"github.com/leominov/datalock/pkg/utils"
+	"github.com/leominov/datalock/pkg/util/request"
 )
 
 type TemplateVars struct {
@@ -17,7 +17,7 @@ type TemplateVars struct {
 
 func IndexHandler(s *server.Server) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		ip := utils.RealIP(r)
+		ip := request.RealIP(r)
 		requestURI := r.URL.RequestURI()
 		seriesLink := s.AbsoluteLink(requestURI)
 		if r.URL.Path == "/" {
