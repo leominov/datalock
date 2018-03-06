@@ -350,18 +350,6 @@ steps:
       - source: response_status
         comparison: equal
         value: 200
-  - note: Checking rublacklist.net
-    step_type: request
-    method: GET
-    url: https://reestr.rublacklist.net/search/?q=1seasonvar.ru
-    assertions:
-      - source: response_status
-        comparison: equal
-        value: 200
-      - source: response_html
-        property: .//tr[@class='t431__evenrow']/#
-        comparison: equal
-        value: 1
 notification:
   telegram:
     chat_id: "{{.APITEST_TELEGRAM_CHATID}}"
