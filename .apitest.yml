@@ -3,6 +3,7 @@ name: 1seasonvar.ru
 stop_on_failure: true
 initial_variables:
   TestedHostname: 1seasonvar.ru
+  # TestedHostname: 127.0.0.1:7000
 env_variables:
   - APITEST_TELEGRAM_CHATID
   - APITEST_TELEGRAM_TOKEN
@@ -302,41 +303,37 @@ steps:
         comparison: equal
         value: 200
       - source: response_json
-        property: playlist.#
+        property: "#"
         comparison: is_greater_than
         value: 0
       - source: response_json
-        property: playlist.0.comment
+        property: 0.title
         comparison: has_key
       - source: response_json
-        property: playlist.0.comment
+        property: 0.title
         comparison: contains
         value: RenTV
       - source: response_json
-        property: playlist.0.streamsend
-        comparison: equal
-        value: sec
-      - source: response_json
-        property: playlist.0.galabel
+        property: 0.galabel
         comparison: has_key
       - source: response_json
-        property: playlist.0.file
+        property: 0.file
         comparison: has_key
       - source: response_json
-        property: playlist.0.file
+        property: 0.file
         comparison: contains
-        value: 4f6e5fae1fc6898e4d7ac9335940a334
+        value: 4f6e5fae1fc6898e4d7ac9335940a33
       - source: response_json
-        property: playlist.0.file
+        property: 0.file
         comparison: contains
         value: 7f_
   - note: Checking playlist with incorrect secureMark
     step_type: request
     method: GET
-    url: http://datalock.ru/playlist/0/1/list.xml
+    url: http://datalock.ru/playlist/08/1/list.xml
     variables:
       - source: response_json
-        property: playlist.0.file
+        property: 0.file
         name: PlaylistFile
     assertions:
       - source: response_status
