@@ -10,13 +10,12 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"path"
 	"regexp"
 	"strconv"
 	"strings"
 
-	"github.com/boltdb/bolt"
 	"github.com/leominov/datalock/pkg/api"
+	"github.com/leominov/datalock/pkg/backends"
 	"github.com/leominov/datalock/pkg/metrics"
 	"github.com/leominov/datalock/pkg/util/httpget"
 	"github.com/leominov/datalock/pkg/util/useragent"
@@ -33,14 +32,12 @@ var (
 	seasonTitleRegexp       = regexp.MustCompile(`\<title\>([^<]+)\<\/title\>`)
 	seasonKeywordsRegexp    = regexp.MustCompile(`\<meta\ name\=\"keywords\"\ content\=\"([^"]+)\"`)
 	seasonDescriptionRegexp = regexp.MustCompile(`\<meta\ name\=\"description\"\ content\=\"([^"]+)\"`)
-
-	MetaBucket = []byte("meta")
 )
 
 type Server struct {
 	NodeName        string
 	Config          *Config
-	DB              *bolt.DB
+	storeClient     backends.StoreClient
 	reloadTemplates bool
 }
 
@@ -58,12 +55,17 @@ type User struct {
 	SecureMark string `json:"secure_mark"`
 }
 
-func New(config *Config) *Server {
+func New(config *Config) (*Server, error) {
 	hostname, _ := os.Hostname()
-	return &Server{
-		NodeName: hostname,
-		Config:   config,
+	storeClient, err := backends.New(config.StorageClientConfig)
+	if err != nil {
+		return nil, err
 	}
+	return &Server{
+		NodeName:    hostname,
+		Config:      config,
+		storeClient: storeClient,
+	}, nil
 }
 
 func BoolAsHit(hitCache bool) string {
@@ -73,23 +75,8 @@ func BoolAsHit(hitCache bool) string {
 	return "MISS"
 }
 
-func (s *Server) Start() error {
-	var err error
-	s.DB, err = bolt.Open(path.Join(s.Config.DatabaseDir, "datalock.db"), 0600, nil)
-	if err != nil {
-		return err
-	}
-	return s.DB.Update(func(tx *bolt.Tx) error {
-		// Always create Meta bucket.
-		if _, err := tx.CreateBucketIfNotExists(MetaBucket); err != nil {
-			return err
-		}
-		return nil
-	})
-}
-
 func (s *Server) Stop() error {
-	return s.DB.Close()
+	return s.storeClient.Close()
 }
 
 func (s *Server) AbsoluteLink(link string) string {
@@ -231,29 +218,16 @@ func (s *Server) GetUser(ip string) *User {
 }
 
 func (s *Server) SetSeasonMeta(m *SeasonMeta) error {
-	return s.DB.Update(func(tx *bolt.Tx) error {
-		b := tx.Bucket(MetaBucket)
-		encoded, err := json.Marshal(m)
-		if err != nil {
-			return err
-		}
-		return b.Put([]byte(strconv.Itoa(m.ID)), encoded)
-	})
+	return s.storeClient.SetValue(strconv.Itoa(m.ID), &m)
 }
 
 func (s *Server) GetSeasonMeta(id int) (*SeasonMeta, error) {
 	var m *SeasonMeta
-	return m, s.DB.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket(MetaBucket)
-		v := b.Get([]byte(strconv.Itoa(id)))
-		if len(v) == 0 {
-			return errors.New("Meta not found")
-		}
-		if err := json.Unmarshal(v, &m); err != nil {
-			return err
-		}
-		return nil
-	})
+	err := s.storeClient.GetValue(strconv.Itoa(id), &m)
+	if err != nil {
+		return m, err
+	}
+	return m, nil
 }
 
 func (s *Server) CanShowHD(r *http.Request) bool {

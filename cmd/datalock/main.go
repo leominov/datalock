@@ -56,9 +56,8 @@ func main() {
 
 	log.Printf("HTTP service listening on %s", config.ListenAddr)
 
-	s := server.New(config)
-
-	if err := s.Start(); err != nil {
+	s, err := server.New(config)
+	if err != nil {
 		log.Fatal(err)
 	}
 

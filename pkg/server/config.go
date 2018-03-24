@@ -3,6 +3,7 @@ package server
 import (
 	"os"
 
+	"github.com/leominov/datalock/pkg/backends"
 	"github.com/leominov/datalock/pkg/util/text"
 )
 
@@ -11,7 +12,6 @@ const (
 	DefaultPublicDir      = "./public"
 	DefaultMetricsPath    = "/metrics"
 	DefaultHealthzPath    = "/healthz"
-	DefaultDatabaseDir    = "./database"
 	DefaultHdHostname     = "ZGF0YS1oZC5kYXRhbG9jay5ydQ=="
 	DefaultHostname       = "c2Vhc29udmFyLnJ1"
 	DefaultPublicHostname = "MXNlYXNvbnZhci5ydQ=="
@@ -19,25 +19,27 @@ const (
 )
 
 type Config struct {
-	ListenAddr     string
-	MetricsPath    string
-	HealthzPath    string
-	PublicDir      string
-	DatabaseDir    string
-	HdHostname     string
-	Hostname       string
-	PublicHostname string
-	TemplatesDir   string
+	ListenAddr          string
+	MetricsPath         string
+	HealthzPath         string
+	PublicDir           string
+	HdHostname          string
+	Hostname            string
+	PublicHostname      string
+	TemplatesDir        string
+	StorageClientConfig backends.Config
 }
 
 func NewConfig() *Config {
 	return &Config{
-		Hostname: text.Base64Decode(DefaultHostname),
+		Hostname:            text.Base64Decode(DefaultHostname),
+		StorageClientConfig: backends.Config{},
 	}
 }
 
 func (c *Config) Load() error {
-	if err := c.LoadFromEnv(); err != nil {
+	err := c.LoadFromEnv()
+	if err != nil {
 		return err
 	}
 	return nil
@@ -60,10 +62,6 @@ func (c *Config) LoadFromEnv() error {
 	if c.HealthzPath == "" {
 		c.HealthzPath = DefaultHealthzPath
 	}
-	c.DatabaseDir = os.Getenv("DATALOCK_DATABASE_DIR")
-	if c.DatabaseDir == "" {
-		c.DatabaseDir = DefaultDatabaseDir
-	}
 	c.HdHostname = os.Getenv("DATALOCK_HD_HOSTNAME")
 	if c.HdHostname == "" {
 		c.HdHostname = text.Base64Decode(DefaultHdHostname)
@@ -75,6 +73,12 @@ func (c *Config) LoadFromEnv() error {
 	c.TemplatesDir = os.Getenv("DATALOCK_TEMPLATES_DIR")
 	if c.TemplatesDir == "" {
 		c.TemplatesDir = DefaultTemplatesDir
+	}
+	c.StorageClientConfig.Backend = os.Getenv("DATALOCK_STORAGE_BACKEND")
+	c.StorageClientConfig.Directory = os.Getenv("DATALOCK_STORAGE_DIRECTORY")
+	c.StorageClientConfig.Bucket = os.Getenv("DATALOCK_STORAGE_BUCKET")
+	if databaseDir := os.Getenv("DATALOCK_DATABASE_DIR"); databaseDir != "" {
+		c.StorageClientConfig.Directory = databaseDir
 	}
 	return nil
 }
