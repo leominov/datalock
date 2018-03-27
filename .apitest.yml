@@ -358,7 +358,7 @@ steps:
       - source: response_html
         property: .//tr[@class='t431__evenrow']/#
         comparison: equal
-        value: 1
+        value: 2
 notification:
   telegram:
     chat_id: "{{.APITEST_TELEGRAM_CHATID}}"
