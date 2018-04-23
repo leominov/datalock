@@ -20,7 +20,8 @@ import (
 )
 
 var (
-	showVersion = flag.Bool("version", false, "Show version and exit")
+	showVersion   = flag.Bool("version", false, "Show version and exit")
+	blacklistPath = flag.String("blacklist.path", "", "RKN blacklist path")
 )
 
 func init() {
@@ -57,6 +58,11 @@ func main() {
 	log.Printf("HTTP service listening on %s", config.ListenAddr)
 
 	s, err := server.New(config)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = s.LoadBlacklist(*blacklistPath)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -1,0 +1,191 @@
+---
+name: 1seasonvar.ru Blacklist feature
+initial_variables:
+  TestedHostname: 127.0.0.1:7000
+steps:
+  - note: Is King of the Hill source link is banned
+    step_type: request
+    method: GET
+    url: http://{{.TestedHostname}}/serial-4426-TCar__gori-1-season.html
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+      - source: response_text
+        comparison: contains
+        value: blocked-text
+  - note: Is King of the Hill alias link is accessible
+    step_type: request
+    method: GET
+    url: http://{{.TestedHostname}}/serial-4426.html
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+      - source: response_text
+        comparison: contains
+        value: pgs-player
+  - note: Is api/all_seasons contains King of the Hill alias link by source link
+    step_type: request
+    method: GET
+    url: http://{{.TestedHostname}}/api/all_seasons?url=%2Fserial-4426-TCar__gori-1-season.html
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+      - source: response_json
+        property: 0.link
+        comparison: equal
+        value: /serial-4426.html
+  - note: Is api/all_seasons contains King of the Hill alias link by alias link
+    step_type: request
+    method: GET
+    url: http://{{.TestedHostname}}/api/all_seasons?url=%2Fserial-4426.html
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+      - source: response_json
+        property: 0.link
+        comparison: equal
+        value: /serial-4426.html
+  - note: Is api/all_seasons contains King of the Hill alias link by season 2 link
+    step_type: request
+    method: GET
+    url: http://{{.TestedHostname}}/api/all_seasons?url=%2Fserial-4434-TCar__gori-2-season.html
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+      - source: response_json
+        property: 0.link
+        comparison: equal
+        value: /serial-4426.html
+  - note: Is api/info_season contains King of the Hill valid information about source link
+    step_type: request
+    method: GET
+    url: http://{{.TestedHostname}}/api/info_season?url=%2Fserial-4426-TCar__gori-1-season.html
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+      - source: response_json
+        property: title
+        comparison: has_key
+      - source: response_json
+        property: keywords
+        comparison: has_key
+      - source: response_json
+        property: description
+        comparison: has_key
+      - source: response_json
+        property: id
+        comparison: equal
+        value: 4426
+      - source: response_json
+        property: serial
+        comparison: equal
+        value: 2211
+  - note: Is api/info_season contains King of the Hill valid information about alias link
+    step_type: request
+    method: GET
+    url: http://{{.TestedHostname}}/api/info_season?url=%2Fserial-4426.html
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+      - source: response_json
+        property: title
+        comparison: has_key
+      - source: response_json
+        property: keywords
+        comparison: has_key
+      - source: response_json
+        property: description
+        comparison: has_key
+      - source: response_json
+        property: id
+        comparison: equal
+        value: 4426
+      - source: response_json
+        property: serial
+        comparison: equal
+        value: 2211
+  - note: Is api/all_series contains King of the Hill valid information about source link
+    step_type: request
+    method: GET
+    url: http://{{.TestedHostname}}/api/all_series?url=%2Fserial-4426-TCar__gori-1-season.html
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+      - source: response_json
+        property: "#"
+        comparison: is_greater_than
+        value: 0
+      - source: response_json
+        property: 0.playlist.#
+        comparison: is_greater_than
+        value: 0
+      - source: response_json
+        property: 0.playlist.0.id
+        comparison: has_key
+      - source: response_json
+        property: 0.playlist.0.title
+        comparison: has_key
+      - source: response_json
+        property: 0.playlist.0.file
+        comparison: has_key
+      - source: response_json
+        property: 0.playlist.0.galabel
+        comparison: has_key
+  - note: Is api/all_series contains King of the Hill valid information about alias link
+    step_type: request
+    method: GET
+    url: http://{{.TestedHostname}}/api/all_series?url=%2Fserial-4426.html
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+      - source: response_json
+        property: "#"
+        comparison: is_greater_than
+        value: 0
+      - source: response_json
+        property: 0.playlist.#
+        comparison: is_greater_than
+        value: 0
+      - source: response_json
+        property: 0.playlist.0.id
+        comparison: has_key
+      - source: response_json
+        property: 0.playlist.0.title
+        comparison: has_key
+      - source: response_json
+        property: 0.playlist.0.file
+        comparison: has_key
+      - source: response_json
+        property: 0.playlist.0.galabel
+        comparison: has_key
+  - note: Is sitemap contains King of the Hill alias link
+    step_type: request
+    method: GET
+    url: http://{{.TestedHostname}}/sitemap.xml
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+      - source: response_text
+        comparison: contains
+        value: serial-4426.html
+  - note: Is autocomplete contains King of the Hill alias link
+    step_type: request
+    method: GET
+    url: http://{{.TestedHostname}}/autocomplete.php?query=king%20of%20the%20hill
+    assertions:
+      - source: response_status
+        comparison: equal
+        value: 200
+      - source: response_text
+        comparison: contains
+        value: serial-4426.html

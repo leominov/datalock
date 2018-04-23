@@ -17,6 +17,7 @@ import (
 	"github.com/leominov/datalock/pkg/api"
 	"github.com/leominov/datalock/pkg/backends"
 	"github.com/leominov/datalock/pkg/metrics"
+	"github.com/leominov/datalock/pkg/util/blacklist"
 	"github.com/leominov/datalock/pkg/util/httpget"
 	"github.com/leominov/datalock/pkg/util/useragent"
 )
@@ -37,6 +38,7 @@ var (
 type Server struct {
 	NodeName        string
 	Config          *Config
+	Blacklist       *blacklist.Blacklist
 	storeClient     backends.StoreClient
 	reloadTemplates bool
 }
@@ -75,6 +77,15 @@ func BoolAsHit(hitCache bool) string {
 	return "MISS"
 }
 
+func (s *Server) LoadBlacklist(path string) error {
+	bl, err := blacklist.NewBlacklist(path)
+	if err != nil {
+		return err
+	}
+	s.Blacklist = bl
+	return nil
+}
+
 func (s *Server) Stop() error {
 	return s.storeClient.Close()
 }
@@ -105,6 +116,21 @@ func (s *Server) GetCachedSeasonMeta(link string) (*SeasonMeta, bool, error) {
 		return nil, hitCache, err
 	}
 	return seasonMeta, hitCache, nil
+}
+
+func (s *Server) SwitchSeriesLink(url string, isUserRequest bool) string {
+	if isUserRequest {
+		if s.Blacklist.IsAlias(url) {
+			source := s.Blacklist.GetSource(url)
+			return source
+		}
+	} else {
+		if s.Blacklist.IsBlocked(url) {
+			alias := s.Blacklist.GetAlias(url)
+			return alias
+		}
+	}
+	return url
 }
 
 func (s *Server) collectSeasonMeta(link string) (*SeasonMeta, error) {
@@ -305,7 +331,7 @@ func (s *Server) NewPlaylistRequest(form url.Values) (*http.Request, error) {
 	return req, nil
 }
 
-func (s *Server) UpdateHostnameResponseBody(r *http.Response) error {
+func (s *Server) UpdateResponseBody(r *http.Response) error {
 	b, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		return err
@@ -315,6 +341,9 @@ func (s *Server) UpdateHostnameResponseBody(r *http.Response) error {
 		return err
 	}
 	b = bytes.Replace(b, []byte(s.Config.Hostname), []byte(s.Config.PublicHostname), -1)
+	for _, item := range s.Blacklist.List {
+		b = bytes.Replace(b, []byte(item.Source[1:]), []byte(item.Alias[1:]), -1)
+	}
 	body := ioutil.NopCloser(bytes.NewReader(b))
 	r.Body = body
 	r.ContentLength = int64(len(b))

@@ -1,0 +1,19 @@
+---
+blacklist:
+  - source: /serial-16826-Vavilon-Berlin.html
+    alias: /serial-16826-Vavilon--Berlin.html
+  - source: /serial-17085-Po_tu_storonu_2018-0-season.html
+    alias: /serial-17085-Po_tu_storonu_2018--0-season.html
+  # https://reestr.rublacklist.net/rec/332794/
+  - source: /serial-16857-Mudrost__tolpy--1-sezon.html
+    alias: /serial-16857-Mudrost__tolpy-1-sezon.html
+  - source: /serial-16857-Mudrost__tolpy--000001-sezon.html
+    alias: /serial-16857-Mudrost__tolpy--00001-sezon.html
+  - source: /serial-16857-Mudrost__tolpy--1--season.html
+    alias: /serial-16857-Mudrost__tolpy-1-season.html
+  # https://reestr.rublacklist.net/rec/293718/
+  - source: /serial-17239-Britaniya.html
+    alias: /serial-17239--Britaniya.html
+  # https://reestr.rublacklist.net/rec/345656/
+  - source: /serial-16672-Padenie_Ordena.html
+    alias: /serial-16672--Padenie_Ordena.html

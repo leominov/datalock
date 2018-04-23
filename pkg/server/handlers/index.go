@@ -19,12 +19,18 @@ func IndexHandler(s *server.Server) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ip := request.RealIP(r)
 		requestURI := r.URL.RequestURI()
-		seriesLink := s.AbsoluteLink(requestURI)
+		seriesLink := s.AbsoluteLink(s.SwitchSeriesLink(requestURI, true))
 		if r.URL.Path == "/" {
 			http.ServeFile(w, r, path.Join(s.Config.PublicDir, "index.html"))
 			return
+		} else if r.URL.Path == "/blocked.html" {
+			http.ServeFile(w, r, path.Join(s.Config.PublicDir, "blocked.html"))
+			return
 		} else if strings.Index(requestURI, ".html") == -1 {
 			http.Redirect(w, r, seriesLink, http.StatusFound)
+			return
+		} else if s.Blacklist.IsBlocked(r.URL.Path) {
+			http.Redirect(w, r, "/blocked.html", http.StatusFound)
 			return
 		}
 		u := s.GetUser(ip)

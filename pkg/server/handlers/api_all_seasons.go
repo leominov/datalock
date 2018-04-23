@@ -27,6 +27,7 @@ func ApiAllSeasonsHandler(s *server.Server) http.Handler {
 			http.Error(w, "Incorrect request", http.StatusBadRequest)
 			return
 		}
+		url = s.SwitchSeriesLink(url, true)
 		b, err := httpget.HttpGetRaw(s.AbsoluteLink(url), map[string]string{})
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -46,9 +47,11 @@ func ApiAllSeasonsHandler(s *server.Server) http.Handler {
 			if !ok {
 				continue
 			}
+			title = text.StandardizeSpaces(title)
+			link = strings.TrimSpace(link)
 			seasons = append(seasons, api.Season{
-				Title: text.StandardizeSpaces(title),
-				Link:  strings.TrimSpace(link),
+				Title: title,
+				Link:  s.SwitchSeriesLink(link, false),
 			})
 		}
 		if val, ok := shuffle.IsShuffleEnabled(r); ok {

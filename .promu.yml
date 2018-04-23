@@ -22,6 +22,7 @@ tarball:
     - README.md
     - CONFIGURATION.md
     - LICENSE
+    - blacklist.yml
     - public
     - templates
 crossbuild:

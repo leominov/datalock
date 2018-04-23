@@ -1,0 +1,4 @@
+---
+blacklist:
+  - source: /serial-4426-TCar__gori-1-season.html
+    alias: /serial-4426.html

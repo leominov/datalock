@@ -27,6 +27,7 @@ func ApiAllSeasonSeriesHandler(s *server.Server) http.Handler {
 			http.Error(w, "Incorrect request", http.StatusBadRequest)
 			return
 		}
+		link = s.SwitchSeriesLink(link, true)
 		seasonMeta, hitCache, err := s.GetCachedSeasonMeta(s.AbsoluteLink(link))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)

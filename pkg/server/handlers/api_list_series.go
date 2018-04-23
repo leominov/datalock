@@ -70,6 +70,10 @@ func ApiListSeriesHandler(s *server.Server, listType string) http.Handler {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		for i, seriesItem := range series {
+			seriesItem.Link = s.SwitchSeriesLink(seriesItem.Link, false)
+			series[i] = seriesItem
+		}
 		if val, ok := shuffle.IsShuffleEnabled(r); ok {
 			shuffle.ShuffleByInt64(series, val)
 		}
