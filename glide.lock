@@ -1,12 +1,12 @@
 hash: 6b5710b96584fb214480220d699d193dfb34281c78136c3a55d9f5924be842a2
-updated: 2017-12-30T12:15:30.41441+05:00
+updated: 2018-04-23T23:32:21.685307+05:00
 imports:
 - name: github.com/beorn7/perks
   version: 4c0e84591b9aa9e6dcfdf3e020114cd81f89d5f9
   subpackages:
   - quantile
 - name: github.com/boltdb/bolt
-  version: 9da31745363232bc1e27dbab3569e77383a51585
+  version: fd01fc79c553a8e99d512a07e8e0c63d4a3ccfc5
 - name: github.com/braintree/manners
   version: 82a8879fc5fd0381fa8b2d8033b19bf255252088
 - name: github.com/golang/protobuf
@@ -38,7 +38,7 @@ imports:
   subpackages:
   - xfs
 - name: golang.org/x/net
-  version: 9dfe39835686865bff950a07b394c12a98ddc811
+  version: 4876518f9e71663000c348837735820161a42df7
   subpackages:
   - html
   - html/atom
@@ -48,4 +48,6 @@ imports:
   - unix
 - name: gopkg.in/xmlpath.v2
   version: 860cbeca3ebcc600db0b213c0e83ad6ce91f5739
+- name: gopkg.in/yaml.v2
+  version: eb3733d160e74a9c7e442f435eb3bea458e1d19f
 testImports: []
