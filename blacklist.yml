@@ -17,3 +17,6 @@ blacklist:
   # https://reestr.rublacklist.net/rec/345656/
   - source: /serial-16672-Padenie_Ordena.html
     alias: /serial-16672--Padenie_Ordena.html
+  # nap#96637 – ООО "ТРК "2X2"
+  - source: /serial-18177-Podozritel_naya_sova-2-season.html
+    alias: /serial-18177-Podozritel_naya_sova--2-season.html
