@@ -1,6 +1,6 @@
 # datalock
 
-Follow the rules on http://bit.ly/2rdoNTn
+Follow the rules on http://bit.ly/2MllTtS
 
 ## Information for developers
 
