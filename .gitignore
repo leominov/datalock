@@ -22,6 +22,7 @@ _cgo_export.*
 .build/
 bin/
 database/
+database2/
 .vagrant/
 dependencies-stamp
 .tarballs/

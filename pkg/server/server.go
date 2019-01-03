@@ -13,6 +13,8 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"sync"
+	"time"
 
 	"github.com/leominov/datalock/pkg/api"
 	"github.com/leominov/datalock/pkg/backends"
@@ -37,12 +39,19 @@ var (
 
 type Server struct {
 	NodeName        string
+	NodeList        []*Node
 	Config          *Config
 	Blacklist       *blacklist.Blacklist
 	storeClient     backends.StoreClient
 	reloadTemplates bool
 }
 
+type Node struct {
+	NodeName string
+	Hostname string
+	mu       sync.Mutex
+	Healthy  bool
+}
 type SeasonMeta struct {
 	Title       string `json:"title"`
 	ID          int    `json:"id"`
@@ -63,11 +72,21 @@ func New(config *Config) (*Server, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &Server{
+	s := &Server{
 		NodeName:    hostname,
 		Config:      config,
 		storeClient: storeClient,
-	}, nil
+	}
+	err = s.LoadNodeList()
+	if err != nil {
+		return nil, err
+	}
+	if len(s.NodeList) > 0 {
+		for _, node := range s.NodeList {
+			log.Printf("Node %s is %s", node.NodeName, node.State())
+		}
+	}
+	return s, nil
 }
 
 func BoolAsHit(hitCache bool) string {
@@ -75,6 +94,80 @@ func BoolAsHit(hitCache bool) string {
 		return "HIT"
 	}
 	return "MISS"
+}
+
+func (n *Node) State() string {
+	if n.Healthy {
+		return "healthy"
+	}
+	return "inactive"
+}
+
+func (s *Server) Run() {
+	if len(s.NodeList) == 0 {
+		return
+	}
+	log.Print("Starting node list heartbeat...")
+	time.Sleep(5 * time.Second)
+	for {
+		for _, node := range s.NodeList {
+			healthy := s.IsHealthyNode(node)
+			if node.Healthy != healthy {
+				node.mu.Lock()
+				node.Healthy = healthy
+				node.mu.Unlock()
+				log.Printf("Node %s switch state to %s", node.NodeName, node.State())
+			}
+		}
+		time.Sleep(5 * time.Second)
+	}
+}
+
+func (s *Server) LoadNodeList() error {
+	for _, nodeAddr := range s.Config.NodeList {
+		node := s.GetNodeByAddr(nodeAddr)
+		s.NodeList = append(s.NodeList, node)
+	}
+	return nil
+}
+
+func (s *Server) GetNodeByAddr(addr string) *Node {
+	n := &Node{
+		NodeName: addr,
+		Hostname: addr,
+	}
+	n.mu.Lock()
+	state := s.IsHealthyNode(n)
+	n.mu.Unlock()
+	n.Healthy = state
+	return n
+}
+
+func (s *Server) IsHealthyNode(node *Node) bool {
+	addr := fmt.Sprintf("http://%s%s", node.Hostname, s.Config.HealthzPath)
+	cli := http.DefaultClient
+	cli.Timeout = 5 * time.Second
+	resp, err := cli.Get(addr)
+	if err != nil {
+		log.Printf("Error requesting node %s state: %s", node.NodeName, err)
+		return false
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		log.Printf("Node %s has incorrect status: %s", node.NodeName, resp.Status)
+		return false
+	}
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Printf("Error reading node %s state: %s", node.NodeName, err)
+		return false
+	}
+	state := strings.TrimSpace(string(b))
+	if state == "ok" {
+		return true
+	}
+	log.Printf("Node %s has incorrect state: %s", node.NodeName, state)
+	return false
 }
 
 func (s *Server) LoadBlacklist(path string) error {
@@ -92,6 +185,10 @@ func (s *Server) Stop() error {
 
 func (s *Server) AbsoluteLink(link string) string {
 	return fmt.Sprintf(SeriesLinkFormat, s.Config.Hostname, link)
+}
+
+func (n *Node) AbsoluteLink(link string) string {
+	return fmt.Sprintf(SeriesLinkFormat, n.Hostname, link)
 }
 
 func (s *Server) GetCachedSeasonMeta(link string) (*SeasonMeta, bool, error) {

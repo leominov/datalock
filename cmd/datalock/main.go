@@ -67,6 +67,8 @@ func main() {
 		log.Fatal(err)
 	}
 
+	go s.Run()
+
 	mux := http.NewServeMux()
 	mux.Handle("/", handlers.IndexHandler(s))
 	mux.Handle("/styleP.php", handlers.StyleHandler(s))

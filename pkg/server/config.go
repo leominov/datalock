@@ -2,6 +2,7 @@ package server
 
 import (
 	"os"
+	"strings"
 
 	"github.com/leominov/datalock/pkg/backends"
 	"github.com/leominov/datalock/pkg/util/text"
@@ -27,6 +28,7 @@ type Config struct {
 	Hostname            string
 	PublicHostname      string
 	TemplatesDir        string
+	NodeList            []string
 	StorageClientConfig backends.Config
 }
 
@@ -73,6 +75,14 @@ func (c *Config) LoadFromEnv() error {
 	c.TemplatesDir = os.Getenv("DATALOCK_TEMPLATES_DIR")
 	if c.TemplatesDir == "" {
 		c.TemplatesDir = DefaultTemplatesDir
+	}
+	nodeListStr := os.Getenv("DATALOCK_NODE_LIST")
+	if len(nodeListStr) != 0 {
+		nodeListArr := strings.Split(nodeListStr, ",")
+		for _, node := range nodeListArr {
+			nodeAddr := strings.TrimSpace(node)
+			c.NodeList = append(c.NodeList, nodeAddr)
+		}
 	}
 	c.StorageClientConfig.Backend = os.Getenv("DATALOCK_STORAGE_BACKEND")
 	c.StorageClientConfig.Directory = os.Getenv("DATALOCK_STORAGE_DIRECTORY")
