@@ -91,6 +91,7 @@ func main() {
 	mux.Handle("/favicon.ico", handlers.ProxyHandler(s, false))
 	mux.Handle("/tpl/asset/js/", handlers.JavaScriptHandler(s))
 	mux.Handle("/tpl/asset/", handlers.ProxyHandler(s, false))
+	mux.Handle("/hls.min.js.map", handlers.NoContentHandler(s))
 	// Interface helpers
 	mux.Handle("/api/all_seasons", handlers.ApiAllSeasonsHandler(s))
 	mux.Handle("/api/all_season_series", handlers.ApiAllSeasonSeriesHandler(s))
