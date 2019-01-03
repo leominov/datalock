@@ -19,37 +19,28 @@ func PlaylistHandler(s *server.Server) http.Handler {
 			pl            *api.Playlist
 			err           error
 		)
+
+		hd := s.CanShowHD(r)
 		requestURI := r.URL.RequestURI()
 		filename := filepath.Base(r.URL.Path)
 		if filename == "plist.txt" {
 			arrayResponse = true
 		}
-		encoder := json.NewEncoder(w)
 
-		hd := s.CanShowHD(r)
-		url := s.AbsoluteLink(requestURI)
-		pl, err = s.GetPlaylist(url, hd, arrayResponse)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		if len(pl.Items) == 0 {
-			for _, node := range s.NodeList {
-				if !node.Healthy {
-					continue
-				}
-				log.Printf("Requesting playlist %s from %s node...", requestURI, node.NodeName)
-				url := node.AbsoluteLink(requestURI)
-				pl, err = s.GetPlaylist(url, hd, arrayResponse)
-				if err != nil {
-					http.Error(w, err.Error(), http.StatusInternalServerError)
-					return
-				}
-				log.Printf("Got %d item(s) from %s node", len(pl.Items), node.NodeName)
-				if len(pl.Items) != 0 {
-					break
-				}
+		for _, node := range s.NodeList {
+			if !node.Healthy {
+				continue
+			}
+			log.Printf("Requesting playlist %s from %s node...", requestURI, node.NodeName)
+			url := node.AbsoluteLink(requestURI)
+			pl, err = s.GetPlaylist(url, hd, arrayResponse)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			log.Printf("Got %d item(s) from %s node", len(pl.Items), node.NodeName)
+			if len(pl.Items) != 0 {
+				break
 			}
 		}
 
@@ -60,7 +51,10 @@ func PlaylistHandler(s *server.Server) http.Handler {
 			}
 		}
 
+		url := s.AbsoluteLink(requestURI)
 		pl.Name = playlist.GetPlaylistNameByLink(url)
+
+		encoder := json.NewEncoder(w)
 		w.Header().Set("Content-Type", "application/json")
 		if arrayResponse {
 			if err := encoder.Encode(pl.Items); err != nil {
