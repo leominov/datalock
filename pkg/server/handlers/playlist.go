@@ -27,6 +27,9 @@ func PlaylistHandler(s *server.Server) http.Handler {
 		}
 		if val, ok := shuffle.IsShuffleEnabled(r); ok {
 			shuffle.ShuffleByInt64(pl.Items, val)
+			for _, item := range pl.Items {
+				shuffle.ShuffleByInt64(item.Folder, val)
+			}
 		}
 		pl.Name = playlist.GetPlaylistNameByLink(url)
 		w.Header().Set("Content-Type", "application/json")

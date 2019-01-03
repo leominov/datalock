@@ -6,14 +6,15 @@ import (
 )
 
 type Item struct {
-	ID         string `json:"id,omitempty"`
-	Title      string `json:"title,omitempty"`
-	Comment    string `json:"comment,omitempty"`
-	Subtitle   string `json:"subtitle,omitempty"`
-	Sub        string `json:"sub,omitempty"`
-	Streamsend string `json:"streamsend,omitempty"`
-	File       string `json:"file"`
-	GALabel    string `json:"galabel"`
+	ID         string  `json:"id,omitempty"`
+	Title      string  `json:"title,omitempty"`
+	Comment    string  `json:"comment,omitempty"`
+	Subtitle   string  `json:"subtitle,omitempty"`
+	Sub        string  `json:"sub,omitempty"`
+	Streamsend string  `json:"streamsend,omitempty"`
+	File       string  `json:"file"`
+	GALabel    string  `json:"galabel"`
+	Folder     []*Item `json:"folder,omitempty"`
 }
 
 func (i *Item) AvailableInHD() bool {
