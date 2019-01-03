@@ -2,12 +2,11 @@ package server
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
-	"net/http"
 	"strings"
 	"sync"
-	"time"
+
+	"github.com/leominov/datalock/pkg/util/httpget"
 )
 
 type Node struct {
@@ -27,11 +26,15 @@ func NodeFromAddr(addr string, root bool) *Node {
 	if n.Root {
 		n.NodeName = "root"
 	}
-	n.mu.Lock()
 	state := n.IsHealthy()
-	n.mu.Unlock()
-	n.Healthy = state
+	n.SetHealthy(state)
 	return n
+}
+
+func (n *Node) SetHealthy(state bool) {
+	n.mu.Lock()
+	n.Healthy = state
+	n.mu.Unlock()
 }
 
 func (n *Node) State() string {
@@ -58,24 +61,12 @@ func (n *Node) IsHealthy() bool {
 		return true
 	}
 	addr := fmt.Sprintf("http://%s/healthz", n.Hostname)
-	cli := http.DefaultClient
-	cli.Timeout = 5 * time.Second
-	resp, err := cli.Get(addr)
+	body, err := httpget.HttpGet(addr)
 	if err != nil {
-		log.Printf("Error requesting node %s state: %s", n.NodeName, err)
+		log.Printf("Error getting node %s state: %s", n.NodeName, err)
 		return false
 	}
-	defer resp.Body.Close()
-	if resp.StatusCode != http.StatusOK {
-		log.Printf("Node %s has incorrect status: %s", n.NodeName, resp.Status)
-		return false
-	}
-	b, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Printf("Error reading node %s state: %s", n.NodeName, err)
-		return false
-	}
-	state := strings.TrimSpace(string(b))
+	state := strings.TrimSpace(body)
 	if state == "ok" {
 		return true
 	}

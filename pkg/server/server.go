@@ -103,9 +103,7 @@ func (s *Server) Run() {
 		for _, node := range s.NodeList {
 			healthy := node.IsHealthy()
 			if node.Healthy != healthy {
-				node.mu.Lock()
-				node.Healthy = healthy
-				node.mu.Unlock()
+				node.SetHealthy(healthy)
 				log.Printf("Node %s switch state to %s", node.NodeName, node.State())
 			}
 		}
