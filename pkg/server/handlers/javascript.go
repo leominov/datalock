@@ -8,6 +8,10 @@ import (
 	"github.com/leominov/datalock/pkg/util/httpget"
 )
 
+var (
+	domainCheck = strings.NewReplacer("top.document.domain!==", "false")
+)
+
 func JavaScriptHandler(s *server.Server) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		url := s.AbsoluteLink(r.URL.RequestURI())
@@ -17,6 +21,7 @@ func JavaScriptHandler(s *server.Server) http.Handler {
 			return
 		}
 		b = strings.Replace(b, s.Config.Hostname, s.Config.PublicHostname, -1)
+		b = domainCheck.Replace(b)
 		w.Write([]byte(b))
 	})
 }
