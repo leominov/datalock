@@ -15,7 +15,7 @@ const (
 	DefaultHealthzPath    = "/healthz"
 	DefaultHdHostname     = "ZGF0YS1oZC5kYXRhbG9jay5ydQ=="
 	DefaultHostname       = "c2Vhc29udmFyLnJ1"
-	DefaultPublicHostname = "MXNlYXNvbnZhci5ydQ=="
+	DefaultPublicHostname = "dmlkYWNoLnJ1"
 	DefaultTemplatesDir   = "./templates"
 )
 
