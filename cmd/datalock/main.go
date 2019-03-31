@@ -40,7 +40,7 @@ func main() {
 	rand.Seed(time.Now().UTC().UnixNano())
 
 	if *showVersion {
-		fmt.Printf("datalock %v\n", getVersion())
+		fmt.Println(version.Print("datalock"))
 		return
 	}
 
