@@ -1,12 +1,9 @@
 ---
 blacklist:
-  # nap#96637 – ООО "ТРК "2X2"
-  - source: /serial-18177-Podozritel_naya_sova-2-season.html
-    alias: /serial-18177-Podozritel_naya_sova--2-season.html
-  # COPYRIGHT-35560
+  # COPYRIGHT-35560 – ООО "Кинопоиск"
   - source: /serial-8287-Rik_i_Morti.html
     alias: /serial-8287--Rik_i_Morti.html
-  # COPYRIGHT-35448
+  # COPYRIGHT-35448 – ООО "Кинопоиск"
   - source: /serial-394-Druz_ya-1-sezon.html
     alias: /serial-394--Druz_ya-1-sezon.html
   # nap#186747 – ООО "Виасат Глобал"
