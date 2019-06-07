@@ -12,3 +12,6 @@ blacklist:
   # nap#186747 – ООО "Виасат Глобал"
   - source: /serial-19007-Mister_Mersedes--02-sezon.html
     alias: /serial-19007-Mister_Mersedes-02-sezon.html
+  # nap#178240 – ООО "А Сериал"
+  - source: /serial-8504-Nastoyashij_detektiv-0001-sezon.html
+    alias: /serial-8504-Nastoyashij_detektiv-001-sezon.html
