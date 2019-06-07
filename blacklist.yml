@@ -9,3 +9,6 @@ blacklist:
   # COPYRIGHT-35448
   - source: /serial-394-Druz_ya-1-sezon.html
     alias: /serial-394--Druz_ya-1-sezon.html
+  # nap#186747 – ООО "Виасат Глобал"
+  - source: /serial-19007-Mister_Mersedes--02-sezon.html
+    alias: /serial-19007-Mister_Mersedes-02-sezon.html
