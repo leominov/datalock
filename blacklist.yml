@@ -12,3 +12,6 @@ blacklist:
   # nap#178240 – ООО "А Сериал"
   - source: /serial-8504-Nastoyashij_detektiv-0001-sezon.html
     alias: /serial-8504-Nastoyashij_detektiv-001-sezon.html
+  # COPYRIGHT-76803 – ООО "Кинопоиск"
+  - source: /serial-20866-Viski_Kavaler.html
+    alias: /serial-20866--Viski_Kavaler.html
