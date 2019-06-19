@@ -15,3 +15,6 @@ blacklist:
   # COPYRIGHT-76803 – ООО "Кинопоиск"
   - source: /serial-20866-Viski_Kavaler.html
     alias: /serial-20866--Viski_Kavaler.html
+  # COPYRIGHT-77202 – ООО "Кинопоиск"
+  - source: /serial-19759-Teoriya_bol_shogo_vzryva-12-sezon.html
+    alias: /serial-19759-Teoriya_bol_shogo_vzryva--12-sezon.html
