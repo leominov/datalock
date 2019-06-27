@@ -18,3 +18,6 @@ blacklist:
   # COPYRIGHT-77202 – ООО "Кинопоиск"
   - source: /serial-19759-Teoriya_bol_shogo_vzryva-12-sezon.html
     alias: /serial-19759-Teoriya_bol_shogo_vzryva--12-sezon.html
+  # COPYRIGHT-79300 – ООО "Кинопоиск"
+  - source: /serial-412-Druz_ya-2-sezon.html
+    alias: /serial-412-Druz_ya-02-sezon.html
