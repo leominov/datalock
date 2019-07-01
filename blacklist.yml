@@ -24,3 +24,6 @@ blacklist:
   # COPYRIGHT-92625 – ООО "Кинопоиск"
   - source: /serial-458-Druz_ya-8-sezon.html
     alias: /serial-458-Druz_ya-08-sezon.html
+  # nap#195251 – ООО "Иви.ру"
+  - source: /serial-21713-Moskovskij_nuar.html
+    alias: /serial-21713-Moskovskij__nuar.html
