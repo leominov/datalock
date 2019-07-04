@@ -27,3 +27,6 @@ blacklist:
   # nap#195251 – ООО "Иви.ру"
   - source: /serial-21713-Moskovskij_nuar.html
     alias: /serial-21713-Moskovskij__nuar.html
+  # nap#196217 – ООО "Парнас-Медиа"
+  - source: /serial-22327-Fitnes-2-season.html
+    alias: /serial-22327-Fitnes-02-season.html
