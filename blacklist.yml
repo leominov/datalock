@@ -30,3 +30,9 @@ blacklist:
   # nap#196217 – ООО "Парнас-Медиа"
   - source: /serial-22327-Fitnes-2-season.html
     alias: /serial-22327-Fitnes-02-season.html
+  # COPYRIGHT-98077 – ООО "Кинопоиск"
+  - source: /serial-22152-Bolotnaya_tvar_.html
+    alias: /serial-22152-Bolotnaya_tvar__.html
+  # COPYRIGHT-98076 – ООО "Кинопоиск"
+  - source: /serial-415-Teoriya_bol_shogo_vzriva-0000001-sezon.html
+    alias: /serial-415-Teoriya_bol_shogo_vzriva-000001-sezon.html
