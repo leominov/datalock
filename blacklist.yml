@@ -36,3 +36,6 @@ blacklist:
   # COPYRIGHT-98076 – ООО "Кинопоиск"
   - source: /serial-415-Teoriya_bol_shogo_vzriva-0000001-sezon.html
     alias: /serial-415-Teoriya_bol_shogo_vzriva-000001-sezon.html
+  # COPYRIGHT-100751 – ООО "Кинопоиск"
+  - source: /serial-415-Teoriya_bol_shogo_vzriva-000001-sezon.html
+    alias: /serial-415-Teoriya_bol_shogo_vzriva-00001-sezon.html
