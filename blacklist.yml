@@ -39,3 +39,14 @@ blacklist:
   # COPYRIGHT-100751 – ООО "Кинопоиск"
   - source: /serial-415-Teoriya_bol_shogo_vzriva-000001-sezon.html
     alias: /serial-415-Teoriya_bol_shogo_vzriva-00001-sezon.html
+  # COPYRIGHT-106007 – ООО "Кинопоиск"
+  - source: /serial-439-druz_ya-4-sezon.html
+    alias: /serial-439-druz_ya-04-sezon.html
+  - source: /serial-446-druz_ya-6-season.html
+    alias: /serial-446-druz_ya-06-season.html
+  # nap#202250 – ООО "А сериал"
+  - source: /serial-22098-Samyj_gromkij_golos_v_komnate.html
+    alias: /serial-22098-Samyj_gromkij_golos_v__komnate.html
+  # Notice_ID:*AlLBs7* – NBCUniversal Media
+  - source: /serial-21683-Trolli_prazdnik_prodolzhaetsya-5-season.html
+    alias: /serial-21683-Trolli_prazdnik_prodolzhaetsya-05-season.html
