@@ -1,0 +1,151 @@
+Delivered-To: leoderoko@gmail.com
+Received: by 2002:a17:906:e095:0:0:0:0 with SMTP id gh21csp12232737ejb;
+        Fri, 26 Jul 2019 00:40:50 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqx3HrfVKMeeFHahVHkryXgh2rQ/xHZo8MVtZKsYf/UwqvqeniG/lSN+91kpVb5io+LDD8xR
+X-Received: by 2002:a2e:9b83:: with SMTP id z3mr20861114lji.84.1564126850649;
+        Fri, 26 Jul 2019 00:40:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1564126850; cv=none;
+        d=google.com; s=arc-20160816;
+        b=KGNrkhoUcXSRPwXA2kGlmD/W1LecsYbs4m+M5jjd7X5Zwy4/scoQ9ftXhzmXZtBo86
+         ju+Ylj0bMyNWN33Ys1HSpyleLT/kyoP4v+JsfmGpwbGHouWYntyGqlC21jy+JqkCMq0d
+         9Ykg/3+VKPioyk7dFt75RhCRjyPP2cvlC84ilFd5w2GO9yeAATuDWHU2w3ktOoUZRrIt
+         8TLs7hcWClmryR+UzBQJWD63UlqYt9G5VWcDe99aw3D1JCNokoHK2HFr/wu3FtQTJlXc
+         FtPH2DlnlQ2AwMq+qKyz45FE1c2Z4DRKwK464z53VgyMRKUaW6pmyKifnooRQqzYQNwL
+         SOEg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=content-transfer-encoding:subject:date:to:from:mime-version
+         :importance:dkim-signature:message-id;
+        bh=3Gv4m15ZkLXydpoGH/Mk6PfzRsG9AM7I22V5B2h380w=;
+        b=k3H9A+BaK/+LZIuC17XYlH2TOpq7e2IhC97Sl6XEUM5czn0RigcdpJfR+O74QSvns3
+         Mi+aygWALNUi/fCwnRE4gBSAxEiGsqmoBs4bf+Kh1VA3kQ3x2g98jTmIPpvCpYM0omgV
+         8msC/ZxwJZytbNmHN0+rhuxiLKa34qvt0lCoeFa7V73pSAu/9MBJyer4DzwGyJjasyiS
+         I/KY8JMtLankmhWOQZp8DwVbVBYifCwcE6O9UwXouPF9IniDsQue/DBuT+M/DUQgIIlm
+         Tub5BtN1vZ4rJPU/tZlbRE8Y0O7CAhRKywnWwCmf68lPLuHs2Jv7kxRf0dnLO6a8w3kI
+         1axg==
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=temperror (no key for signature) header.i=@webkontrol.ru header.s=default header.b="SLrCX/0y";
+       spf=neutral (google.com: 37.140.190.182 is neither permitted nor denied by best guess record for domain of lev@portveintogo.ru) smtp.mailfrom=lev@portveintogo.ru
+Return-Path: <lev@portveintogo.ru>
+Received: from forward102o.mail.yandex.net (forward102o.mail.yandex.net. [37.140.190.182])
+        by mx.google.com with ESMTPS id c1si37769991lff.49.2019.07.26.00.40.50
+        for <leoderoko@gmail.com>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 26 Jul 2019 00:40:50 -0700 (PDT)
+Received-SPF: neutral (google.com: 37.140.190.182 is neither permitted nor denied by best guess record for domain of lev@portveintogo.ru) client-ip=37.140.190.182;
+Authentication-Results: mx.google.com;
+       dkim=temperror (no key for signature) header.i=@webkontrol.ru header.s=default header.b="SLrCX/0y";
+       spf=neutral (google.com: 37.140.190.182 is neither permitted nor denied by best guess record for domain of lev@portveintogo.ru) smtp.mailfrom=lev@portveintogo.ru
+Received: from mxfront11g.mail.yandex.net (mxfront11g.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b7:68])
+	by forward102o.mail.yandex.net (Yandex) with ESMTP id 2C84C6680089
+	for <leoderoko@gmail.com>; Fri, 26 Jul 2019 10:40:50 +0300 (MSK)
+Received: from mxfront11g.mail.yandex.net (localhost [127.0.0.1])
+	by mxfront11g.mail.yandex.net with LMTP id 8ovno9D1gp-PC3gFX6x
+	for <lev@portveintogo.ru>; Fri, 26 Jul 2019 10:40:49 +0300
+Received: from smtp.webkontrol.ru (smtp.webkontrol.ru [148.251.12.21])
+	by mxfront11g.mail.yandex.net (nwsmtp/Yandex) with ESMTP id 3W0bglVv44-emGiFXGP;
+	Fri, 26 Jul 2019 10:40:48 +0300
+Message-Id: <20190726104049.emGiFXGP@mxfront11g.mail.yandex.net>
+Authentication-Results: mxfront11g.mail.yandex.net; spf=softfail (mxfront11g.mail.yandex.net: transitioning domain of webkontrol.ru does not designate 148.251.12.21 as permitted sender, rule=[~all]) smtp.mail=post@webkontrol.ru; dkim=neutral header.i=@webkontrol.ru
+X-Yandex-Suid-Status: 1 1130000036399877
+X-Yandex-Fwd: MTM3MDA1NzM0MzgyMjc4Mjg2NDEsNDMwNzczOTQxNTM0NzY4NTI3Ng==
+Received: from wr0 (static.26.133.201.138.clients.your-server.de [138.201.133.26])
+	by smtp.webkontrol.ru (Postfix) with ESMTP id 7DC1F6BC0073;
+	Fri, 26 Jul 2019 09:40:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=webkontrol.ru;
+	s=default; t=1564126848;
+	bh=3Gv4m15ZkLXydpoGH/Mk6PfzRsG9AM7I22V5B2h380w=;
+	h=From:To:Date:Subject:From;
+	b=SLrCX/0yTtQjbsA5OkIGB++QBEJTUhylx+TXSCEsDcbvk8nGbf+A63n0dy7MTg6RP
+	 5DKXbFpPXu7AB04i/ilfxlPMv2UQcgmzX6Inh6H9AxwWgUX9OwaQub0V2RRRAKqhoT
+	 7Ptp74CBE0MI+SDlBH/04bcouq95mnbQcz3gzFO4=
+Importance: High
+MIME-Version: 1.0
+From: post@webkontrol.ru
+To: lev@portveintogo.ru
+Date: 26 Jul 2019 09:40:48 +0200
+Subject: [Notice_ID:*AlLBs7*] NBCUniversal Media, LLC - Нарушение прав
+ правообладателей / NBCUniversal Media, LLC  - Abuse
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: base64
+X-Yandex-Forward: aff406925a489d42f46a48d37548fd67
+
+0JXRgdC70Lgg0LTQsNC90L3Ri9C1INGB0YHRi9C70LrQuCDQsdGL0LvQuCDRg9C00LDQ
+u9C10L3Riywg0L/RgNC+0YHQuNC8INGB0L7QvtCx0YnQuNGC0Ywg0L3QsNC8INC90LAg
+cG9zdEB3ZWJrb250cm9sLnJ1INC00LvRjyDQv9GA0LXQtNC+0YLQstGA0LDRidC10L3Q
+uNGPINC/0L7RgdC70LXQtNGD0Y7RidC40YUg0LTQtdC50YHRgtCy0LjQuS4NCg0KSWYg
+dGhlIGZvbGxvd2luZyBsaW5rcyBoYXZlIGJlZW4gcmVtb3ZlZCBwbGVhc2UgZS1tYWls
+IHVzIHRvIHBvc3RAd2Via29udHJvbC5ydSB0byBhdm9pZCBmdXJ0aGVyIGFjdGlvbnMu
+DQoNCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCkZvciBFbmdsaXNoIHNlZSBiZWxv
+dw0KLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KDQrQo9Cy0LDQttCw0LXQvNCw0Y8g
+0LDQtNC80LjQvdC40YHRgtGA0LDRhtC40Y8g0YHQsNC50YLQsCB2aWRhY2gucnUgDQoN
+CtCd0LAg0JLQsNGI0LXQvCDRgdCw0LnRgtC1INC+0LHQvdCw0YDRg9C20LXQvdGLINGB
+0YHRi9C70LrQuCDQvdCwINC90LXQu9C10LPQsNC70YzQvdC+0LUg0YHQutCw0YfQuNCy
+0LDQvdC40LUsINC40LvQuCDQstC+0LfQvNC+0LbQvdC+0YHRgtGMINC+0L3Qu9Cw0LnQ
+vS3Qv9GA0L7RgdC80L7RgtGA0LAg0YHQtdGA0LjQsNC70LAo0L7Qsik6DQoNCg0KItCi
+0YDQvtC70LvQuC4g0J/RgNCw0LfQtNC90LjQuiDQv9GA0L7QtNC+0LvQttCw0LXRgtGB
+0Y8hICjRgdC10LfQvtC9IDUpIiAoIltOQkNdIFRyb2xsczogVGhlIEJlYXQgR29lcyBP
+biEgKHNlYXNvbiA1KSIpOiANCmh0dHA6Ly92aWRhY2gucnUvc2VyaWFsLTIxNjgzLVRy
+b2xsaV9wcmF6ZG5pa19wcm9kb2x6aGFldHN5YS01LXNlYXNvbi5odG1sIA0KDQoNCtCf
+0YDQsNCy0LAg0L3QsCDQv9GA0L7QutCw0YIg0LTQsNC90L3QvtCz0L4o0YvRhSkg0YHQ
+tdGA0LjQsNC70LAo0L7Qsikg0LIg0KDQvtGB0YHQuNC4INC/0YDQuNC90LDQtNC70LXQ
+ttCw0YIg0LjRgdC60LvRjtGH0LjRgtC10LvRjNC90L4g0LrQvtC80L/QsNC90LjQuCBO
+QkNVbml2ZXJzYWwgTWVkaWEsIExMQyAuINCc0YssINCe0LHRidC10YHRgtCy0L4g0YEg
+0L7Qs9GA0LDQvdC40YfQtdC90L3QvtC5INC+0YLQstC10YLRgdGC0LLQtdC90L3QvtGB
+0YLRjNGOIMKr0JLQtdCxINCa0L7QvdGC0YDQvtC70YzCuywgINGP0LLQu9GP0LXQvNGB
+0Y8g0YPQv9C+0LvQvdC+0LzQvtGH0LXQvdC90YvQvCDQv9GA0LXQtNGB0YLQsNCy0LjR
+gtC10LvQtdC8INCf0YDQsNCy0L7QvtCx0LvQsNC00LDRgtC10LvRjy4NCg0K0JvRjtCx
+0L7QtSDQuNGB0L/QvtC70YzQt9C+0LLQsNC90LjQtSDQtNCw0L3QvdC+0LPQvijRi9GF
+KSDRgdC10YDQuNCw0LvQsCjQvtCyKSwg0LIg0YLQvtC8INGH0LjRgdC70LUg0YPQutCw
+0LfQsNC90LjQtSDRgdGB0YvQu9C60Lgg0L3QsCDQv9C+0YHRgtC+0YDQvtC90L3QuNC1
+INGA0LXRgdGD0YDRgdGLLCDRgdC+0LTQtdGA0LbQsNGJ0LjQtSDQtNCw0L3QvdGL0Lko
+0YvQtSkg0YHQtdGA0LjQsNC7KNGLKSwg0Y/QstC70Y/QtdGC0YHRjyDQvdC10LvQtdCz
+0LDQu9GM0L3Ri9C8LiDQn9C+0LbQsNC70YPQudGB0YLQsCwg0L3QtdC30LDQvNC10LTQ
+u9C40YLQtdC70YzQvdC+INGD0LTQsNC70LjRgtC1INCy0YHQtSDQstGL0YjQtdC/0LXR
+gNC10YfQuNGB0LvQtdC90L3Ri9C1INGB0YHRi9C70LrQuC4NCg0K0KHQvtCz0LvQsNGB
+0L3QviDQodGC0LDRgtGM0LUgMTUuNy4g0KTQtdC00LXRgNCw0LvRjNC90L7Qs9C+INC3
+0LDQutC+0L3QsCDQvtGCIDI3LjA3LjIwMDYg4oSWIDE0OS3QpNCXICLQntCxINC40L3R
+hNC+0YDQvNCw0YbQuNC4LCDQuNC90YTQvtGA0LzQsNGG0LjQvtC90L3Ri9GFINGC0LXR
+hdC90L7Qu9C+0LPQuNGP0YUg0Lgg0L4g0LfQsNGJ0LjRgtC1INC40L3RhNC+0YDQvNCw
+0YbQuNC4Iiwg0LjQvdGE0L7RgNC80LDRhtC40Y8sINGB0L7QtNC10YDQttCw0YnQsNGP
+INC+0LHRitC10LrRgtGLINCw0LLRgtC+0YDRgdC60LjRhSDQuCAo0LjQu9C4KSDRgdC8
+0LXQttC90YvRhSDQv9GA0LDQsiwg0LTQvtC70LbQvdCwINCx0YvRgtGMINGD0LTQsNC7
+0LXQvdCwINCy0LvQsNC00LXQu9GM0YbQtdC8INGB0LDQudGC0LAg0LIg0YLQtdGH0LXQ
+vdC40LUgMjQg0YfQsNGB0L7QsiDRgSDQvNC+0LzQtdC90YLQsCDQv9C+0LvRg9GH0LXQ
+vdC40Y8g0YPQstC10LTQvtC80LvQtdC90LjRjyDQvtGCINC/0YDQsNCy0L7QvtCx0LvQ
+sNC00LDRgtC10LvRjyDQuNC70Lgg0LvQuNGG0LAsINGD0L/QvtC70L3QvtC80L7Rh9C1
+0L3QvdC+0LPQviDQv9GA0LDQstC+0L7QsdC70LDQtNCw0YLQtdC70LXQvC4gDQoNCtCS
+INC/0YDQvtGC0LjQstC90L7QvCDRgdC70YPRh9Cw0LUsINC/0YDQsNCy0L7QvtCx0LvQ
+sNC00LDRgtC10LvQuCDQvtGB0YLQsNCy0LvRj9GO0YIg0LfQsCDRgdC+0LHQvtC5INC/
+0YDQsNCy0L4g0L/RgNC40LzQtdC90LXQvdC40Y8g0LzQtdGAINCz0YDQsNC20LTQsNC9
+0YHQutC+0LksINCw0LTQvNC40L3QuNGB0YLRgNCw0YLQuNCy0L3QvtC5INC40LvQuCDR
+g9Cz0L7Qu9C+0LLQvdC+0Lkg0L7RgtCy0LXRgtGB0YLQstC10L3QvdC+0YHRgtC4LCDQ
+v9GA0LXQtNGD0YHQvNC+0YLRgNC10L3QvdGL0YUg0LfQsNC60L7QvdC+0LTQsNGC0LXQ
+u9GM0YHRgtCy0L7QvC4NCg0K0KEg0YPQstCw0LbQtdC90LjQtdC8LA0K0J7QntCeICLQ
+ktC10LEg0JrQvtC90YLRgNC+0LvRjCINCg0K0JTQvtC60YPQvNC10L3RgtGLOg0KDQoi
+0KLRgNC+0LvQu9C4LiDQn9GA0LDQt9C00L3QuNC6INC/0YDQvtC00L7Qu9C20LDQtdGC
+0YHRjyEgKNGB0LXQt9C+0L0gNSkiICgiW05CQ10gVHJvbGxzOiBUaGUgQmVhdCBHb2Vz
+IE9uISAoc2Vhc29uIDUpIik6DQpodHRwczovL3d3dy53ZWJrb250cm9sLmNvbS9pbWFn
+ZXMvRG9jdW1lbnRzL05CQ1UvTkJDVV9MZXR0ZXJPZkF1dGhvcml0eUFuZE93bmVyc2hp
+cC5wZGYNCg0KLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KDQpEZWFyIFNpciBvciBN
+YWRhbSwNCg0K4oCcV2ViIEtvbnRyb2wgTHRk4oCdIHJlcHJlc2VudHMgTkJDVW5pdmVy
+c2FsIE1lZGlhLCBMTEMgKOKAnFRoZSBDb21wYW554oCdKSBpbiBhbGwgbWF0dGVycyBj
+b25jZXJuaW5nIGluZnJpbmdlbWVudCBvZiB0aGUgQ29tcGFueeKAmXMgaW50ZWxsZWN0
+dWFsIHByb3BlcnR5IHJpZ2h0cy4gIFBsZWFzZSBmaW5kIGJlbG93IG91ciBDb21wYW55
+IGRldGFpbHMsIGFzIHdlbGwgYXMgdGhlIExldHRlciBvZiBBdXRob3JpdHkuDQoNCldl
+IGhhdmUgZGlzY292ZXJlZCBsaW5rcyBmb3IgaWxsZWdhbCBkb3dubG9hZGluZyBvciB3
+YXRjaGluZyBvbmxpbmUgb2YgdGhlIHNlcmllcyBvbiB5b3VyIHdlYnNpdGUuDQpBbGwg
+cmlnaHRzIHRvIHRoaXMgc2VyaWVzIGJlbG9uZyBleGNsdXNpdmVseSB0byBOQkNVbml2
+ZXJzYWwgTWVkaWEsIExMQy4NCg0KV291bGQgeW91IHBsZWFzZSBpbW1lZGlhdGVseSBy
+ZW1vdmUgdGhlIGZvbGxvd2luZyBsaW5rcyB3aGljaCBpbmZyaW5nZSB0aGUgQ29tcGFu
+eeKAmXMgaW50ZWxsZWN0dWFsIHByb3BlcnR5IHJpZ2h0czoNCg0KDQoiW05CQ10gVHJv
+bGxzOiBUaGUgQmVhdCBHb2VzIE9uISAoc2Vhc29uIDUpIjogDQpodHRwOi8vdmlkYWNo
+LnJ1L3NlcmlhbC0yMTY4My1Ucm9sbGlfcHJhemRuaWtfcHJvZG9semhhZXRzeWEtNS1z
+ZWFzb24uaHRtbCANCg0KDQpJIHdvdWxkIGJlIGdyYXRlZnVsIGlmIHlvdSB3b3VsZCBk
+ZWxldGUgdGhlIGFib3ZlIGxpbmtzIGFzIHNvb24gYXMgcG9zc2libGUuDQoNCkZvciB5
+b3VyIHJlZmVyZW5jZSwgQ29tcGFueSBkZXRhaWxzIGFyZSBhcyBmb2xsb3dzOg0KDQpX
+ZWIgS29udHJvbCBMdGQNCis3ICg0OTUpIDY2My05My02MQ0KcG9zdEB3ZWJrb250cm9s
+LnJ1DQp3d3cud2Via29udHJvbC5jb20NCg0KRG9jdW1lbnRzOg0KDQoiW05CQ10gVHJv
+bGxzOiBUaGUgQmVhdCBHb2VzIE9uISAoc2Vhc29uIDUpIjogDQpodHRwczovL3d3dy53
+ZWJrb250cm9sLmNvbS9pbWFnZXMvRG9jdW1lbnRzL05CQ1UvTkJDVV9MZXR0ZXJPZkF1
+dGhvcml0eUFuZE93bmVyc2hpcC5wZGYNCg==
+
