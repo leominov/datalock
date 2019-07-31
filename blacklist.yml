@@ -50,3 +50,6 @@ blacklist:
   # Notice_ID:*AlLBs7* – NBCUniversal Media
   - source: /serial-21683-Trolli_prazdnik_prodolzhaetsya-5-season.html
     alias: /serial-21683-Trolli_prazdnik_prodolzhaetsya-05-season.html
+  # nap#204000 – ООО "Парнас-Медиа"
+  - source: /serial-22402-Koroche_2019.html
+    alias: /serial-22402-Koroche__2019.html
