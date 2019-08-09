@@ -53,3 +53,9 @@ blacklist:
   # nap#204000 – ООО "Парнас-Медиа"
   - source: /serial-22402-Koroche_2019.html
     alias: /serial-22402-Koroche__2019.html
+  # COPYRIGHT-112275 – Turner Broadcasting System Europe Limited
+  - source: /serial-17947-Kosmo-Rubezh-1-season.html
+    alias: /serial-17947-Kosmo-Rubezh-01-season.html
+  # COPYRIGHT-112276 – Warner Bros. Entertainment Nederland B.V.
+  - source: /serial-22104-Kripton-2-season.html
+    alias: /serial-22104-Kripton-02-season.html
