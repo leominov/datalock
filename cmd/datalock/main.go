@@ -81,7 +81,6 @@ func main() {
 	// /playls2/08/trans/16912/list.xml
 	mux.Handle("/playls2/", handlers.PlaylistHandler(s))
 	mux.Handle("/crossdomain.xml", handlers.CrossdomainHandler(s))
-	mux.Handle("/robots.txt", handlers.ProxyHandler(s, true))
 	mux.Handle("/sitemap.xml", handlers.ProxyHandler(s, true))
 	mux.Handle("/rss.php", handlers.ProxyHandler(s, true))
 	// Static files
@@ -107,6 +106,7 @@ func main() {
 
 	fs := http.FileServer(http.Dir(s.Config.PublicDir))
 	mux.Handle("/public/", http.StripPrefix("/public", fs))
+	mux.Handle("/robots.txt", fs)
 
 	mux.Handle(s.Config.HealthzPath, handlers.HealthzHandler())
 	mux.Handle(s.Config.MetricsPath, promhttp.Handler())
