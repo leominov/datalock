@@ -384,7 +384,7 @@ func (s *Server) UpdateResponseBody(r *http.Response) error {
 	if err != nil {
 		return err
 	}
-	b = bytes.Replace(b, []byte(s.Config.Hostname), []byte(s.Config.PublicHostname), -1)
+	b = bytes.Replace(b, []byte(s.Config.Hostname), []byte(s.GetPublicHostname(nil)), -1)
 	for _, item := range s.Blacklist.List {
 		b = bytes.Replace(b, []byte(item.Source[1:]), []byte(item.Alias[1:]), -1)
 	}
@@ -406,4 +406,15 @@ func (s *Server) FlushTemplatesCache() {
 	log.Println("Clearing templates cache")
 	s.reloadTemplates = false
 	ParseTemplates(s.Config)
+}
+
+func (s *Server) GetPublicHostname(r *http.Request) string {
+	if r == nil {
+		return s.Config.PublicHostname
+	}
+	header := r.Header.Get("X-Hostname")
+	if header == "" {
+		return s.Config.PublicHostname
+	}
+	return header
 }

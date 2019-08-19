@@ -20,7 +20,8 @@ func JavaScriptHandler(s *server.Server) http.Handler {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		b = strings.Replace(b, s.Config.Hostname, s.Config.PublicHostname, -1)
+		hostname := s.GetPublicHostname(r)
+		b = strings.Replace(b, s.Config.Hostname, hostname, -1)
 		b = domainCheck.Replace(b)
 		w.Write([]byte(b))
 	})

@@ -19,8 +19,9 @@ const crossdomainContent = `<cross-domain-policy>
 `
 
 func CrossdomainHandler(s *server.Server) http.Handler {
-	resultCrossdomain := fmt.Sprintf(crossdomainContent, s.Config.Hostname, s.Config.PublicHostname)
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		hostname := s.GetPublicHostname(r)
+		resultCrossdomain := fmt.Sprintf(crossdomainContent, s.Config.Hostname, hostname)
 		w.Header().Set("Content-Type", "text/xml")
 		w.Write([]byte(resultCrossdomain))
 	})
