@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/base64"
 	"net/url"
 	"strings"
 )
@@ -51,4 +52,22 @@ func (i *Item) RemoveHostnameFromSubtitleLink() error {
 		i.Subtitle = u.Path + "?" + u.RawQuery
 	}
 	return nil
+}
+
+func (i *Item) DecodeFileURL() {
+	if !strings.HasPrefix(i.File, "#2") {
+		return
+	}
+	link := i.File
+	link = strings.Replace(link, "#2", "", -1)
+	link = strings.Replace(link, "//b2xvbG8=", "", -1)
+	decoded, err := base64.StdEncoding.DecodeString(link)
+	if err != nil {
+		return
+	}
+	link = string(decoded)
+	if !strings.HasPrefix(link, "http") {
+		return
+	}
+	i.File = link
 }

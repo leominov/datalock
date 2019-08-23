@@ -18,6 +18,10 @@ test:
 	@echo ">> running tests"
 	@$(GO) test -short $(pkgs)
 
+test-report:
+	@echo ">> running tests"
+	@$(GO) test $(pkgs) -coverprofile=coverage.txt && go tool cover -html=coverage.txt
+
 format:
 	@echo ">> formatting code"
 	@$(GO) fmt $(pkgs)

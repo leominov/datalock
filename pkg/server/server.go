@@ -322,6 +322,7 @@ func (s *Server) GetPlaylist(link string, hd, arrayResponse bool) (*api.Playlist
 			return nil, err
 		}
 	}
+	playlist.DecodeLinks()
 	if hd {
 		// Nothing change if switching was failed
 		playlist.SwitchToHD(s.Config.HdHostname)

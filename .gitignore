@@ -27,4 +27,6 @@ database2/
 dependencies-stamp
 .tarballs/
 coverage.out
+coverage.txt
 debug.test
+/datalock

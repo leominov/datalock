@@ -77,8 +77,8 @@ func main() {
 	mux.Handle("/autocomplete.php", handlers.ProxyHandler(s, false))
 	mux.Handle("/tagautocomplete.php", handlers.ProxyHandler(s, false))
 	// Examples:
-	// /playls2/08/trans/16912/plist.txt
-	// /playls2/08/trans/16912/list.xml
+	// /playls2/0/trans/14340/plist.txt
+	// /playls2/0/trans/14340/list.xml
 	mux.Handle("/playls2/", handlers.PlaylistHandler(s))
 	mux.Handle("/crossdomain.xml", handlers.CrossdomainHandler(s))
 	mux.Handle("/sitemap.xml", handlers.ProxyHandler(s, true))
