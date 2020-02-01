@@ -26,7 +26,7 @@ func IndexHandler(s *server.Server) http.Handler {
 		} else if r.URL.Path == "/blocked.html" {
 			http.ServeFile(w, r, path.Join(s.Config.PublicDir, "blocked.html"))
 			return
-		} else if strings.Index(requestURI, ".html") == -1 {
+		} else if !strings.Contains(requestURI, ".html") {
 			http.Redirect(w, r, seriesLink, http.StatusFound)
 			return
 		} else if s.Blacklist.IsBlocked(r.URL.Path) {

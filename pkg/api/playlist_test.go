@@ -82,7 +82,9 @@ func TestDecodeLinks(t *testing.T) {
 		p := &Playlist{
 			Items: []*Item{&Item{File: test.file}},
 		}
-		p.DecodeLinks()
+		if err := p.DecodeLinks(); err != nil {
+			t.Error(err)
+		}
 		ok := strings.HasSuffix(p.Items[0].File, ".mp4")
 		if !ok && test.mp4 {
 			t.Error("Must contains mp4 link")

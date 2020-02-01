@@ -60,10 +60,7 @@ func (b *Blacklist) IsAlias(url string) bool {
 		return false
 	}
 	_, ok := b.listByAliasUrl[url]
-	if ok {
-		return true
-	}
-	return false
+	return ok
 }
 
 func (b *Blacklist) IsBlocked(url string) bool {
@@ -71,10 +68,7 @@ func (b *Blacklist) IsBlocked(url string) bool {
 		return false
 	}
 	_, ok := b.listBySourceUrl[url]
-	if ok {
-		return true
-	}
-	return false
+	return ok
 }
 
 func (b *Blacklist) GetAlias(url string) string {

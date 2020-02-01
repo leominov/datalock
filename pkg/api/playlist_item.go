@@ -19,11 +19,7 @@ type Item struct {
 }
 
 func (i *Item) AvailableInHD() bool {
-	index := strings.Index(i.Title, "HD")
-	if index >= 0 {
-		return true
-	}
-	return false
+	return strings.Contains(i.Title, "HD")
 }
 
 func (i *Item) SwitchToHD(hdHostname string) error {
